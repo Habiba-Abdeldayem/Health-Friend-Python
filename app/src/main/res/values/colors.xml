@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey">#F2F1F6</color>
+    <color name="light_green">#CDF3CB</color>
+    <color name="dark_green">#278F42</color>
+    <color name="pink_protein">#FF216F</color>
+    <color name="orange_carbs">#ff6905</color>
+    <color name="purple_fats">#5900FF</color>
+
+</resources>

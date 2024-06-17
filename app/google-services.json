@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "78383475852",
+    "firebase_url": "https://healthfriend-a68ac-default-rtdb.firebaseio.com",
+    "project_id": "healthfriend-a68ac",
+    "storage_bucket": "healthfriend-a68ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78383475852:android:e747371191389acdc79fa9",
+        "android_client_info": {
+          "package_name": "com.example.healthfriend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiun-JTz5yEMqA6FOSY3BnamfFyDN8wiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78383475852:android:46d87c2165d15ba1c79fa9",
+        "android_client_info": {
+          "package_name": "com.example.healthfriendd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiun-JTz5yEMqA6FOSY3BnamfFyDN8wiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78383475852:android:596e5c89754f5fb4c79fa9",
+        "android_client_info": {
+          "package_name": "com.example.pythontest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiun-JTz5yEMqA6FOSY3BnamfFyDN8wiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
