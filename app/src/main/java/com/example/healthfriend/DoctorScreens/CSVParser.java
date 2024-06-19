@@ -39,4 +39,29 @@ public class CSVParser {
 
         return categories;
     }
+    public static Set<String> getingraidiant(InputStream inputStream, String category) {
+        Set<String> ingradiant = new HashSet<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            boolean headerSkipped = false; // Skip the header row
+
+            while ((line = reader.readLine()) != null) {
+                if (!headerSkipped) {
+                    headerSkipped = true;
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+                if (parts.length >= 22 && parts[21].trim().equals(category)) { // Assuming 'category' is the 23rd column
+                    String ing = parts[0].trim(); // Adjust index as per your CSV structure
+                    ingradiant.add(ing);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ingradiant;
+    }
 }
