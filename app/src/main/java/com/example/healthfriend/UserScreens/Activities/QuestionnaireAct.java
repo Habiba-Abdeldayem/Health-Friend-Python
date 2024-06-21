@@ -74,7 +74,6 @@ public class QuestionnaireAct extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedGoal = parent.getItemAtPosition(position).toString();
-                // Handle the selected goal
             }
 
             @Override
@@ -82,7 +81,6 @@ public class QuestionnaireAct extends AppCompatActivity {
                 // Handle case when nothing is selected
             }
         });
-        //edit text data
 
         Confirm.setOnClickListener(new View.OnClickListener() {
             @Override

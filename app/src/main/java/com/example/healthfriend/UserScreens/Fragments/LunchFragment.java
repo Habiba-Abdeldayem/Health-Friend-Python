@@ -21,9 +21,8 @@ import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
-import com.example.healthfriend.UserScreens.BreakfastAdapterInterface;
-import com.example.healthfriend.UserScreens.PythonBreakfast;
-import com.example.healthfriend.UserScreens.PythonIngredient;
+import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.PythonLaunch;
 import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
@@ -36,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class LunchFragment extends Fragment implements BreakfastAdapterInterface {
+public class LunchFragment extends Fragment implements MealAdapterInterface {
     boolean lunch_fav_isClicked = false;
     private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;

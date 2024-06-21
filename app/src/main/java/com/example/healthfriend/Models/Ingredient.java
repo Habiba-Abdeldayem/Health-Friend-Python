@@ -1,18 +1,21 @@
-package com.example.healthfriend.UserScreens;
+package com.example.healthfriend.Models;
 
-public class PythonIngredient {
+public class Ingredient {
     private String name;
     private double carbs, calories, fats, protein;
-    private boolean isIngredientSelected; // New boolean field to track the image state
+    private boolean isIngredientSelectedByUser; // New boolean field to track the image state
+    private boolean isIngredientSelectedByDoctor; // New boolean field to track the image state
 
+    public Ingredient() {
+    }
 
-    public PythonIngredient(String name, double carbs, double calories, double fats, double protein) {
+    public Ingredient(String name, double carbs, double calories, double fats, double protein) {
         this.name = name;
         this.carbs = carbs;
         this.calories = calories;
         this.fats = fats;
         this.protein = protein;
-        isIngredientSelected = false;
+        isIngredientSelectedByUser = false;
     }
 
     public String getName() {
@@ -55,11 +58,4 @@ public class PythonIngredient {
         this.protein = protein;
     }
 
-    public boolean isIngredientSelected() {
-        return isIngredientSelected;
-    }
-
-    public void setIngredientSelected(boolean ingredientSelected) {
-        isIngredientSelected = ingredientSelected;
-    }
 }

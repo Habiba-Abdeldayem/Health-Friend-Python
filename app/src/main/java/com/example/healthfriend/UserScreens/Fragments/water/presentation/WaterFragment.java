@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WaterFragment extends Fragment {
@@ -23,7 +24,7 @@ public class WaterFragment extends Fragment {
     private TextView waterGoal;
     private WaterViewModel viewModel;
     private FirebaseFirestore db;
-    private Double waterNeeded = 160.0;
+    private Double waterNeeded = User.getInstance().getDaily_water_need();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,16 +40,16 @@ public class WaterFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_water, container, false);
 
 
-        progressBar = view.findViewById(R.id.progress_bar);
+        progressBar = view.findViewById(R.id.water_progress_bar);
         textViewProgress = view.findViewById(R.id.text_view_progress);
         waterGoal = view.findViewById(R.id.water_goal);
 
         AppCompatImageButton buttonIncrease = view.findViewById(R.id.button_incr);
         buttonIncrease.setOnClickListener(v -> {
-            if (progress == 2500){
+            if (progress == waterNeeded){
                 Toast.makeText(requireContext(), "Invalid action", Toast.LENGTH_SHORT).show();
-            } else if(progress > (2500 - 250)) {
-                increaseProgress(2500- progress);
+            } else if(progress > (waterNeeded - 250)) {
+                increaseProgress(waterNeeded- progress);
             } else {
                 increaseProgress(250);
                 updateProgressBar();
@@ -72,14 +73,16 @@ public class WaterFragment extends Fragment {
         viewModel.getWeight();
         viewModel.getProgress();
 
-        viewModel.weight.observe(getViewLifecycleOwner(), w -> {
-            waterNeeded = viewModel.calculateWaterInTake(Double.parseDouble(w));
-            waterGoal.setText("/ " + 2500);
-        });
+//        viewModel.weight.observe(getViewLifecycleOwner(), w -> {
+//            waterNeeded = viewModel.calculateWaterInTake(Double.parseDouble(w));
+//            waterGoal.setText("/ " + waterNeeded);
+//        });
 
         viewModel.progress.observe(getViewLifecycleOwner(), p -> {
             progress = p;
             updateProgressBar();
+            waterNeeded = User.getInstance().getDaily_water_need();
+            waterGoal.setText("/ " + waterNeeded);
         });
 
         // Inflate the layout for this fragment
@@ -88,74 +91,18 @@ public class WaterFragment extends Fragment {
 
     private void updateProgressBar() {
         // Calculate the scaled progress value
-        int scaledProgress = (int) ((progress * 100) / 2500); // Scale the progress to a percentage
+        int scaledProgress = (int) ((progress * 100) / waterNeeded); // Scale the progress to a percentage
         progressBar.setProgress(scaledProgress);
-        textViewProgress.setText(2500 + "");
+        textViewProgress.setText(progress + "");
     }
 
-    private void increaseProgress(int amount) {
+    private void increaseProgress(double amount) {
         progress += amount;
         viewModel.setProgress(progress);
     }
 
-    private void decreaseProgress(int amount) {
+    private void decreaseProgress(double amount) {
         progress -= amount;
         viewModel.setProgress(progress);
     }
 }
-
-/*
-public class MainActivity extends AppCompatActivity {
-    private int progr = 0;
-    private ProgressBar progressBar;
-    private TextView textViewProgress;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        progressBar = findViewById(R.id.progress_bar);
-        textViewProgress = findViewById(R.id.text_view_progress);
-        updateProgressBar();
-
-        Button buttonIncr = findViewById(R.id.button_incr);
-        buttonIncr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                increaseProgress(250);
-            }
-        });
-
-        Button buttonDecr = findViewById(R.id.button_decr);
-        buttonDecr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decreaseProgress(250);
-            }
-        });
-    }
-
-    private void updateProgressBar() {
-        // Calculate the scaled progress value
-        int scaledProgress = (progr * 100) / 2500; // Scale the progress to a percentage
-        progressBar.setProgress(scaledProgress);
-        textViewProgress.setText(progr + "/2500 ml");
-    }
-
-    private void increaseProgress(int amount) {
-        progr += amount;
-        if (progr > 2500)
-            progr = 2500;
-        updateProgressBar();
-    }
-
-    private void decreaseProgress(int amount) {
-        progr -= amount;
-        if (progr < 0)
-            progr = 0;
-        updateProgressBar();
-    }
-}
-
- */

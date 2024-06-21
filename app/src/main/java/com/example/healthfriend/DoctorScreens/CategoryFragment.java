@@ -58,7 +58,7 @@ CategryAdapter adapter;
         RecyclerView recyclerView = view.findViewById(R.id.category_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new CategryAdapter (items);
+        adapter = new CategryAdapter ( getContext(),items);
         recyclerView.setAdapter(adapter);
 
         return  view;

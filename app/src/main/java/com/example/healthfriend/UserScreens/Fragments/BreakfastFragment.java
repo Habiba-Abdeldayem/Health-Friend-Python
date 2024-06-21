@@ -18,11 +18,9 @@ import android.widget.TextView;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
-import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
-import com.example.healthfriend.UserScreens.BreakfastAdapterInterface;
+import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import com.example.healthfriend.UserScreens.PythonBreakfast;
-import com.example.healthfriend.UserScreens.PythonIngredient;
-import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
+import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
 
 import java.lang.reflect.Type;
@@ -32,17 +30,13 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
 
-public class BreakfastFragment extends Fragment implements BreakfastAdapterInterface {
+public class BreakfastFragment extends Fragment implements MealAdapterInterface {
     boolean breakfast_fav_isClicked = false;
     private PythonBreakfast pythonBreakfast;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
