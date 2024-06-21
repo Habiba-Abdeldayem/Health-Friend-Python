@@ -15,7 +15,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
+            android:layout_marginStart="12dp"
             android:text="My profile:"
             android:textSize="30sp"
             android:textStyle="bold|italic"
@@ -160,14 +160,6 @@
             app:layout_constraintEnd_toEndOf="@+id/edit_weight"
             app:layout_constraintTop_toTopOf="@+id/target_tv" />
 
-        <ImageView
-            android:id="@+id/edit_calories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_edit_24"
-            app:layout_constraintBottom_toBottomOf="@+id/calories_tv"
-            app:layout_constraintEnd_toEndOf="@+id/edit_weight"
-            app:layout_constraintTop_toTopOf="@+id/calories_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

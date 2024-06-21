@@ -6,20 +6,37 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/edit_field_label"
+        android:id="@+id/gender_edit_field_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Weight"
+        android:text="Edit Gender"
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingTop="16dp"/>
 
-    <EditText
-        android:id="@+id/edit_field"
-        android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/profile_gender_radio_group"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:inputType="numberDecimal"/>
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/profile_male_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textColor="#454343" />
+
+        <RadioButton
+            android:id="@+id/profile_female_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textColor="#454343" />
+    </RadioGroup>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +56,7 @@
             android:textColor="@color/black"
             android:layout_marginEnd="20dp"/>
         <Button
-            android:id="@+id/save_button"
+            android:id="@+id/gender_save_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"

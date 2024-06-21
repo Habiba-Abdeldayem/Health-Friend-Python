@@ -2,6 +2,7 @@ package com.example.healthfriend.DoctorScreens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -13,7 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.healthfriend.Models.WeeklyPlan;
+import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.FireStoreManager;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +34,8 @@ public class MealsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_meals);
         breakfastButton = findViewById(R.id.breakfastButton);
         //categoryListView = findViewById(R.id.categoryListView); // Ensure you have this ListView in your layout
+
+
 
         breakfastButton.setOnClickListener(new View.OnClickListener() {
             @Override

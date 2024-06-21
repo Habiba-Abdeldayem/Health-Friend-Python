@@ -1,5 +1,6 @@
 package com.example.healthfriend.UserScreens;
 
+import com.example.healthfriend.UserScreens.Fragments.water.domain.WaterIntakeCalculator;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class User {
@@ -81,6 +82,7 @@ public class User {
         if(plan.equals("Health & Wellness") || plan.equals("Easy Monitoring")){daily_calories_need = weight * 30;}
         else if(plan.equals("Weight Control")){ daily_calories_need = weight * 35;}
         else if(plan.equals("Weight Gain")){  daily_calories_need = weight * 20;}
+//        else {  daily_calories_need = weight * 20;}
 
     }
 
@@ -94,10 +96,6 @@ public class User {
 
     public int getWater_target() {
         return water_target;
-    }
-
-    public void setWater_target(int water_target) {
-        this.water_target = water_target;
     }
 
     public String getEmail() {
@@ -122,7 +120,9 @@ public class User {
 
     public void setDaily_water_need() {
         final double BASE_FACTOR = 0.3;
-        daily_water_need= weight * BASE_FACTOR;
+        double milliPerKg = weight * BASE_FACTOR;
+//        double milliPerKg = WaterIntakeCalculator.calculateRecommendedWaterIntake(weight);
+        daily_water_need = milliPerKg * weight;
     }
 
     public String getPlan() {
@@ -146,6 +146,7 @@ public class User {
             daily_proteins_need = document.getDouble("daily_proteins_need");
             gender = document.getString("gender");
             water_progress = document.getLong("daily_water_need").intValue();
+            plan = document.getString("plan");
 
             setDaily_water_need();
         }
@@ -157,6 +158,16 @@ public class User {
 
     public void setWater_progress(int water_progress) {
         this.water_progress = water_progress;
+    }
+    // Used to update info when user update his info
+    public void updateCalculations(){
+        setDaily_carbs_need();
+        setDaily_proteins_need();
+        setDaily_fats_need();
+        setDaily_calories_need();
+        setDaily_water_need();
+        FireStoreManager fireStoreManager = new FireStoreManager();
+        fireStoreManager.setUserPersonalInfo(instance);
     }
 
 }

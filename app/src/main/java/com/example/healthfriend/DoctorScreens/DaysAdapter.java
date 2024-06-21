@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DayViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                WeeklyPlanManagerSingleton.getInstance().setCurrentDayIdx(holder.getAdapterPosition());
                 Intent intent = new Intent(context, MealsActivity.class);
                 context.startActivity(intent);
             }

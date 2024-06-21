@@ -1,6 +1,6 @@
 package com.example.healthfriend.UserScreens;
 
-import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
+import com.example.healthfriend.Models.PythonIngredient;
 
 import java.util.List;
 

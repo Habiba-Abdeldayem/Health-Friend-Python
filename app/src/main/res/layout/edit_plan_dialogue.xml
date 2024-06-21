@@ -6,20 +6,19 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/edit_field_label"
+        android:id="@+id/plan_edit_field_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Weight"
+        android:text="Edit Plan"
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingTop="16dp"/>
-
-    <EditText
-        android:id="@+id/edit_field"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/edit_plan_spinner"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:inputType="numberDecimal"/>
+        android:layout_marginStart="16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,25 +26,24 @@
         android:orientation="horizontal"
         android:layout_marginTop="16dp">
 
-
-
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Cancel"
             android:backgroundTint="@color/grey"
             android:textColor="@color/black"
-            android:layout_marginEnd="20dp"/>
+            android:text="Cancel"
+            android:layout_marginEnd="20dp"
+            />
         <Button
-            android:id="@+id/save_button"
+            android:id="@+id/plan_save_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Save"
             android:backgroundTint="@color/dark_green"
-            />
+            android:text="Save" />
+
     </LinearLayout>
 
 </LinearLayout>
