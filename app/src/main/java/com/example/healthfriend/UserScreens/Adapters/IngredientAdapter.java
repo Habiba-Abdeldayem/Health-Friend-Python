@@ -1,5 +1,7 @@
 package com.example.healthfriend.UserScreens.Adapters;
 
+import static android.provider.Settings.System.getString;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
@@ -38,8 +41,16 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     public void onBindViewHolder(IngredientViewHolder holder, int position) {
         PythonIngredient currentIngredient = ingredientModelList.get(position);
 
+        double calories = currentIngredient.getCalories();
+        double protein = currentIngredient.getProtein();
+        double carbs = currentIngredient.getCarbs();
+        double fats = currentIngredient.getFats();
+
         holder.textViewIngredientName.setText(currentIngredient.getName());
-        holder.textViewIngredientInfo.setText(currentIngredient.getCalories() + "Kcal, ");
+        String ingredientInfo = holder.itemView.getContext().getString(R.string.ingredient_info, calories, protein, carbs,fats);
+        holder.textViewIngredientInfo.setText(ingredientInfo);
+
+//        holder.textViewIngredientInfo.setText(currentIngredient.getCalories() + "Kcal, ");
 //        holder.textViewServingSize.setText(currentIngredient.getServingSize());
 
         holder.imageViewAddItem.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +68,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                         }
                     }
                     else  {
-                        TodaysNutrientsEaten.setEatenCalories(TodaysNutrientsEaten.getEatenCalories() - currentIngredient.getCalories());
-                        TodaysNutrientsEaten.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs() - currentIngredient.getCarbs());
-                        TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein());
-                        TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats());
+                        TodaysNutrientsEaten.setEatenCalories(Math.max(TodaysNutrientsEaten.getEatenCalories() - currentIngredient.getCalories(),0));
+                        TodaysNutrientsEaten.setEatenCarbs(Math.max(TodaysNutrientsEaten.getEatenCarbs() - currentIngredient.getCarbs(),0));
+                        TodaysNutrientsEaten.setEatenProteins(Math.max(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein(),0));
+                        TodaysNutrientsEaten.setEatenFats(Math.max(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats(),0));
                         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
                             mealAdapterInterface.removeItem(holder.getAdapterPosition());
                         }

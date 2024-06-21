@@ -22,14 +22,10 @@ import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
 import com.example.healthfriend.UserScreens.User;
 
 public class CaloriesFragment extends Fragment {
-
-    TextView deleteme;
-    TextView carbs;
-    TextView fatt;
-    TextView proo;
+    private TextView caloriesLeft, carbsLeft,proteinsLeft,fatsLeft;
     TodaysBreakfastSingleton breakfast;
     TodaysNutrientsEaten todaysNutrientsEaten;
-    double progress;
+    private double progress;
     public CaloriesFragment() {
         // Required empty public constructor
     }
@@ -56,11 +52,13 @@ public class CaloriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView remaining_calories = view.findViewById(R.id.mealsOverview_calories_tv);
         CardView breakfastCv = view.findViewById(R.id.breakfast_cv);
         CardView lunchCv = view.findViewById(R.id.lunch_cv);
         CardView dinnerCv = view.findViewById(R.id.dinner_cv);
-        remaining_calories.setText(Double.toString(User.getInstance().getDaily_calories_need()-TodaysNutrientsEaten.getEatenCalories()));
+        caloriesLeft =view.findViewById(R.id.mealsOverview_calories_tv);
+        carbsLeft =view.findViewById(R.id.mealsOverview_carbs_tv);
+        proteinsLeft =view.findViewById(R.id.mealsOverview_proteins_tv);
+        fatsLeft =view.findViewById(R.id.mealsOverview_fats_tv);
         breakfastCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,31 +86,39 @@ public class CaloriesFragment extends Fragment {
             }
         });
 
-        //ProgressBar progressBar = view.findViewById(R.id.fragment_calories_progress_bar);
-        //progressBar.setProgress((int)progress);
-//        progressBar.notify();
-        deleteme = view.findViewById(R.id.deleteme_textViewData);
-        Log.d("habba",Double.toString(progress));
+        ProgressBar progressBar = view.findViewById(R.id.fragment_mealsOverview_progress_bar);
+        progressBar.setProgress((int)progress);
 
-        loadNote();
     }
 
-    public void loadNote() {
-
-
-        if (breakfast.getTodaysBreakfast() != null) {
-            deleteme.setText("fats: " + breakfast.getTodaysBreakfast().getFat());
-        } else {
-            // Handle the case when todaysBreakfast is null
-            Toast.makeText(getContext(), "Check network connection", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void onResume() {
         super.onResume();
+        updateCaloriesProgress();
 
-      //  ProgressBar progressBar = requireView().findViewById(R.id.fragment_calories_progress_bar);
-        //double progress = (TodaysNutrientsEaten.getEatenCalories() / 1500.0) * 100;
-        //progressBar.setProgress((int) progress);
+    }
+
+    private void updateCaloriesProgress(){
+        User user = User.getInstance();
+        ProgressBar caloriesProgressBar = requireView().findViewById(R.id.fragment_mealsOverview_progress_bar);
+        double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / user.getDaily_calories_need()) * 100;
+        caloriesProgressBar.setProgress((int) caloriesProgress);
+
+        double caloriesLeftValue = Math.max(User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
+        double carbsLeftValue = Math.max(user.getDaily_carbs_need() - TodaysNutrientsEaten.getEatenCarbs(), 0);
+        double proteinsLeftValue = Math.max(user.getDaily_proteins_need() - TodaysNutrientsEaten.getEatenProteins(), 0);
+        double fatsLeftValue = Math.max(user.getDaily_fats_need() - TodaysNutrientsEaten.getEatenFats(), 0);
+
+
+        String calories_left_string = getString(R.string.home_calories_left, caloriesLeftValue);
+        String carbs_left_string = getString(R.string.carbs_left, carbsLeftValue);
+        String proteins_left_string = getString(R.string.proteins_left, proteinsLeftValue);
+        String fats_left_string = getString(R.string.fats_left, fatsLeftValue);
+
+        caloriesLeft.setText(calories_left_string);
+        carbsLeft.setText(carbs_left_string);
+        proteinsLeft.setText(proteins_left_string);
+        fatsLeft.setText(fats_left_string);
+
     }
 }
