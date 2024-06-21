@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,54 +17,28 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.water.presentation.WaterFragment;
 import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
+import com.example.healthfriend.UserScreens.TodaysDinnerSingleton;
+import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
+import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
+import com.example.healthfriend.UserScreens.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private TextView caloriesLeft;
+    TodaysNutrientsEaten todaysNutrientsEaten;
+    private double progress;
     public HomeFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TodaysBreakfastSingleton breakfast = TodaysBreakfastSingleton.getInstance();
+        TodaysLunchSingleton lunchFragment = TodaysLunchSingleton.getInstance();
+        TodaysDinnerSingleton dinnerFragment = TodaysDinnerSingleton.getInstance();
+        todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
+        progress = (TodaysNutrientsEaten.getEatenCalories()/1500.0)*100;
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -111,5 +89,27 @@ public class HomeFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ProgressBar progressBar = view.findViewById(R.id.home_progress_bar);
+        caloriesLeft = view.findViewById(R.id.tv_homeFragment_calories_left);
+        progressBar.setProgress((int)progress);
+        Double calories_left_value = User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
+        String calories_left_string = getString(R.string.home_calories_left, calories_left_value);
+        caloriesLeft.setText(calories_left_string);
+    }
+    public void onResume() {
+        super.onResume();
+
+        ProgressBar progressBar = requireView().findViewById(R.id.home_progress_bar);
+        double progress = (TodaysNutrientsEaten.getEatenCalories() / User.getInstance().getDaily_calories_need()) * 100;
+        progressBar.setProgress((int) progress);
+        Double calories_left_value = User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
+        String calories_left_string = getString(R.string.home_calories_left, calories_left_value);
+        caloriesLeft.setText(calories_left_string);
+
     }
 }

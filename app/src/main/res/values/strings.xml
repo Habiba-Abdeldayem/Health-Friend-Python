@@ -49,5 +49,15 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="ingredient_info">%1$.1f Kcal, Proteins: %2$.1f g, Carbs: %3$.1f g, Fats: %4$.1f g</string>
+    <string name="home_calories_left">%1$.1f\nleft</string>
+    <string name="calories_left">%1$.1f\nleft</string>
+    <string name="proteins_left">%1$.1f\nleft</string>
+    <string name="carbs_left">%1$.1f\nleft</string>
+    <string name="fats_left">%1$.1f\nleft</string>
+
+    <string name="calories_progress">%1$.1f / %2$.1f</string>
+    <string name="proteins_progress">%1$.1f / %2$.1f</string>
+    <string name="carbs_progress">%1$.1f / %2$.1f</string>
+    <string name="fats_progress">%1$.1f / %2$.1f</string>
 
 </resources>

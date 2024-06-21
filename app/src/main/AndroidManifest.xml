@@ -23,20 +23,21 @@
             android:exported="false" />
         <activity
             android:name=".DoctorScreens.DaysActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".UserScreens.Activities.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".UserScreens.Activities.LoginActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".UserScreens.Activities.RegisterActivity"
             android:exported="false"
