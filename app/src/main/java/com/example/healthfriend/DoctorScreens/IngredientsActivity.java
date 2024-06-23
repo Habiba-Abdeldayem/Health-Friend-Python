@@ -2,6 +2,8 @@ package com.example.healthfriend.DoctorScreens;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,8 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.healthfriend.Models.DoctorIngredient;
+import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.FireStoreManager;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 
 import java.util.ArrayList;
@@ -40,7 +44,13 @@ DoctorIngredientAdapter adapter;
         if(WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan() != null)
             calories.setText(caaa);
 
+        Button save_meal = findViewById(R.id.doctor_save_ingredients);
+        save_meal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
 
 //        DoctorIngredient ingredient1 = new DoctorIngredient("cat name",100,11,2,3);
 //        DoctorIngredient ingredient2 = new DoctorIngredient("cat name",100,11,2,100);
@@ -56,6 +66,7 @@ DoctorIngredientAdapter adapter;
 //
 //// Save to Firestore
 //        FireStoreManager firestoreManager = new FireStoreManager();
+//        WeeklyPlan weeklyPlan = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan();
 //        firestoreManager.saveWeeklyPlan("patientId123", weeklyPlan);
 
     }

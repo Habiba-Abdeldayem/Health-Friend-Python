@@ -41,7 +41,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/save_ingredients"
+        android:layout_above="@+id/doctor_save_ingredients"
         android:layout_below="@+id/tooolbar"
         android:orientation="vertical">
 
@@ -207,7 +207,7 @@
             android:layout_marginEnd="8dp" />
     </LinearLayout>
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/save_ingredients"
+        android:id="@+id/doctor_save_ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Save"

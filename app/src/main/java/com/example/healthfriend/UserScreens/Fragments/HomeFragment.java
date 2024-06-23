@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.healthfriend.DoctorScreens.DaysActivity;
+import com.example.healthfriend.DoctorScreens.Userlist_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.water.presentation.WaterFragment;
 import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
@@ -57,8 +58,15 @@ public class HomeFragment extends Fragment {
         deleteMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), DaysActivity.class);
-                startActivity(intent);
+//                FragmentManager fm = requireActivity().getSupportFragmentManager();
+//                FragmentTransaction ft = fm.beginTransaction();
+//                ft.replace(R.id.home_frame_layout, userlistFragment);
+//                ft.addToBackStack(null); // Add this line to enable back navigation
+//                ft.commit();
+                Userlist_Fragment userlistFragment = new Userlist_Fragment();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, userlistFragment).commit();
+//                Intent intent = new Intent(getActivity(), DaysActivity.class);
+//                startActivity(intent);
             }
         });
 

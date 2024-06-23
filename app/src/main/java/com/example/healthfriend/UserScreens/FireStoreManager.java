@@ -218,7 +218,7 @@ public class FireStoreManager {
 
     // Doctor methods
     // Save the weekly plan for a patient
-    public void saveWeeklyPlan(String patientId, WeeklyPlan weeklyPlan) {
+    public void saveWeeklyPlan(String patient_email, WeeklyPlan weeklyPlan) {
         db.collection("DoctorsPlan")
                 .document("doctor1@gmail.com")
                 .collection("patient1@gmail.com")

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,18 +37,20 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
         this.dayIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
         this.isItBreakfastLunchDinnerIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx();
         this.currentMeal = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
-        this.selectedIngredients = this.currentMeal.getIngredients();
+        if (this.currentMeal != null) {
+            this.selectedIngredients = this.currentMeal.getIngredients();
 
-        // Initialize the selected state for each ingredient
-        for (DoctorIngredient availableIngredient : availableIngredients) {
-            boolean isSelected = false;
-            for (DoctorIngredient selectedIngredient : selectedIngredients) {
-                if (availableIngredient.getName().equals(selectedIngredient.getName())) {
-                    isSelected = true;
-                    break;
+            // Initialize the selected state for each ingredient
+            for (DoctorIngredient availableIngredient : availableIngredients) {
+                boolean isSelected = false;
+                for (DoctorIngredient selectedIngredient : selectedIngredients) {
+                    if (availableIngredient.getName().equals(selectedIngredient.getName())) {
+                        isSelected = true;
+                        break;
+                    }
                 }
+                availableIngredient.setIngredientSelectedByDoctor(isSelected);
             }
-            availableIngredient.setIngredientSelectedByDoctor(isSelected);
         }
     }
 
@@ -84,13 +87,13 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
                         currentMeal.addIngredient(currentIngredient);
                         currentIngredient.setIngredientSelectedByDoctor(true);
                         Log.d("opaa", "after after" + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
-                        Log.d("opaa", "total ing: " +  WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+                        Log.d("opaa", "total ing: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
                     } else {
 //                        currentMeal.removeIngredient(currentIngredient);
                         currentMeal.removeIngredientByName(currentIngredient.getName());
                         currentIngredient.setIngredientSelectedByDoctor(false);
                         Log.d("opaa", "deselect " + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
-                        Log.d("opaa", "total ing after des: " +  WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+                        Log.d("opaa", "total ing after des: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
 
                     }
                     // Update the weekly plan using the meal position
