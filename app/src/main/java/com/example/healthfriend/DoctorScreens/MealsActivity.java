@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
@@ -26,6 +29,8 @@ import java.util.Set;
 
 public class MealsActivity extends AppCompatActivity {
     private Button breakfastButton;
+    private Button lunchButton;
+    private Button dinnerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +38,36 @@ public class MealsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_meals);
         breakfastButton = findViewById(R.id.breakfastButton);
-        //categoryListView = findViewById(R.id.categoryListView); // Ensure you have this ListView in your layout
-
-
-
+        lunchButton = findViewById(R.id.lunchButton);
+        dinnerButton = findViewById(R.id.dinnerButton);
         breakfastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Set<String> categoriesSet = CSVParser.getCategories(getResources().openRawResource(R.raw.breakfast));
-                List<String> categoriesList = new ArrayList<>(categoriesSet);
-                Toast.makeText(MealsActivity.this, "This is my Toast message!",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MealsActivity.this, CategoryActivity.class);
-                intent.putStringArrayListExtra("categories", (ArrayList<String>) categoriesList);
-
+                WeeklyPlanManagerSingleton.getInstance().setCurrentMeal(1);
+                Intent intent = new Intent(MealsActivity.this, MealSelectedIngredientsActivity.class);
                 startActivity(intent);
-                // Assuming you have a custom adapter for ListView, set it here
-                //categoryAdapter = new CategoryAdapter(MealsActivity.this, categoriesList);
-               // categoryListView.setAdapter(categoryAdapter);
+
             }
         });
+        lunchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WeeklyPlanManagerSingleton.getInstance().setCurrentMeal(2);
+                Intent intent = new Intent(MealsActivity.this, MealSelectedIngredientsActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        dinnerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WeeklyPlanManagerSingleton.getInstance().setCurrentMeal(3);
+                Intent intent = new Intent(MealsActivity.this, MealSelectedIngredientsActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
     }
 }
