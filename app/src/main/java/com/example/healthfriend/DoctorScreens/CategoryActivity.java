@@ -23,15 +23,14 @@ CategryAdapter adapter;
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_category);
-        Toast.makeText(CategoryActivity.this, "ggggg!",Toast.LENGTH_LONG).show();
         ArrayList<String> categories = getIntent().getStringArrayListExtra("categories");
-        //Toast.makeText(CategoryActivity.this, categories.size(),Toast.LENGTH_LONG).show();
         RecyclerView recyclerView =findViewById(R.id.categry_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new CategryAdapter (this,categories);
-        recyclerView.setAdapter(adapter);
-
+        if(categories!=null) {
+            adapter = new CategryAdapter(this, categories);
+            recyclerView.setAdapter(adapter);
+        }
 
     }
 }

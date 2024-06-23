@@ -53,5 +53,33 @@ public class DailyPlan {
     public double getTotalCarbs() {
         return breakfast.getTotalCarbs() + lunch.getTotalCarbs() + dinner.getTotalCarbs();
     }
+    public Meal isItBreakfastLunchDinner(int position) {
+        if (position > 0 && position <= 3) {
+            switch (position) {
+                case 1:
+                    return breakfast;
+                case 2:
+                    return lunch;
+                case 3:
+                    return dinner;
+            }
+        }
+        return breakfast;
+    }
+    public void updateMeal(int position, Meal updatedMeal) {
+        if (position > 0 && position <= 3) {
+            switch (position){
+                case 1:
+                    breakfast=updatedMeal;
+                    break;
+                case 2:
+                    lunch = updatedMeal;
+                    break;
+                case 3:
+                    dinner = updatedMeal;
+                    break;
+            }
+        }
+    }
 
 }

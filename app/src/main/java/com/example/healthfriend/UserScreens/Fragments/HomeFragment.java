@@ -1,9 +1,11 @@
 package com.example.healthfriend.UserScreens.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.healthfriend.DoctorScreens.DaysActivity;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.water.presentation.WaterFragment;
 import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
@@ -37,7 +40,7 @@ public class HomeFragment extends Fragment {
         TodaysLunchSingleton lunchFragment = TodaysLunchSingleton.getInstance();
         TodaysDinnerSingleton dinnerFragment = TodaysDinnerSingleton.getInstance();
         todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
-        progress = (TodaysNutrientsEaten.getEatenCalories()/1500.0)*100;
+        progress = (TodaysNutrientsEaten.getEatenCalories()/User.getInstance().getDaily_calories_need())*100;
 
     }
 
@@ -50,6 +53,14 @@ public class HomeFragment extends Fragment {
         CardView caloriesCV = view.findViewById(R.id.calories_cv);
         CardView waterCV = view.findViewById(R.id.water_cv);
         CardView sleepCV = view.findViewById(R.id.sleep_cv);
+        Button deleteMe=view.findViewById(R.id.btn_deleteme);
+        deleteMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), DaysActivity.class);
+                startActivity(intent);
+            }
+        });
 
         caloriesCV.setOnClickListener(new View.OnClickListener() {
             @Override

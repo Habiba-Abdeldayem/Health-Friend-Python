@@ -1,6 +1,7 @@
 package com.example.healthfriend.DoctorScreens;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.healthfriend.Models.DailyPlan;
 import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.Models.Meal;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
@@ -20,20 +20,35 @@ import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import java.util.List;
 
 public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
-//    private List<String> ingredient;
     private Context context;
-    private List<DoctorIngredient> ingredientsList;
-    RecyclerView recyclerView;
+    private List<DoctorIngredient> availableIngredients;
+    private List<DoctorIngredient> selectedIngredients;
+
     private final MealAdapterInterface mealAdapterInterface;
-    private int dayIdx =WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
-    private DailyPlan currentDayNutrients = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx);
-//    private Meal currentMeal = currentDayNutrients.get;
+    private int dayIdx;
+    private Meal currentMeal;
+    private int isItBreakfastLunchDinnerIdx; // 1 for breakfast , 2 for lunch , 3 for dinner
 
     public DoctorIngredientAdapter(Context context, List<DoctorIngredient> ingredientsList, MealAdapterInterface mealAdapterInterface) {
         this.context = context;
-        this.ingredientsList = ingredientsList;
-//        this.recyclerView = recyclerView;
+        this.availableIngredients = ingredientsList;
         this.mealAdapterInterface = mealAdapterInterface;
+        this.dayIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
+        this.isItBreakfastLunchDinnerIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx();
+        this.currentMeal = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
+        this.selectedIngredients = this.currentMeal.getIngredients();
+
+        // Initialize the selected state for each ingredient
+        for (DoctorIngredient availableIngredient : availableIngredients) {
+            boolean isSelected = false;
+            for (DoctorIngredient selectedIngredient : selectedIngredients) {
+                if (availableIngredient.getName().equals(selectedIngredient.getName())) {
+                    isSelected = true;
+                    break;
+                }
+            }
+            availableIngredient.setIngredientSelectedByDoctor(isSelected);
+        }
     }
 
     @NonNull
@@ -45,87 +60,76 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
 
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-//        String categoryName = ingredient.get(position);
-//        holder.cat.setText(categoryName);
-
-        DoctorIngredient currentIngredient = ingredientsList.get(position);
+        DoctorIngredient currentIngredient = availableIngredients.get(position);
         double calories = currentIngredient.getCalories();
         double protein = currentIngredient.getProtein();
         double carbs = currentIngredient.getCarbs();
         double fats = currentIngredient.getFats();
 
         holder.textViewIngredientName.setText(currentIngredient.getName());
-        String ingredientInfo = context.getString(R.string.ingredient_info, calories, protein, carbs,fats);
+        String ingredientInfo = context.getString(R.string.ingredient_info, calories, protein, carbs, fats);
         holder.textViewIngredientInfo.setText(ingredientInfo);
 
-//        holder.imageViewAddItem.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if (mealAdapterInterface != null) {
-//                    // it was unselected, then selected after press
-//                    if (!currentIngredient.isIngredientSelectedByDoctor()) {
-//                        TodaysNutrientsEaten.setEatenCalories(TodaysNutrientsEaten.getEatenCalories() + currentIngredient.getCalories());
-//                        TodaysNutrientsEaten.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs() + currentIngredient.getCarbs());
-//                        TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() + currentIngredient.getProtein());
-//                        TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() + currentIngredient.getFats());
-//                        if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
-//                            mealAdapterInterface.addItem(holder.getAdapterPosition());
-//                        }
-//                    }
-//                    else  {
-//                        TodaysNutrientsEaten.setEatenCalories(TodaysNutrientsEaten.getEatenCalories() - currentIngredient.getCalories());
-//                        TodaysNutrientsEaten.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs() - currentIngredient.getCarbs());
-//                        TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein());
-//                        TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats());
-//                        if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
-//                            mealAdapterInterface.removeItem(holder.getAdapterPosition());
-//                        }
-//                    }
-//                }
-//
-//                // Notify the adapter that the data has changed to reflect the new image state
-//                notifyDataSetChanged();
-//                currentIngredient.setIngredientSelectedByDoctor(!currentIngredient.isIngredientSelectedByDoctor());
-//
-//            }
-//        });
+        // Set the initial state of the add item button based on selection status
+        updateAddItemButton(holder.imageViewAddItem, currentIngredient.isIngredientSelectedByDoctor());
 
-        if (currentIngredient.isIngredientSelectedByDoctor()) {
-            holder.imageViewAddItem.setImageResource(R.drawable.ic_ingredient_check_green);
-            currentIngredient.setIngredientSelectedByDoctor(true);
-        } else {
-            holder.imageViewAddItem.setImageResource(R.drawable.ic_ingredient_unchecked);
-        }
+        Log.d("opaa", "before " + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
 
+        holder.imageViewAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("opaa", "afteeeer" + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
+                if (currentMeal != null) {
+                    if (!currentIngredient.isIngredientSelectedByDoctor()) {
+                        currentMeal.addIngredient(currentIngredient);
+                        currentIngredient.setIngredientSelectedByDoctor(true);
+                        Log.d("opaa", "after after" + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
+                        Log.d("opaa", "total ing: " +  WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+                    } else {
+//                        currentMeal.removeIngredient(currentIngredient);
+                        currentMeal.removeIngredientByName(currentIngredient.getName());
+                        currentIngredient.setIngredientSelectedByDoctor(false);
+                        Log.d("opaa", "deselect " + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
+                        Log.d("opaa", "total ing after des: " +  WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
 
+                    }
+                    // Update the weekly plan using the meal position
+                    WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).updateMeal(isItBreakfastLunchDinnerIdx, currentMeal);
 
+                    // Update the add item button state
+                    updateAddItemButton(holder.imageViewAddItem, currentIngredient.isIngredientSelectedByDoctor());
 
+                    // Notify the adapter to refresh the view
+                    notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return ingredientsList.size();
+        return availableIngredients.size();
+    }
+
+    private void updateAddItemButton(ImageButton imageButton, boolean isSelected) {
+        if (isSelected) {
+            imageButton.setImageResource(R.drawable.ic_ingredient_check_green);
+        } else {
+            imageButton.setImageResource(R.drawable.ic_ingredient_unchecked);
+        }
     }
 }
 
 class IngredientViewHolder extends RecyclerView.ViewHolder {
-//    public TextView cat;
     TextView textViewIngredientName;
-    TextView textViewCalories;
-     TextView textViewIngredientInfo;
-     ImageButton imageViewAddItem;
-     ImageButton imageViewFav;
-     CardView cardView;
-
+    TextView textViewIngredientInfo;
+    ImageButton imageViewAddItem;
+    CardView cardView;
 
     public IngredientViewHolder(@NonNull View itemView) {
         super(itemView);
-//        cat = itemView.findViewById(R.id.category_tv);
         textViewIngredientName = itemView.findViewById(R.id.textViewIngredientName);
-//            textViewCalories = itemView.findViewById(R.id.textViewCalories);
         textViewIngredientInfo = itemView.findViewById(R.id.textViewIngredientInfo);
-//            textViewServingSize = itemView.findViewById(R.id.textViewServingSize);
         imageViewAddItem = itemView.findViewById(R.id.btn_add_item);
         cardView = itemView.findViewById(R.id.ingredient_cardView);
     }
