@@ -13,6 +13,7 @@
         android:theme="@style/Theme.HealthFriend"
         tools:targetApi="31">
         <activity
+            android:name=".DoctorScreens.QuestionnaireDoctorActivity"
             android:name=".DoctorScreens.MealSelectedIngredientsActivity"
             android:exported="false" />
         <activity
@@ -34,7 +35,7 @@
             android:name=".UserScreens.Activities.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-           <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,12 +45,6 @@
             android:name=".DoctorScreens.FollowingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" >
-
-        </activity>
-        <activity
-            android:name=".UserScreens.Activities.RegisterActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan">
 
         </activity>
         <activity
