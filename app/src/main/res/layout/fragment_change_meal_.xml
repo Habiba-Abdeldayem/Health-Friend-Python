@@ -183,7 +183,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/ingredient_cardView"
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
@@ -230,7 +230,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            app:layout_constraintTop_toBottomOf="@+id/ingredient_cardView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.example.healthfriend.UserScreens.Adapters;
 
-import android.util.Log;
+import static android.provider.Settings.System.getString;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,10 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.R;
-import com.example.healthfriend.UserScreens.BreakfastAdapterInterface;
-import com.example.healthfriend.UserScreens.PythonIngredient;
+import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
 
 import java.util.List;
@@ -20,12 +22,12 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
     private List<PythonIngredient> ingredientModelList;
     RecyclerView recyclerView;
-    private final BreakfastAdapterInterface breakfastAdapterInterface;
+    private final MealAdapterInterface mealAdapterInterface;
 
-    public IngredientAdapter(List<PythonIngredient> ingredientModelList, RecyclerView recyclerView, BreakfastAdapterInterface breakfastAdapterInterface) {
+    public IngredientAdapter(List<PythonIngredient> ingredientModelList, RecyclerView recyclerView, MealAdapterInterface mealAdapterInterface) {
         this.ingredientModelList = ingredientModelList;
         this.recyclerView = recyclerView;
-        this.breakfastAdapterInterface = breakfastAdapterInterface;
+        this.mealAdapterInterface = mealAdapterInterface;
     }
 
     @Override
@@ -39,45 +41,53 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     public void onBindViewHolder(IngredientViewHolder holder, int position) {
         PythonIngredient currentIngredient = ingredientModelList.get(position);
 
+        double calories = currentIngredient.getCalories();
+        double protein = currentIngredient.getProtein();
+        double carbs = currentIngredient.getCarbs();
+        double fats = currentIngredient.getFats();
+
         holder.textViewIngredientName.setText(currentIngredient.getName());
-        holder.textViewCalories.setText(currentIngredient.getCalories() + "Kcal, ");
+        String ingredientInfo = holder.itemView.getContext().getString(R.string.ingredient_info, calories, protein, carbs,fats);
+        holder.textViewIngredientInfo.setText(ingredientInfo);
+
+//        holder.textViewIngredientInfo.setText(currentIngredient.getCalories() + "Kcal, ");
 //        holder.textViewServingSize.setText(currentIngredient.getServingSize());
 
         holder.imageViewAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (breakfastAdapterInterface != null) {
+                if (mealAdapterInterface != null) {
                     // it was unselected, then selected after press
-                    if (!currentIngredient.isIngredientSelected()) {
+                    if (!currentIngredient.isIngredientSelectedByUser()) {
                         TodaysNutrientsEaten.setEatenCalories(TodaysNutrientsEaten.getEatenCalories() + currentIngredient.getCalories());
                         TodaysNutrientsEaten.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs() + currentIngredient.getCarbs());
                         TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() + currentIngredient.getProtein());
                         TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() + currentIngredient.getFats());
                         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
-                            breakfastAdapterInterface.addItem(holder.getAdapterPosition());
+                            mealAdapterInterface.addItem(holder.getAdapterPosition());
                         }
                     }
                     else  {
-                        TodaysNutrientsEaten.setEatenCalories(TodaysNutrientsEaten.getEatenCalories() - currentIngredient.getCalories());
-                        TodaysNutrientsEaten.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs() - currentIngredient.getCarbs());
-                        TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein());
-                        TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats());
+                        TodaysNutrientsEaten.setEatenCalories(Math.max(TodaysNutrientsEaten.getEatenCalories() - currentIngredient.getCalories(),0));
+                        TodaysNutrientsEaten.setEatenCarbs(Math.max(TodaysNutrientsEaten.getEatenCarbs() - currentIngredient.getCarbs(),0));
+                        TodaysNutrientsEaten.setEatenProteins(Math.max(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein(),0));
+                        TodaysNutrientsEaten.setEatenFats(Math.max(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats(),0));
                         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
-                            breakfastAdapterInterface.removeItem(holder.getAdapterPosition());
+                            mealAdapterInterface.removeItem(holder.getAdapterPosition());
                         }
                     }
                 }
 
                 // Notify the adapter that the data has changed to reflect the new image state
                 notifyDataSetChanged();
-                currentIngredient.setIngredientSelected(!currentIngredient.isIngredientSelected());
+                currentIngredient.setIngredientSelectedByUser(!currentIngredient.isIngredientSelectedByUser());
 
             }
         });
 
-        if (currentIngredient.isIngredientSelected()) {
+        if (currentIngredient.isIngredientSelectedByUser()) {
             holder.imageViewAddItem.setImageResource(R.drawable.ic_ingredient_check_green);
-            currentIngredient.setIngredientSelected(true);
+            currentIngredient.setIngredientSelectedByUser(true);
         } else {
             holder.imageViewAddItem.setImageResource(R.drawable.ic_ingredient_unchecked);
         }
@@ -90,22 +100,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     }
 
     public static class IngredientViewHolder extends RecyclerView.ViewHolder {
-        public TextView textViewIngredientName;
-        public TextView textViewCalories;
-        public TextView textViewServingSize;
-        public ImageButton imageViewAddItem;
-        public ImageButton imageViewFav;
-        public CardView cardView;
+        private TextView textViewIngredientName;
+        private TextView textViewCalories;
+        private TextView textViewIngredientInfo;
+        private ImageButton imageViewAddItem;
+        private ImageButton imageViewFav;
+        private CardView cardView;
 
 
         public IngredientViewHolder(View itemView) {
             super(itemView);
             textViewIngredientName = itemView.findViewById(R.id.textViewIngredientName);
-            textViewCalories = itemView.findViewById(R.id.textViewCalories);
-            textViewServingSize = itemView.findViewById(R.id.textViewServingSize);
+//            textViewCalories = itemView.findViewById(R.id.textViewCalories);
+            textViewIngredientInfo = itemView.findViewById(R.id.textViewIngredientInfo);
+//            textViewServingSize = itemView.findViewById(R.id.textViewServingSize);
             imageViewAddItem = itemView.findViewById(R.id.btn_add_item);
             imageViewFav = itemView.findViewById(R.id.breakfast_btn_add_to_favourite);
-            cardView = itemView.findViewById(R.id.cardView);
+            cardView = itemView.findViewById(R.id.ingredient_cardView);
 
 
         }

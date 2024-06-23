@@ -12,7 +12,7 @@
         tools:context=".MainActivity">
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/water_progress_bar"
             style="@style/WaterCircularDeterminateProgressBar"
             android:layout_width="294dp"
             android:layout_height="255dp"
@@ -35,7 +35,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar"
+            app:layout_constraintTop_toBottomOf="@+id/water_progress_bar"
             app:layout_constraintVertical_bias="0.41"
             tools:text="0" />
 
@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/text_view_progress"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar"
+            app:layout_constraintTop_toBottomOf="@+id/water_progress_bar"
             app:layout_constraintVertical_bias="0.41"
             tools:text="/ " />
 
@@ -66,7 +66,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.643"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar"
+            app:layout_constraintTop_toBottomOf="@+id/water_progress_bar"
             app:layout_constraintVertical_bias="0.489"
             tools:ignore="MissingConstraints" />
 
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.356"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_bar"
+            app:layout_constraintTop_toBottomOf="@+id/water_progress_bar"
             app:layout_constraintVertical_bias="0.489"
             tools:ignore="MissingConstraints" />
 
@@ -91,10 +91,10 @@
             android:layout_width="143dp"
             android:layout_height="139dp"
             android:src="@drawable/water_glass"
-            app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-            app:layout_constraintEnd_toEndOf="@+id/progress_bar"
-            app:layout_constraintStart_toStartOf="@+id/progress_bar"
-            app:layout_constraintTop_toTopOf="@+id/progress_bar" />
+            app:layout_constraintBottom_toBottomOf="@+id/water_progress_bar"
+            app:layout_constraintEnd_toEndOf="@+id/water_progress_bar"
+            app:layout_constraintStart_toStartOf="@+id/water_progress_bar"
+            app:layout_constraintTop_toTopOf="@+id/water_progress_bar" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

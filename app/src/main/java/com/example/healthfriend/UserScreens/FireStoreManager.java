@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.UserScreens.Adapters.MealModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -157,7 +158,7 @@ public class FireStoreManager {
     public void setUserPersonalInfo(User u) {
         // Create a Map to represent your data
         Map<String, Object> user_personal_data = new HashMap<>();
-        user_personal_data.put("age", u.getAge()); //vv
+        user_personal_data.put("age", u.getAge());
         user_personal_data.put("daily_calories_need", u.getDaily_calories_need());
         user_personal_data.put("daily_water_need", u.getDaily_water_need());
         user_personal_data.put("daily_carbs_need", u.getDaily_carbs_need());
@@ -211,6 +212,36 @@ public class FireStoreManager {
                 }
             }
         });
+
+    }
+
+
+    // Doctor methods
+    // Save the weekly plan for a patient
+    public void saveWeeklyPlan(String patientId, WeeklyPlan weeklyPlan) {
+        db.collection("DoctorsPlan")
+                .document("doctor1@gmail.com")
+                .collection("patient1@gmail.com")
+                .document("weekly_plan")
+                .set(weeklyPlan)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully saved
+                    System.out.println("Weekly plan successfully saved!");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the error
+                    System.err.println("Error saving weekly plan: " + e.getMessage());
+                });
+    }
+
+    // Retrieve the weekly plan for a patient
+    public void getWeeklyPlan(String patientId, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+        db.collection("DoctorsPlan")
+                .document("doctor1@gmail.com")
+                .collection("patient1@gmail.com")
+                .document("weekly_plan")
+                .get()
+                .addOnCompleteListener(onCompleteListener);
 
     }
 

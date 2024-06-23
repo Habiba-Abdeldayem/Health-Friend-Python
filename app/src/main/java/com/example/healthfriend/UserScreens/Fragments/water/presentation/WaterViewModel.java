@@ -7,6 +7,7 @@ import com.example.healthfriend.UserScreens.Fragments.water.data.WaterFirestoreM
 import com.example.healthfriend.UserScreens.Fragments.water.domain.GetCallback;
 import com.example.healthfriend.UserScreens.Fragments.water.domain.SetCallback;
 import com.example.healthfriend.UserScreens.Fragments.water.domain.WaterIntakeCalculator;
+import com.example.healthfriend.UserScreens.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WaterViewModel extends ViewModel {
@@ -22,23 +23,24 @@ public class WaterViewModel extends ViewModel {
     }
 
 
-    public double calculateWaterInTake(double weightInKg) {
-        double milliPerKg = WaterIntakeCalculator.calculateRecommendedWaterIntake(weightInKg);
-        return milliPerKg * weightInKg;
-    }
+//    public double calculateWaterInTake(double weightInKg) {
+//        double milliPerKg = WaterIntakeCalculator.calculateRecommendedWaterIntake(weightInKg);
+//        return milliPerKg * weightInKg;
+//    }
 
     public void getWeight() {
-        manager.getWeight(new GetCallback() {
-            @Override
-            public void onSuccess(String value) {
-                _weight.postValue(value);
-            }
-
-            @Override
-            public void onError(String error) {
-                // Todo
-            }
-        });
+        User.getInstance().getWeight();
+//        manager.getWeight(new GetCallback() {
+//            @Override
+//            public void onSuccess(String value) {
+//                _weight.postValue(value);
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//                // Todo
+//            }
+//        });
     }
 
     public void setProgress(int progress) {
@@ -59,7 +61,7 @@ public class WaterViewModel extends ViewModel {
         manager.getProgress(new GetCallback() {
             @Override
             public void onSuccess(String p) {
-                _progress.postValue(Integer.valueOf(p));
+                _progress.postValue(Integer.valueOf(User.getInstance().getWater_progress()));
             }
 
             @Override

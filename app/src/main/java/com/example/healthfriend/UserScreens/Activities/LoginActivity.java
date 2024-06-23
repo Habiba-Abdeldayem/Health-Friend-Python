@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -31,10 +33,21 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseUser mUser;
     String emailPattern="[a-zA-Z0-9._-]+@[a-z]+\\.[a-z]+";
     private AppCompatButton button;
+    boolean isLoggedIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
+        if(isLoggedIn) {
+            User user = User.getInstance();
+            user.setEmail(sharedPref.getString("user_email", ""));
+            FireStoreManager fireStoreManager =new FireStoreManager();
+            fireStoreManager.getUserPersonalInfo(user);
+            sendUserToAnthorActivity();
+
+        };
         button = findViewById(R.id.login_btn);
         google_btn=findViewById(R.id.login_google);
         email=findViewById(R.id.login_email);
@@ -91,6 +104,11 @@ google_btn.setOnClickListener(new View.OnClickListener() {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this,"Login succeeded",Toast.LENGTH_LONG).show();
+                    SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean("is_logged_in", true);
+                    editor.putString("user_email", EMAIL); // Save user email or ID if needed
+                    editor.apply();
                     sendUserToAnthorActivity();
                 }else {
                     progressDialog.dismiss();

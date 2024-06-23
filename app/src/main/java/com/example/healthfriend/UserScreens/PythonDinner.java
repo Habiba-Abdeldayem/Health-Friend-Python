@@ -1,5 +1,7 @@
 package com.example.healthfriend.UserScreens;
 
+import com.example.healthfriend.Models.PythonIngredient;
+
 import java.util.List;
 
 public class PythonDinner {

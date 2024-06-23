@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+android:id="@+id/fragment_meals_overview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserScreens.Fragments.CaloriesFragment">
@@ -85,10 +85,13 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/mealsOverview_carbs_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="2"
                         android:text="50%"
-                        android:textSize="16sp" />
+                        android:textAlignment="center"
+                        android:textSize="14sp" />
 
 
                 </LinearLayout>
@@ -108,10 +111,14 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/mealsOverview_proteins_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="20%"
-                        android:textSize="16sp" />
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+
+                        android:maxLines="2"/>
 
 
                 </LinearLayout>
@@ -131,10 +138,13 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/mealsOverview_fats_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="30%"
-                        android:textSize="16sp" />
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+                        android:maxLines="2"/>
 
 
                 </LinearLayout>
