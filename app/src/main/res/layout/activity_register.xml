@@ -97,6 +97,29 @@
                 android:inputType="textPassword"
                 android:hint="Confirm Password" />
 
+
+<RadioGroup
+    android:id="@+id/userType_radio_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <RadioButton
+        android:id="@+id/user_RadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="User" />
+
+    <RadioButton
+        android:id="@+id/doctor_RadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Doctor" />
+</RadioGroup>
+
+
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/reg_btn"
                 android:layout_width="match_parent"
