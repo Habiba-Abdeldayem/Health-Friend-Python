@@ -49,6 +49,7 @@ public class Userlist_Fragment extends Fragment implements UserList.OnItemClickL
 
         FireStoreManager firestoreHelper = new FireStoreManager();
 
+
         recyclerView = view.findViewById(R.id.rv_userList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
@@ -218,8 +219,8 @@ public class FireStoreManager {
 
     }
 
-    public void getUserPersonalInfo(String u) {
-        userDocumentRef = db.document("/Users/" + u + "/personal_info/data");
+    public void getUserPersonalInfo(String userEmail) {
+        userDocumentRef = db.document("/Users/" + userEmail + "/personal_info/data");
         Task<DocumentSnapshot> documentSnapshotTask = userDocumentRef.get();
 
         documentSnapshotTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -232,6 +233,7 @@ public class FireStoreManager {
 
                         // Access the document data here
                     } else {
+                        retrieveDoctorFromFirestore(userEmail);
                         // Document doesn't exist
                     }
                 } else {
@@ -267,6 +269,49 @@ public class FireStoreManager {
 //            }
 //        });
 //    }
+
+    public void saveDoctorToFirestore(Doctor doctor) {
+        db.collection("Doctors")
+                .document(doctor.getEmail())
+                .set(doctor)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", "Doctor data saved successfully");
+                        } else {
+                            Log.e("TAG", "Error saving doctor data", task.getException());
+                        }
+                    }
+                });
+    }
+    private void retrieveDoctorFromFirestore(String email) {
+        db.collection("Doctors")
+                .document(email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Doctor doctor = document.toObject(Doctor.class);
+                                if (doctor != null) {
+                                    Doctor.getInstance().setName(doctor.getName());
+                                    Log.d("TAG", "Doctor data retrieved successfully: " + doctor.getName());
+                                    // Do something with the retrieved doctor data
+                                }
+                            } else {
+                                Log.d("TAG", "No such document");
+                            }
+                        } else {
+                            Log.e("TAG", "Error retrieving doctor data", task.getException());
+                        }
+                    }
+                });
+    }
+
+
     // Method to retrieve patient emails for a specific doctor
     public void getPatientEmails(String doctorEmail, final PatientFirestoreCallback callback) {
         db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email")

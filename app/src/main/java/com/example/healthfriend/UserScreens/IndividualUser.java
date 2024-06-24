@@ -6,6 +6,7 @@ public class IndividualUser {
     private double height,weight, daily_calories_need, daily_carbs_need,daily_proteins_need,daily_fats_need ,daily_water_need;
     private int age, water_target,water_progress;
     private String email,gender, plan,name;
+
     private static IndividualUser instance;
 
 

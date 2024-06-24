@@ -54,7 +54,7 @@ public class FollowingActivity extends AppCompatActivity {
         EditText searchEditText = findViewById(R.id.searchEditText);
         recyclerViewDoctors = findViewById(R.id.doctorRecyclerView);
 
-        doctorList = getDoctors();
+//        doctorList = getDoctors();
         selectedDoctors = new ArrayList<>();
 
         doctorAdapter = new DoctorAdapter(doctorList, new DoctorAdapter.OnDoctorListener() {
@@ -98,12 +98,12 @@ public class FollowingActivity extends AppCompatActivity {
         });
     }
 
-    private List<Doctor> getDoctors() {
-        // This should be replaced with actual data retrieval logic
-        List<Doctor> doctors = new ArrayList<>();
-        doctors.add(new Doctor("Dr. Smith", "Cardiologist"));
-        doctors.add(new Doctor("Dr. Johnson", "Dermatologist"));
-        doctors.add(new Doctor("Dr. Williams", "Neurologist"));
-        return doctors;
-    }
+//    private List<Doctor> getDoctors() {
+//        // This should be replaced with actual data retrieval logic
+//        List<Doctor> doctors = new ArrayList<>();
+//        doctors.add(new Doctor("Dr. Smith", "Cardiologist"));
+//        doctors.add(new Doctor("Dr. Johnson", "Dermatologist"));
+//        doctors.add(new Doctor("Dr. Williams", "Neurologist"));
+//        return doctors;
+//    }
 }

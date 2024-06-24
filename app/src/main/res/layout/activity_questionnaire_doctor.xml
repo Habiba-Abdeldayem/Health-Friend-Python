@@ -6,33 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DoctorScreens.QuestionnaireDoctorActivity">
-
+    tools:context=".DoctorScreens.QuestionnaireDoctorActivity"
+    android:gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Personal Info"
+        android:layout_marginBottom="26dp"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
     <EditText
         android:id="@+id/doc_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+
         android:ems="10"
-        android:hint="enter your Name"
-        android:inputType="number" />
+        android:maxLines="1"
+        android:hint="User Name" />
 
     <EditText
         android:id="@+id/doc_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="enter your Age"
+        android:maxLines="1"
+        android:hint="Age"
         android:inputType="number" />
     <Button
         android:id="@+id/confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="24dp"
         android:backgroundTint="@color/dark_green"
         android:text="Confirm" />
 </LinearLayout>

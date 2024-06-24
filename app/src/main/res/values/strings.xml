@@ -27,8 +27,6 @@
     <string name="patient_personal_data"><b>Name:</b> %1$s\n<b>Email:</b> %2$s\n<b>Age:</b> %3$d\n<b>Gender:</b> %4$s\n<b>Height</b>: %5$.1f cm ,<b>Weight:</b> %6$.1f kg\n<b>Goal:</b> %7$s</string>
 
 
-
-
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

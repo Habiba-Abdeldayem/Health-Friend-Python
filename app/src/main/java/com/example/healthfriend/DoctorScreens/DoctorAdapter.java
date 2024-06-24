@@ -93,7 +93,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         public void bind(Doctor doctor) {
             doctorNameTextView.setText(doctor.getName());
-            doctorSpecialtyTextView.setText(doctor.getSpecialty());
+//            doctorSpecialtyTextView.setText(doctor.getSpecialty());
             followButton.setText(onDoctorListener.isFollowing(doctor) ? "Unfollow" : "Follow");
         }
 

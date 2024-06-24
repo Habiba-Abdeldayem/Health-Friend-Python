@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.IndividualUser;
@@ -24,6 +26,9 @@ public class Doctor_Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_main);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,new Userlist_Fragment()).addToBackStack(null).commit();
+
 //        ArrayList<User> users=new ArrayList<User>();
 //        users.add(new User(150,50,R.drawable.ff,"shimaa"));
 //        users.add(new User(160,80,R.drawable.car4,"aya"));
