@@ -38,21 +38,40 @@ public class DailyPlan {
     public void setDinner(Meal dinner) {
         this.dinner = dinner;
     }
+
+    // Helper method to safely get total from a meal
+    private double safeGetTotalCalories(Meal meal) {
+        return meal != null ? meal.getTotalCalories() : 0.0;
+    }
+
+    private double safeGetTotalFats(Meal meal) {
+        return meal != null ? meal.getTotalFats() : 0.0;
+    }
+
+    private double safeGetTotalProteins(Meal meal) {
+        return meal != null ? meal.getTotalProteins() : 0.0;
+    }
+
+    private double safeGetTotalCarbs(Meal meal) {
+        return meal != null ? meal.getTotalCarbs() : 0.0;
+    }
+
     public double getTotalCalories() {
-        return breakfast.getTotalCalories() + lunch.getTotalCalories() + dinner.getTotalCalories();
+        return safeGetTotalCalories(breakfast) + safeGetTotalCalories(lunch) + safeGetTotalCalories(dinner);
     }
 
     public double getTotalFats() {
-        return breakfast.getTotalFats() + lunch.getTotalFats() + dinner.getTotalFats();
+        return safeGetTotalFats(breakfast) + safeGetTotalFats(lunch) + safeGetTotalFats(dinner);
     }
 
     public double getTotalProteins() {
-        return breakfast.getTotalProteins() + lunch.getTotalProteins() + dinner.getTotalProteins();
+        return safeGetTotalProteins(breakfast) + safeGetTotalProteins(lunch) + safeGetTotalProteins(dinner);
     }
 
     public double getTotalCarbs() {
-        return breakfast.getTotalCarbs() + lunch.getTotalCarbs() + dinner.getTotalCarbs();
+        return safeGetTotalCarbs(breakfast) + safeGetTotalCarbs(lunch) + safeGetTotalCarbs(dinner);
     }
+
     public Meal isItBreakfastLunchDinner(int position) {
         if (position > 0 && position <= 3) {
             switch (position) {
@@ -66,11 +85,12 @@ public class DailyPlan {
         }
         return breakfast;
     }
+
     public void updateMeal(int position, Meal updatedMeal) {
         if (position > 0 && position <= 3) {
-            switch (position){
+            switch (position) {
                 case 1:
-                    breakfast=updatedMeal;
+                    breakfast = updatedMeal;
                     break;
                 case 2:
                     lunch = updatedMeal;
@@ -81,5 +101,4 @@ public class DailyPlan {
             }
         }
     }
-
 }

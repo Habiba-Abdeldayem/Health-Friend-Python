@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,10 +41,10 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
         if(isLoggedIn) {
-            User user = User.getInstance();
-            user.setEmail(sharedPref.getString("user_email", ""));
+            IndividualUser individualUser = IndividualUser.getInstance();
+            individualUser.setEmail(sharedPref.getString("user_email", ""));
             FireStoreManager fireStoreManager =new FireStoreManager();
-            fireStoreManager.getUserPersonalInfo(user);
+            fireStoreManager.getUserPersonalInfo(individualUser);
             sendUserToAnthorActivity();
 
         };
@@ -83,8 +83,8 @@ google_btn.setOnClickListener(new View.OnClickListener() {
 
     private void performLogin() {
         FireStoreManager fireStoreManager = new FireStoreManager();
-        User.getInstance().setEmail(email.getText().toString());
-        fireStoreManager.getUserPersonalInfo(User.getInstance());
+        IndividualUser.getInstance().setEmail(email.getText().toString());
+        fireStoreManager.getUserPersonalInfo(IndividualUser.getInstance());
         String EMAIL=email.getText().toString();
         String PASS=pass.getText().toString();
 

@@ -2,22 +2,19 @@ package com.example.healthfriend.UserScreens.Fragments.profile.data;
 
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.EditUserCallback;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.GetUserCallback;
-import com.example.healthfriend.UserScreens.User;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Objects;
 
 
 public class ProfileFireStoreManager {
     private FirebaseFirestore db;
-    private User user = User.getInstance();
+    private IndividualUser individualUser = IndividualUser.getInstance();
     public ProfileFireStoreManager(FirebaseFirestore db) {
         this.db = db;
     }
 
     public void getUser(final GetUserCallback callback) {  // Change return type to void
-                            callback.onSuccess(user);  // Notify success
+                            callback.onSuccess(individualUser);  // Notify success
 
 //        db.collection("/Users/")
 //                .document(User.getInstance().getEmail())
@@ -45,8 +42,8 @@ public class ProfileFireStoreManager {
     }
 
     public void editWeight(String value, final EditUserCallback callback) {
-        user.setWeight(Double.valueOf(value));
-        user.updateCalculations();
+        individualUser.setWeight(Double.valueOf(value));
+        individualUser.updateCalculations();
 
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")
@@ -61,8 +58,8 @@ public class ProfileFireStoreManager {
     }
 
     public void editHeight(String value, final EditUserCallback callback) {
-        user.setHeight(Double.valueOf(value));
-        user.updateCalculations();
+        individualUser.setHeight(Double.valueOf(value));
+        individualUser.updateCalculations();
 
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")
@@ -76,8 +73,8 @@ public class ProfileFireStoreManager {
 //                });
     }
     public void editAge(String value, final EditUserCallback callback) {
-        user.setAge(Integer.valueOf(value));
-        user.updateCalculations();
+        individualUser.setAge(Integer.valueOf(value));
+        individualUser.updateCalculations();
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")
 //                .update("age", value)
@@ -90,8 +87,8 @@ public class ProfileFireStoreManager {
 //                });
     }
     public void editGender(String value, final EditUserCallback callback) {
-        user.setGender(value);
-        user.updateCalculations();
+        individualUser.setGender(value);
+        individualUser.updateCalculations();
 
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")

@@ -1,13 +1,12 @@
 package com.example.healthfriend.UserScreens;
 
-import com.example.healthfriend.UserScreens.Fragments.water.domain.WaterIntakeCalculator;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class User {
+public class IndividualUser {
     private double height,weight, daily_calories_need, daily_carbs_need,daily_proteins_need,daily_fats_need ,daily_water_need;
     private int age, water_target,water_progress;
-    private String email,gender, plan;
-    private static User instance;
+    private String email,gender, plan,name;
+    private static IndividualUser instance;
 
 
     public double getDaily_carbs_need() {
@@ -34,7 +33,7 @@ public class User {
         this.daily_fats_need = Math.round((daily_calories_need *0.2)/9*100.0)/100.0;;
     }
 
-    private User(){
+    private IndividualUser(){
         height =0;
         weight=0;
         daily_calories_need = 0;
@@ -50,9 +49,9 @@ public class User {
         water_progress = 0;
         setDaily_water_need();
     }
-    public static User getInstance() {
+    public static IndividualUser getInstance() {
         if (instance == null) {
-            instance = new User();
+            instance = new IndividualUser();
         }
         return instance;
     }
@@ -159,6 +158,15 @@ public class User {
     public void setWater_progress(int water_progress) {
         this.water_progress = water_progress;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // Used to update info when user update his info
     public void updateCalculations(){
         setDaily_carbs_need();

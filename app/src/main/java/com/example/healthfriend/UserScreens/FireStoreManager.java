@@ -1,10 +1,13 @@
 package com.example.healthfriend.UserScreens;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.healthfriend.Models.WeeklyPlan;
+import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.UserScreens.Adapters.MealModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -155,7 +158,7 @@ public class FireStoreManager {
         });
     }
 
-    public void setUserPersonalInfo(User u) {
+    public void setUserPersonalInfo(IndividualUser u) {
         // Create a Map to represent your data
         Map<String, Object> user_personal_data = new HashMap<>();
         user_personal_data.put("age", u.getAge());
@@ -175,19 +178,19 @@ public class FireStoreManager {
         personalInfoDocumentRef.set(user_personal_data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.d("sucessss","sucessss");
+                Log.d("sucessss", "sucessss");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("falll",e.getMessage());
+                Log.d("falll", e.getMessage());
 
             }
         });
 
     }
 
-    public void getUserPersonalInfo(User u) {
+    public void getUserPersonalInfo(IndividualUser u) {
         userDocumentRef = db.document("/Users/" + u.getEmail() + "/personal_info/data");
         Task<DocumentSnapshot> documentSnapshotTask = userDocumentRef.get();
 
@@ -215,35 +218,120 @@ public class FireStoreManager {
 
     }
 
+    public void getUserPersonalInfo(String u) {
+        userDocumentRef = db.document("/Users/" + u + "/personal_info/data");
+        Task<DocumentSnapshot> documentSnapshotTask = userDocumentRef.get();
+
+        documentSnapshotTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        IndividualUser.getInstance().fromDocumentSnapshot(document);
+
+                        // Access the document data here
+                    } else {
+                        // Document doesn't exist
+                    }
+                } else {
+                    // Handle task failure
+                    Exception e = task.getException();
+                    if (e != null) {
+                        Log.e("aaao", "Error fetching document: " + e.getMessage());
+                    }
+                }
+            }
+        });
+
+    }
+
 
     // Doctor methods
-    // Save the weekly plan for a patient
-    public void saveWeeklyPlan(String patient_email, WeeklyPlan weeklyPlan) {
+//    public void getPatientEmails(String doctorEmail, final PatientFirestoreCallback callback) {
+//        DocumentReference doctorRef = db.collection("DoctorsPlan").document(doctorEmail);
+//        doctorRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    ArrayList<String> patientEmails = (ArrayList<String>) document.get("patients_email");
+//                    if (patientEmails != null) {
+//                        callback.onCallback(patientEmails);
+//                    } else {
+//                        Log.w("FirestoreHelper", "No patient emails found.");
+//                    }
+//                } else {
+//                    Log.w("FirestoreHelper", "Error getting doctor document.", task.getException());
+//                }
+//            }
+//        });
+//    }
+    // Method to retrieve patient emails for a specific doctor
+    public void getPatientEmails(String doctorEmail, final PatientFirestoreCallback callback) {
+        db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<String> patientEmails = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                patientEmails.add(document.getId());
+                            }
+                            callback.onCallback(patientEmails);
+                        } else {
+                            Log.w("FirestoreHelper", "Error getting patient emails.", task.getException());
+                        }
+                    }
+                });
+    }    // Save the weekly plan for a patient
+
+    public void saveWeeklyPlan(String patient_email, WeeklyPlan weeklyPlan, Context context) {
+//        db.collection("DoctorsPlan")
+//                .document("doctor1@gmail.com")
+//                .collection("patient1@gmail.com")
+//                .document("weekly_plan")
+//                .set(weeklyPlan)
         db.collection("DoctorsPlan")
                 .document("doctor1@gmail.com")
-                .collection("patient1@gmail.com")
+                .collection(patient_email)
                 .document("weekly_plan")
                 .set(weeklyPlan)
                 .addOnSuccessListener(aVoid -> {
                     // Successfully saved
-                    System.out.println("Weekly plan successfully saved!");
+                    Toast myToast = Toast.makeText(context, "saveeed", Toast.LENGTH_LONG);
+                    myToast.show();
+                    System.out.println("Weekly plan successfully saved!" + patient_email);
                 })
                 .addOnFailureListener(e -> {
                     // Handle the error
+                    Toast myToast = Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
+                    myToast.show();
                     System.err.println("Error saving weekly plan: " + e.getMessage());
                 });
     }
 
     // Retrieve the weekly plan for a patient
-    public void getWeeklyPlan(String patientId, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+    public void getWeeklyPlan(String patient_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
         db.collection("DoctorsPlan")
                 .document("doctor1@gmail.com")
-                .collection("patient1@gmail.com")
+                .collection(patient_email)
                 .document("weekly_plan")
                 .get()
                 .addOnCompleteListener(onCompleteListener);
 
     }
 
+    public interface PatientFirestoreCallback {
+        void onCallback(ArrayList<String> patientEmails);
+    }
+//    public interface FirestoreCallback {
+//        void onCallback(List<String> patientEmails);
+//    }
+//
+//    public interface WeeklyPlanCallback {
+//        void onCallback(WeeklyPlan weeklyPlan);
+//    }
 
 }

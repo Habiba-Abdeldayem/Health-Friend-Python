@@ -6,25 +6,22 @@ import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
 public class QuestionnaireDoctorActivity extends AppCompatActivity {
     EditText name,age;
     Button Confirm;
-    User currentUser;
+    IndividualUser currentIndividualUser;
     private FireStoreManager fireStoreManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_questionnaire_doctor);
-        currentUser = User.getInstance();
+        currentIndividualUser = IndividualUser.getInstance();
         name=findViewById(R.id.doc_name);
         age=findViewById(R.id.doc_age);
         Confirm=findViewById(R.id.confirm);

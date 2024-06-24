@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.healthfriend.DoctorScreens.QuestionnaireDoctorActivity;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -95,8 +94,8 @@ progressDialog=new ProgressDialog(this);
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
-                        User newUser = User.getInstance();
-                        newUser.setEmail(email.getText().toString());
+                        IndividualUser newIndividualUser = IndividualUser.getInstance();
+                        newIndividualUser.setEmail(email.getText().toString());
                         Toast.makeText(RegisterActivity.this, "Registration Done", Toast.LENGTH_LONG).show();
                         sendUserToAnotherActivity();
                     } else {
@@ -130,8 +129,8 @@ progressDialog=new ProgressDialog(this);
         }
     }
     private void sendUserToAnotherActivity() {
-        User newUser = User.getInstance();
-        newUser.setEmail(email.getText().toString());
+        IndividualUser newIndividualUser = IndividualUser.getInstance();
+        newIndividualUser.setEmail(email.getText().toString());
 //        QuestionnaireFragment questionnaireFragment = new QuestionnaireFragment();
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        FragmentTransaction transaction = fragmentManager.beginTransaction();

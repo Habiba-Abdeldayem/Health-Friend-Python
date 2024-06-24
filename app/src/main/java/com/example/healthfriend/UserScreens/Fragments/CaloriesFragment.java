@@ -1,13 +1,11 @@
 package com.example.healthfriend.UserScreens.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
 public class CaloriesFragment extends Fragment {
     private TextView caloriesLeft, carbsLeft,proteinsLeft,fatsLeft;
@@ -99,15 +97,15 @@ public class CaloriesFragment extends Fragment {
     }
 
     private void updateCaloriesProgress(){
-        User user = User.getInstance();
+        IndividualUser individualUser = IndividualUser.getInstance();
         ProgressBar caloriesProgressBar = requireView().findViewById(R.id.fragment_mealsOverview_progress_bar);
-        double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / user.getDaily_calories_need()) * 100;
+        double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / individualUser.getDaily_calories_need()) * 100;
         caloriesProgressBar.setProgress((int) caloriesProgress);
 
-        double caloriesLeftValue = Math.max(User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
-        double carbsLeftValue = Math.max(user.getDaily_carbs_need() - TodaysNutrientsEaten.getEatenCarbs(), 0);
-        double proteinsLeftValue = Math.max(user.getDaily_proteins_need() - TodaysNutrientsEaten.getEatenProteins(), 0);
-        double fatsLeftValue = Math.max(user.getDaily_fats_need() - TodaysNutrientsEaten.getEatenFats(), 0);
+        double caloriesLeftValue = Math.max(IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
+        double carbsLeftValue = Math.max(individualUser.getDaily_carbs_need() - TodaysNutrientsEaten.getEatenCarbs(), 0);
+        double proteinsLeftValue = Math.max(individualUser.getDaily_proteins_need() - TodaysNutrientsEaten.getEatenProteins(), 0);
+        double fatsLeftValue = Math.max(individualUser.getDaily_fats_need() - TodaysNutrientsEaten.getEatenFats(), 0);
 
 
         String calories_left_string = getString(R.string.home_calories_left, caloriesLeftValue);

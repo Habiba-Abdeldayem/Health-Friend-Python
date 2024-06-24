@@ -1,6 +1,5 @@
 package com.example.healthfriend.UserScreens.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.healthfriend.DoctorScreens.DaysActivity;
 import com.example.healthfriend.DoctorScreens.Userlist_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.water.presentation.WaterFragment;
@@ -24,7 +22,7 @@ import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
 import com.example.healthfriend.UserScreens.TodaysDinnerSingleton;
 import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
 public class HomeFragment extends Fragment {
 
@@ -41,7 +39,7 @@ public class HomeFragment extends Fragment {
         TodaysLunchSingleton lunchFragment = TodaysLunchSingleton.getInstance();
         TodaysDinnerSingleton dinnerFragment = TodaysDinnerSingleton.getInstance();
         todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
-        progress = (TodaysNutrientsEaten.getEatenCalories()/User.getInstance().getDaily_calories_need())*100;
+        progress = (TodaysNutrientsEaten.getEatenCalories()/ IndividualUser.getInstance().getDaily_calories_need())*100;
 
     }
 
@@ -116,7 +114,7 @@ public class HomeFragment extends Fragment {
         ProgressBar progressBar = view.findViewById(R.id.home_progress_bar);
         caloriesLeft = view.findViewById(R.id.tv_homeFragment_calories_left);
         progressBar.setProgress((int)progress);
-        Double calories_left_value = User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
+        Double calories_left_value = IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
         String calories_left_string = getString(R.string.home_calories_left, calories_left_value);
         caloriesLeft.setText(calories_left_string);
     }
@@ -124,9 +122,9 @@ public class HomeFragment extends Fragment {
         super.onResume();
 
         ProgressBar progressBar = requireView().findViewById(R.id.home_progress_bar);
-        double progress = (TodaysNutrientsEaten.getEatenCalories() / User.getInstance().getDaily_calories_need()) * 100;
+        double progress = (TodaysNutrientsEaten.getEatenCalories() / IndividualUser.getInstance().getDaily_calories_need()) * 100;
         progressBar.setProgress((int) progress);
-        Double calories_left_value = User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
+        Double calories_left_value = IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
         String calories_left_string = getString(R.string.home_calories_left, calories_left_value);
         caloriesLeft.setText(calories_left_string);
 

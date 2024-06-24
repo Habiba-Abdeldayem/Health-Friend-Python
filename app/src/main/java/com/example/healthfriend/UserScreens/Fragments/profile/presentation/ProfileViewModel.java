@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.healthfriend.UserScreens.Fragments.profile.data.ProfileFireStoreManager;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.EditUserCallback;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.GetUserCallback;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileViewModel extends ViewModel {
@@ -33,7 +33,7 @@ public class ProfileViewModel extends ViewModel {
     public LiveData<String> calories = _calories;
 
     private ProfileFireStoreManager manager;
-    private User user = User.getInstance();
+    private IndividualUser individualUser = IndividualUser.getInstance();
 
 
 
@@ -46,15 +46,15 @@ public class ProfileViewModel extends ViewModel {
     public void getProfileData() {
         manager.getUser(new GetUserCallback() {
             @Override
-            public void onSuccess(User user) {
-                if (user != null) {
-                    _height.postValue(Double.toString(user.getHeight()));
-                    _weight.postValue(Double.toString(user.getWeight()));
-                    _age.postValue(Integer.toString(user.getAge()));
-                    _gender.postValue(user.getGender());
-                    _plan.postValue(user.getPlan());
-                    _calories.postValue(Double.toString(user.getDaily_calories_need()));
-                    Log.d("prooo",Double.toString(user.getDaily_calories_need()));
+            public void onSuccess(IndividualUser individualUser) {
+                if (individualUser != null) {
+                    _height.postValue(Double.toString(individualUser.getHeight()));
+                    _weight.postValue(Double.toString(individualUser.getWeight()));
+                    _age.postValue(Integer.toString(individualUser.getAge()));
+                    _gender.postValue(individualUser.getGender());
+                    _plan.postValue(individualUser.getPlan());
+                    _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
+                    Log.d("prooo",Double.toString(individualUser.getDaily_calories_need()));
 
                 }
             }
@@ -69,39 +69,39 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void editWeight(String value, EditUserCallback callback) {
-        user.setWeight(Double.valueOf(value));
+        individualUser.setWeight(Double.valueOf(value));
         _weight.postValue(value);
-        user.updateCalculations();
-        _calories.postValue(Double.toString(user.getDaily_calories_need()));
+        individualUser.updateCalculations();
+        _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
 //        manager.editWeight(value, callback);
     }
 
     public void editHeight(String value, EditUserCallback callback) {
-        user.setHeight(Double.valueOf(value));
+        individualUser.setHeight(Double.valueOf(value));
         _height.postValue(value);
-        user.updateCalculations();
-        _calories.postValue(Double.toString(user.getDaily_calories_need()));
+        individualUser.updateCalculations();
+        _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
 //        manager.editHeight(value, callback);
     }
     public void editAge(String value, EditUserCallback callback) {
-        user.setAge(Integer.valueOf(value));
+        individualUser.setAge(Integer.valueOf(value));
         _age.postValue(value);
-        user.updateCalculations();
-        _calories.postValue(Double.toString(user.getDaily_calories_need()));
+        individualUser.updateCalculations();
+        _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
 //        manager.editAge(value, callback);
     }
     public void editGender(String value, EditUserCallback callback) {
-        user.setGender(value);
+        individualUser.setGender(value);
         _gender.postValue(value);
-        user.updateCalculations();
-        _calories.postValue(Double.toString(user.getDaily_calories_need()));
+        individualUser.updateCalculations();
+        _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
 //        manager.editGender(value, callback);
     }
     public void editTarget(String value, EditUserCallback callback) {
-        user.setPlan(value);
+        individualUser.setPlan(value);
         _plan.postValue(value);
-        user.updateCalculations();
-        _calories.postValue(Double.toString(user.getDaily_calories_need()));
+        individualUser.updateCalculations();
+        _calories.postValue(Double.toString(individualUser.getDaily_calories_need()));
 //        manager.editTarget(value, callback);
     }
     public void editCalories(String value, EditUserCallback callback) {

@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.DialogueCallback;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.EditUserCallback;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment {
         viewModel.age.observe(getViewLifecycleOwner(), age -> ageTV.setText("Age: " + age));
         viewModel.gender.observe(getViewLifecycleOwner(), gender -> genderTV.setText("Gender: " + gender));
         viewModel.plan.observe(getViewLifecycleOwner(), plan -> targetTV.setText("Target: " + plan));
-        Log.d("plaan", User.getInstance().getPlan());
+        Log.d("plaan", IndividualUser.getInstance().getPlan());
         viewModel.calories.observe(getViewLifecycleOwner(), calories -> caloriesTV.setText("Limited Calories: " + calories));
 
         weightEditBtn.setOnClickListener(view1 -> {

@@ -8,7 +8,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -18,14 +17,14 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.DialogueCallback;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
 public class EditProfileDialogFragment extends DialogFragment {
 
     private String fieldToEdit;
     private DialogueCallback callback;
-    private String gender = User.getInstance().getGender();
-    private String selectedPlan = User.getInstance().getPlan();
+    private String gender = IndividualUser.getInstance().getGender();
+    private String selectedPlan = IndividualUser.getInstance().getPlan();
 
 
 

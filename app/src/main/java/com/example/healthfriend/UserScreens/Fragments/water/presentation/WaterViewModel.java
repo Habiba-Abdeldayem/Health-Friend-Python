@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.healthfriend.UserScreens.Fragments.water.data.WaterFirestoreManager;
 import com.example.healthfriend.UserScreens.Fragments.water.domain.GetCallback;
 import com.example.healthfriend.UserScreens.Fragments.water.domain.SetCallback;
-import com.example.healthfriend.UserScreens.Fragments.water.domain.WaterIntakeCalculator;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WaterViewModel extends ViewModel {
@@ -29,7 +28,7 @@ public class WaterViewModel extends ViewModel {
 //    }
 
     public void getWeight() {
-        User.getInstance().getWeight();
+        IndividualUser.getInstance().getWeight();
 //        manager.getWeight(new GetCallback() {
 //            @Override
 //            public void onSuccess(String value) {
@@ -61,7 +60,7 @@ public class WaterViewModel extends ViewModel {
         manager.getProgress(new GetCallback() {
             @Override
             public void onSuccess(String p) {
-                _progress.postValue(Integer.valueOf(User.getInstance().getWater_progress()));
+                _progress.postValue(Integer.valueOf(IndividualUser.getInstance().getWater_progress()));
             }
 
             @Override

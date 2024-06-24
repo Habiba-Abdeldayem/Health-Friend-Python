@@ -2,10 +2,8 @@ package com.example.healthfriend.UserScreens.Fragments.water.data;
 
 import com.example.healthfriend.UserScreens.Fragments.water.domain.GetCallback;
 import com.example.healthfriend.UserScreens.Fragments.water.domain.SetCallback;
-import com.example.healthfriend.UserScreens.User;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
 
 import java.util.Objects;
 
@@ -16,7 +14,7 @@ public class WaterFirestoreManager {
     }
 
     public void getWeight(final GetCallback callback) {
-        User.getInstance().getWeight();
+        IndividualUser.getInstance().getWeight();
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")
 //                .get()
@@ -38,7 +36,7 @@ public class WaterFirestoreManager {
 
     public void setProgress(int progress, SetCallback callback) {
         db.collection("/Users/")
-                .document(User.getInstance().getEmail())
+                .document(IndividualUser.getInstance().getEmail())
                 .collection("/personal_info").document("/data")
                 .update("water_progress", progress)
                 .addOnCompleteListener(task -> {
@@ -51,7 +49,7 @@ public class WaterFirestoreManager {
     }
 
     public void getProgress(GetCallback callback) {
-        User.getInstance().getWater_progress();
+        IndividualUser.getInstance().getWater_progress();
 //        db.collection("profile")
 //                .document("pY7jkNH0LxVkqH2BzeHn")
 //                .get()
