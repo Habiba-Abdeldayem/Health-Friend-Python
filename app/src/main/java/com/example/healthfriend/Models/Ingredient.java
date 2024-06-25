@@ -1,53 +1,72 @@
 package com.example.healthfriend.Models;
 
 public class Ingredient {
-    private String name;
-    private double carbs, calories, fats, protein;
+    private String ingredient,category;
+    private int count;
+    private double carbohydrates, energy, fat, protein;
     private boolean isIngredientSelectedByUser; // New boolean field to track the image state
     private boolean isIngredientSelectedByDoctor; // New boolean field to track the image state
 
     public Ingredient() {
     }
 
-    public Ingredient(String name, double carbs, double calories, double fats, double protein) {
-        this.name = name;
-        this.carbs = carbs;
-        this.calories = calories;
-        this.fats = fats;
+    public Ingredient(String name, double carbs, double calories, double fats, double protein,int count,String category) {
+        this.ingredient = name;
+        this.carbohydrates = carbs;
+        this.energy = calories;
+        this.fat = fats;
         this.protein = protein;
+        this.count=count;
+        this.category=category;
+
         isIngredientSelectedByUser = false;
     }
 
     public String getName() {
-        return name;
+        return ingredient;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.ingredient = name;
+    }
+    public String getCategory() {
+        return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+
     public double getCarbs() {
-        return carbs;
+        return carbohydrates;
     }
 
     public void setCarbs(double carbs) {
-        this.carbs = carbs;
+        this.carbohydrates = carbs;
     }
 
     public double getCalories() {
-        return calories;
+        return energy;
     }
 
     public void setCalories(double calories) {
-        this.calories = calories;
+        this.energy = calories;
     }
 
     public double getFats() {
-        return fats;
+        return fat;
     }
 
     public void setFats(double fats) {
-        this.fats = fats;
+        this.fat = fats;
     }
 
     public double getProtein() {

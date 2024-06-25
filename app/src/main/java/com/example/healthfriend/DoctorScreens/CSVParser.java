@@ -88,7 +88,7 @@ public static Set<DoctorIngredient> getIngredients(InputStream inputStream, Stri
                 double protein = Double.parseDouble(parts[4].trim());
                 double fats = Double.parseDouble(parts[5].trim());
                 double carbs = Double.parseDouble(parts[8].trim());
-                DoctorIngredient ingredient = new DoctorIngredient(name, carbs, calories, fats, protein);
+                DoctorIngredient ingredient = new DoctorIngredient(name, carbs, calories, fats, protein,1,"");
                 ingredients.add(ingredient);
             }
         }

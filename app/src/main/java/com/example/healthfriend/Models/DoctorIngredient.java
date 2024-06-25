@@ -6,8 +6,8 @@ public class DoctorIngredient extends Ingredient{
     public DoctorIngredient() {
     }
 
-    public DoctorIngredient(String name, double carbs, double calories, double fats, double protein) {
-        super(name,carbs,calories,fats,protein);
+    public DoctorIngredient(String name, double carbs, double calories, double fats, double protein,int count,String category) {
+        super(name,carbs,calories,fats,protein,count,category);
         isIngredientSelectedByDoctor = false;
     }
 
