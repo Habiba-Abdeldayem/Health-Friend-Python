@@ -23,6 +23,7 @@ import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.Models.Meal;
+import com.example.healthfriend.UserScreens.ChangeMealSingelton;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.PythonLaunch;
@@ -50,6 +51,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
     private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
     //private PythonBreakfast pythonBreakfast;
     private PythonLaunch pythonLaunch;
+    private ChangeMealSingelton changeMealSingelton;
 
     public LunchFragment() {
         // Required empty public constructor
@@ -84,6 +86,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
         lunchSingleton = TodaysLunchSingleton.getInstance();
         List<IngredientModel> todaysIngredient = lunchSingleton.getLunchIngredients();
         pythonLaunch = PythonLaunch.getInstance();
+        changeMealSingelton=ChangeMealSingelton.getInstance();
         if(pythonLaunch.getLunchPythonIngredients()==null) {
 
             if (!Python.isStarted()) {
@@ -120,6 +123,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
             }
 
             pythonLaunch.setLunchPythonIngredients(pythonIngredients);
+            changeMealSingelton.setMeals(meals);
         }
         List<PythonIngredient> breakfastIngredients = pythonLaunch.getLunchPythonIngredients();
 
@@ -153,11 +157,16 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
                 }
             }
         });
+
         change_meal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+//                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
+//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+
+                changeMealSingelton=ChangeMealSingelton.getInstance();
+                pythonLaunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
+                changeMealSingelton.UpdateIndices();
             }
         });
     }
