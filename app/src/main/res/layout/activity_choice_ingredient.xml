@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    tools:context=".UserScreens.choice_ingredient_Activity">
+
+    <!-- General Instruction TextView -->
+    <TextView
+        android:id="@+id/instruction_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter the ingredients you need in the meal"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Ingredient 1 TextView and Spinner -->
+    <TextView
+        android:id="@+id/ingredient1_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingredient 1"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/spinner1_items" />
+
+    <!-- Ingredient 2 TextView and Spinner -->
+    <TextView
+        android:id="@+id/ingredient2_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingredient 2"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/spinner1_items" />
+
+    <!-- Ingredient 3 TextView and Spinner -->
+    <TextView
+        android:id="@+id/ingredient3_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingredient 3"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinner3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/spinner1_items" />
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
