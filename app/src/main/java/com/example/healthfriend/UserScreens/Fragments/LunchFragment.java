@@ -39,6 +39,7 @@ import java.util.Map;
 public class LunchFragment extends Fragment implements MealAdapterInterface {
     IndividualUser individualUser = IndividualUser.getInstance();
     boolean lunch_fav_isClicked = false;
+    boolean eman=false;
     private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
