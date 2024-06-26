@@ -18,6 +18,8 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
+import com.example.healthfriend.Models.Meal;
+import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
@@ -99,20 +101,43 @@ public class DinnerFragment extends Fragment implements MealAdapterInterface {
             String f = result.toString();
             //  List<List<Map<String, String>>> Meals = parseJson(f);
             // List<Map<String, String>> meal = Meals.get(0);
-            Type type = new TypeToken<List<List<Map<String, String>>>>() {
-            }.getType();
-            List<List<Map<String, String>>> meals = new Gson().fromJson(f, type);
+//            Type type = new TypeToken<List<List<Map<String, String>>>>() {
+//            }.getType();
+//            List<List<Map<String, String>>> meals = new Gson().fromJson(f, type);
+//            System.out.println(meals);
+//            List<PythonIngredient> pythonIngredients = new ArrayList<>();
+            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+
+            // Deserialize JSON to List<Meal>
+            List<UserMeal> meals = new Gson().fromJson(f, type);
+//        Type type = new TypeToken<List<List<Map<String, String>>>>() {}.getType();
+//        List<List<Map<String, String>>> meals = new Gson().fromJson(f, type);
             System.out.println(meals);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
+            //pythonIngredients.add(meals.get(0).getIngredients().get(0));
+            for(UserMeal meal : meals){
+                for (PythonIngredient ingredient :meal.getIngredients()){
+                    pythonIngredients.add(new PythonIngredient(ingredient.getName(),
+                            ingredient.getCarbs(),
+                            ingredient.getCalories(),
+                            ingredient.getFats(),
+                            ingredient.getProtein(),
+                            ingredient.getCount(),
+                            ingredient.getCategory()));
+                }
+                break;
+            }
 
             // Adding elements to the list
-            meals.get(0).size();
-            for (int i = 0; i < meals.get(0).size(); i++) {
-                pythonIngredients.add(new PythonIngredient(meals.get(0).get(i).get("ingredient"), Double.valueOf(meals.get(0).get(i).get("carbohydrates")), Double.valueOf(meals.get(0).get(i).get("energy")), Double.valueOf(meals.get(0).get(i).get("fat")), Double.valueOf(meals.get(0).get(i).get("protein"))));
-//            pythonIngredients.add(new PythonIngredient("Ingredient 2", 15.0, 150.0, 7.0, 25.0));
-//            pythonIngredients.add(new PythonIngredient("Ingredient 3", 20.0, 200.0, 10.0, 30.0));
-            }
-        pythonDinner.setBreakfastPythonIngredients(pythonIngredients);
+//            meals.get(0).size();
+//            for (int i = 0; i < meals.get(0).size(); i++) {
+//                pythonIngredients.add(new PythonIngredient(meals.get(0).get(i).get("ingredient"), Double.valueOf(meals.get(0).get(i).get("carbohydrates")), Double.valueOf(meals.get(0).get(i).get("energy")), Double.valueOf(meals.get(0).get(i).get("fat")), Double.valueOf(meals.get(0).get(i).get("protein"))));
+////            pythonIngredients.add(new PythonIngredient("Ingredient 2", 15.0, 150.0, 7.0, 25.0));
+////            pythonIngredients.add(new PythonIngredient("Ingredient 3", 20.0, 200.0, 10.0, 30.0));
+//            }
+          //  pythonIngredients.add(new PythonIngredient(meals.get(0).getIngredients().get(0).getName(), meals.get(0).getIngredients().get(0).getCarbs(), meals.get(0).getIngredients().get(0).getCalories(), meals.get(0).getIngredients().get(0).getFats(), meals.get(0).getIngredients().get(0).getProtein(),meals.get(0).getIngredients().get(0).getCount(),meals.get(0).getIngredients().get(0).getCategory()));
+
+            pythonDinner.setBreakfastPythonIngredients(pythonIngredients);
         }
         List<PythonIngredient> breakfastIngredients = pythonDinner.getDinnerPythonIngredients();
 

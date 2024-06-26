@@ -18,9 +18,12 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
+import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
+import com.example.healthfriend.Models.Meal;
+import com.example.healthfriend.UserScreens.ChangeMealSingelton;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.PythonLaunch;
@@ -39,12 +42,16 @@ import java.util.Map;
 public class LunchFragment extends Fragment implements MealAdapterInterface {
     IndividualUser individualUser = IndividualUser.getInstance();
     boolean lunch_fav_isClicked = false;
+    boolean eman=false;
+    boolean habiba=false;
+
     private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
     private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
     //private PythonBreakfast pythonBreakfast;
     private PythonLaunch pythonLaunch;
+    private ChangeMealSingelton changeMealSingelton;
 
     public LunchFragment() {
         // Required empty public constructor
@@ -79,32 +86,44 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
         lunchSingleton = TodaysLunchSingleton.getInstance();
         List<IngredientModel> todaysIngredient = lunchSingleton.getLunchIngredients();
         pythonLaunch = PythonLaunch.getInstance();
+        changeMealSingelton=ChangeMealSingelton.getInstance();
         if(pythonLaunch.getLunchPythonIngredients()==null) {
 
             if (!Python.isStarted()) {
                 Python.start(new AndroidPlatform(getContext()));
             }
-            Python python = Python.getInstance();
-            PyObject myModule = python.getModule("chocoo");
-            PyObject myfncall = myModule.get("calll");
-            PyObject result = myfncall.call(70, 170, "lunch.csv");
-            String f = result.toString();
+            Python python=Python.getInstance();
+            PyObject myModule=python.getModule("chocoo");
+            PyObject myfncall=myModule.get("calll");
+            PyObject result= myfncall.call(70, 170,"lunch.csv");
+            String f=result.toString();
             //  List<List<Map<String, String>>> Meals = parseJson(f);
             // List<Map<String, String>> meal = Meals.get(0);
-            Type type = new TypeToken<List<List<Map<String, String>>>>() {
-            }.getType();
-            List<List<Map<String, String>>> meals = new Gson().fromJson(f, type);
+            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+
+            // Deserialize JSON to List<Meal>
+            List<UserMeal> meals = new Gson().fromJson(f, type);
+//          Type type = new TypeToken<List<List<Map<String, String>>>>() {}.getType();
+//          List<List<Map<String, String>>> meals = new Gson().fromJson(f, type);
             System.out.println(meals);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
 
-            // Adding elements to the list
-            meals.get(0).size();
-            for (int i = 0; i < meals.get(0).size(); i++) {
-                pythonIngredients.add(new PythonIngredient(meals.get(0).get(i).get("ingredient"), Double.valueOf(meals.get(0).get(i).get("carbohydrates")), Double.valueOf(meals.get(0).get(i).get("energy")), Double.valueOf(meals.get(0).get(i).get("fat")), Double.valueOf(meals.get(0).get(i).get("protein"))));
-//            pythonIngredients.add(new PythonIngredient("Ingredient 2", 15.0, 150.0, 7.0, 25.0));
-//            pythonIngredients.add(new PythonIngredient("Ingredient 3", 20.0, 200.0, 10.0, 30.0));
+           // pythonIngredients.add(meals.get(0).getIngredients().get(0));
+            for(UserMeal meal : meals){
+                for (PythonIngredient ingredient :meal.getIngredients()){
+                    pythonIngredients.add(new PythonIngredient(ingredient.getName(),
+                            ingredient.getCarbs(),
+                            ingredient.getCalories(),
+                            ingredient.getFats(),
+                            ingredient.getProtein(),
+                            ingredient.getCount(),
+                            ingredient.getCategory()));
+                }
+                break;
             }
+
             pythonLaunch.setLunchPythonIngredients(pythonIngredients);
+            changeMealSingelton.setMeals(meals);
         }
         List<PythonIngredient> breakfastIngredients = pythonLaunch.getLunchPythonIngredients();
 
@@ -138,11 +157,16 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
                 }
             }
         });
+
         change_meal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+//                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
+//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+
+                changeMealSingelton=ChangeMealSingelton.getInstance();
+                pythonLaunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
+                changeMealSingelton.UpdateIndices();
             }
         });
     }
