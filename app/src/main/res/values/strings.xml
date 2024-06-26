@@ -8,6 +8,225 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string-array name="spinner1_items">
+        <item>Beef brain</item>
+        <item>Beef brain (fried)</item>
+        <item>Beef burger</item>
+        <item>Beef burger (grilled)</item>
+        <item>Beef frankfurter</item>
+        <item>Beef head</item>
+        <item>Beef head meat (boiled)</item>
+        <item>Beef heart</item>
+        <item>Beef kidneys</item>
+        <item>Beef kunckles</item>
+        <item>Beef liver</item>
+        <item>Beef lung</item>
+        <item>Beef meat</item>
+        <item>Beef meat ground</item>
+        <item>Beef meat (Kofta fried)</item>
+        <item>Beef meat (Kofta grilled)</item>
+        <item>Beef meat (Kofta/rice)</item>
+        <item>Beef meat (Kubeba fried)</item>
+        <item>Beef meat (brown sauce)</item>
+        <item>Beef sausage</item>
+        <item>Beef sausage grilled</item>
+        <item>Beef spleen</item>
+        <item>Beef tongue</item>
+        <item>Beef tongue boiled</item>
+        <item>Buffalo meat</item>
+        <item>Camel liver</item>
+        <item>Camel meat</item>
+        <item>Chicken frankfurter</item>
+        <item>Chicken gizzard</item>
+        <item>Chicken liver</item>
+        <item>Chicken boiled</item>
+        <item>Chicken fried</item>
+        <item>Chicken grilled</item>
+        <item>Chicken meat (dark)</item>
+        <item>Chicken meat (light)</item>
+        <item>Chicken meat and skin</item>
+        <item>Duck meat and skin</item>
+        <item>Goat meat</item>
+        <item>Goose meat and skin</item>
+        <item>Lamb kidneys</item>
+        <item>Lamb liver</item>
+        <item>Lamb meat</item>
+        <item>Lamb meat (Kabab)</item>
+        <item>Pigeon meat and skin</item>
+        <item>Rabbit meat</item>
+        <item>Turkey meat and skin</item>
+        <item>Veal meat</item>
+        <item>Bream</item>
+        <item>Bream golden</item>
+        <item>Catfish bayad</item>
+        <item>Catfish river</item>
+        <item>Catfish scaled</item>
+        <item>Catfish salted</item>
+        <item>Crab</item>
+        <item>Eel fish</item>
+        <item>Fish finger fried</item>
+        <item>Herring smoked</item>
+        <item>Lizard fish</item>
+        <item>Lizard fish fried</item>
+        <item>Mackerel canned</item>
+        <item>Mullet</item>
+        <item>Mullet grilled</item>
+        <item>Mullet salted</item>
+        <item>Sardines</item>
+        <item>Sardines canned</item>
+        <item>Sardine grilled</item>
+        <item>Sardines salted</item>
+        <item>Shrimp</item>
+        <item>Shrimp boiled</item>
+        <item>Sole</item>
+        <item>Sole fried</item>
+        <item>Tilapia</item>
+        <item>Tilapia fried</item>
+        <item>Tilapia grilled</item>
+        <item>Tuna canned</item>
+        <item>Beans green cooked</item>
+        <item>Cabbage rice stuff</item>
+        <item>Cabbage rice / meat stuff</item>
+        <item>Cauliflower cooked</item>
+        <item>Caulinower / meat cooked</item>
+        <item>Eggplant cooked</item>
+        <item>Eggplant cooked with meat</item>
+        <item>Eggplant fired</item>
+        <item>Eggplant rice stuff</item>
+        <item>Grape leaves rice stuff</item>
+
+        <item>Lettuce rice stuff</item>
+        <item>Lettuce rice / meat stuff</item>
+        <item>Mallow cooked</item>
+        <item>Okra cooked</item>
+        <item>Okra cooked with meat</item>
+        <item>Peas / carrot cooked</item>
+        <item>Spinach cooked</item>
+        <item>Spinach cooked with meat</item>
+        <item>Squash cooked with meat</item>
+        <item>Squash rice stuff</item>
+        <item>Squash rice / meat stuff</item>
+        <item>Macaroni</item>
+        <item>Macroni/tomato cooked</item>
+        <item>Macroni/tomato/meat cooked</item>
+        <item>Rice fried</item>
+        <item>Rice fried with noodles</item>
+        <item>Rice Fried with onions</item>
+        <item>Rice (Koshari)</item>
+        <item>Rice (Koshari) market</item>
+        <item>Rice puffed/crisp</item>
+        <item>Semolina</item>
+        <item>Sorghum grains</item>
+        <item>Colocasia</item>
+        <item>Colocasia coocked</item>
+        <item>Potatoes mashed with milk</item>
+        <item>Potatoes meat stuff</item>
+        <item>Potatoes mashed meat/egg</item>
+        <item>Pie Rucak with meat</item>
+        <item>Pizza cheese topping</item>
+        <item>Pizza meat/sausage topping</item>
+        <item>Pizza seafood topping</item>
+        <item>Pizza vegetarian</item>
+        <item>Sandwiches fried brain</item>
+        <item>Sandwiches fried chicken</item>
+        <item>Sandwiches fried liver</item>
+        <item>Sandwiches fried shrimp</item>
+        <item>Sandwiches grilled chicken</item>
+        <item>Sandwiches grilled Kofta</item>
+        <item>Sandwiches hamburger</item>
+        <item>Sandwiches hotdog</item>
+        <item>Sandwiches shawerma meat</item>
+        <item>Beans broad (Nabet) cooked</item>
+        <item>Beans kidney white cooked</item>
+        <item>Beans kidney white / meat</item>
+        <item>Cowpeas cooked</item>
+        <item>Cowpeas cooked with meat</item>
+        <item>Lentils peeled / rice cooked</item>
+        <item>Lentils peeled soup</item>
+        <item>Barley grains</item>
+        <item>Corn grains (white)</item>
+        <item>Corn grains (yellow)</item>
+        <item>Corn flakes</item>
+        <item>Corn kernels on cob grilled</item>
+        <item>Wheat grains</item>
+        <item>Wheat Koskos plain</item>
+        <item>Wheat Koskos sweet</item>
+        <item>Bread Baladi</item>
+        <item>Bread Baladi(wheat/corn)</item>
+        <item>Bread bran dry (sin)</item>
+        <item>Bread buns with sesame</item>
+        <item>Bread corn/ wheat (1:1)</item>
+        <item>Bread corn/ wheat (1:2)</item>
+        <item>Bread corn/ wheat (2:1)</item>
+        <item>Bread french</item>
+        <item>Bread labanese</item>
+        <item>Bread Lebanese (brown)</item>
+        <item>Bread Shami</item>
+        <item>Bread Shamsy</item>
+        <item>Bread sliced(brown toast)</item>
+        <item>Bread sliced(white toast)</item>
+        <item>Bread sticks with sesame</item>
+        <item>Pie Fiteer Meshaltet</item>
+        <item>Pie Fitcer Market</item>
+        <item>Sandwiches cheese white</item>
+        <item>Sandwiches cheese yellow</item>
+        <item>Sandwiches fried eggplant</item>
+        <item>Sandwiches fried Taamia</item>
+        <item>Sandwiches stewed Foul</item>
+        <item>Potatoes</item>
+        <item>Potatoes chips</item>
+        <item>Potatoes fries</item>
+        <item>Potatoes cooked with tomato</item>
+        <item>Beans broad</item>
+        <item>Beans broad (Bisara)</item>
+        <item>Beans broad decorticated</item>
+        <item>Beans broad (Foul) canned</item>
+        <item>Beans broad (FoulMedames)</item>
+        <item>Beans broad (Menabet)</item>
+        <item>Beans broad (Taamia) fried</item>
+        <item>Soybeans</item>
+        <item>Halawa Tehinia</item>
+        <item>Halawa Tehinia with nuts</item>
+        <item>Honey</item>
+        <item>Jams</item>
+        <item>Molasses</item>
+        <item>Beef Basterma</item>
+        <item>Beef Basterma meat</item>
+        <item>Beef meat corned (canned)</item>
+        <item>Beef luncheon</item>
+        <item>Chicken luncheon</item>
+        <item>Turkey luncheon</item>
+        <item>Eggs chicken whole</item>
+        <item>Omelet (ljaa)</item>
+        <item>Tuna canned</item>
+        <item>Cheese camembert</item>
+        <item>Cheese cheddar</item>
+        <item>Cheese gouda</item>
+        <item>Cheese kareesh</item>
+        <item>Cheese kareesh low fat</item>
+        <item>Cheese kareesh (Mish)</item>
+        <item>Cheese parmesan</item>
+        <item>Cheese processed</item>
+        <item>Cheese spread</item>
+        <item>Cheese white</item>
+        <item>Cheese white half cream</item>
+        <item>Cheese Roquefort</item>
+        <item>Cream whipping</item>
+        <item>Fermented milk</item>
+        <item>Fermented skim milk</item>
+        <item>Milk buffalo</item>
+        <item>Milk cow</item>
+        <item>Milk chocolate</item>
+        <item>Milk full cream</item>
+        <item>Milk fruit</item>
+        <item>Milk half cream</item>
+        <item>Milk low fat skimmed</item>
+        <item>Milk powder skim</item>
+        <item>Milk powder whole</item>
+        <item>Yoghurt</item>
+        <item>Yoghurt low fat</item>
+        <item>Yoghurt fruits</item>
+    </string-array>
 
     <string name="health_wellnes"><![CDATA[Health&Wellnes]]></string>
     <string name="enter_your_weight_height"><![CDATA[Enter Your Weight&Height]]></string>

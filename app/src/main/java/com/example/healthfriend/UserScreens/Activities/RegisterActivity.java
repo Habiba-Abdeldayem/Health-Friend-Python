@@ -46,6 +46,23 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         FirebaseApp.initializeApp(this);
 
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+//         loginText = findViewById(R.id.login_text);
+//         email = findViewById(R.id.reg_email);
+//         pass = findViewById(R.id.reg_pass);
+//         confirmPass = findViewById(R.id.reg_confirmpass);
+//         registerBtn = findViewById(R.id.reg_btn);
+//         userType = findViewById(R.id.userType_radio_group);
+//         doc = findViewById(R.id.doctor_RadioButton);
+//         user = findViewById(R.id.user_RadioButton);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait for registration");
+        progressDialog.setTitle("Registration");
+        progressDialog.setCanceledOnTouchOutside(false);
+
         doc = findViewById(R.id.doctor_RadioButton);
         user = findViewById(R.id.user_RadioButton);
         userType = findViewById(R.id.userType_radio_group);
@@ -56,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn = findViewById(R.id.reg_btn);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
 
         loginText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +96,14 @@ public class RegisterActivity extends AppCompatActivity {
         String EMAIL = email.getText().toString();
         String PASS = pass.getText().toString();
         String CONPASS = confirmPass.getText().toString();
+
+        if (!EMAIL.matches(emailPattern)) {
+            email.setError("Please enter a valid email");
+        } else if (PASS.isEmpty() || PASS.length() < 6) {
+            pass.setError("Please enter a password with at least 6 characters");
+        } else if (!PASS.equals(CONPASS)) {
+            confirmPass.setError("Passwords don't match");
+        } else {
         if (!EMAIL.matches(emailPattern)) {
             email.setError("Please enter a valid email");
         } else if (PASS.isEmpty() || PASS.length() < 6) {
@@ -95,6 +121,18 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     progressDialog.dismiss();
                     if (task.isSuccessful()) {
+
+                        Toast.makeText(RegisterActivity.this, "Registration Done", Toast.LENGTH_LONG).show();
+
+                        // Check which user type is selected and redirect accordingly
+//                         int selectedId = userType.getCheckedRadioButtonId();
+//                         if (selectedId == R.id.user_RadioButton) {
+//                             startActivity(new Intent(RegisterActivity.this, QuestionnaireAct.class)
+//                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+//                         } else if (selectedId == R.id.doctor_RadioButton) {
+//                             startActivity(new Intent(RegisterActivity.this, QuestionnaireDoctorActivity.class)
+//                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+
                         // Check which radio button is selected
                         int selectedId = userType.getCheckedRadioButtonId();
                         if (selectedId == R.id.user_RadioButton) {
