@@ -14,11 +14,12 @@ import com.example.healthfriend.UserScreens.IndividualUser;
 
 import java.util.ArrayList;
 
-public class UserListActivity extends AppCompatActivity implements UserList.OnItemClickListener,UserList.OnItemLongClickListener{
+public class UserListActivity extends AppCompatActivity implements UserList.OnItemClickListener, UserList.OnItemLongClickListener {
     private ArrayList<String> usersEmail;
     private RecyclerView recyclerView;
     private UserList adapter;
     IndividualUser individualUser = IndividualUser.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +36,12 @@ public class UserListActivity extends AppCompatActivity implements UserList.OnIt
             public void onCallback(ArrayList<String> patientEmails) {
                 if (patientEmails != null) {
                     usersEmail.addAll(patientEmails);
-                    Log.d("alaaa", "size after callback: " + usersEmail.size());
-                    adapter = new UserList(usersEmail,UserListActivity.this::onItemClick);
+                    adapter = new UserList(usersEmail, UserListActivity.this::onItemClick);
                     recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
-
-        Log.e("lkl", "onViewCreated end");
     }
 
 

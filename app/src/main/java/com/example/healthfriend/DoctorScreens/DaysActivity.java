@@ -45,7 +45,7 @@ public class DaysActivity extends AppCompatActivity {
         personal_info.setText(personalData);
 
         FireStoreManager fireStoreManager = new FireStoreManager();
-        fireStoreManager.getWeeklyPlan(user.getEmail(), task -> {
+        fireStoreManager.getWeeklyPlan(user.getEmail(), Doctor.getInstance().getEmail(), task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists() && document!=null) {
