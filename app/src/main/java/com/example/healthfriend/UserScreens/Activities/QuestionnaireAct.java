@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +13,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
 
 public class QuestionnaireAct extends AppCompatActivity {
-    User currentUser;
+    IndividualUser currentIndividualUser;
     private FireStoreManager fireStoreManager;
     String selectedGoal;
     private Spinner healthGoalSpinner;
@@ -35,7 +34,7 @@ public class QuestionnaireAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
 
-        currentUser = User.getInstance();
+        currentIndividualUser = IndividualUser.getInstance();
         weight=findViewById(R.id.weight);
         height=findViewById(R.id.height);
         age=findViewById(R.id.age);
@@ -88,19 +87,19 @@ public class QuestionnaireAct extends AppCompatActivity {
                 double w= Double.parseDouble(weight.getText().toString());
                 double h=Double.parseDouble(height.getText().toString());
                 int a=Integer.parseInt(age.getText().toString());
-                currentUser.setAge(a);
-                currentUser.setHeight(h);
-                currentUser.setWeight(w);
-                currentUser.setPlan(selectedGoal);
-                currentUser.setDaily_calories_need();
-                currentUser.setGender(gender);
-                currentUser.setDaily_water_need();
-                currentUser.setDaily_carbs_need();
-                currentUser.setDaily_proteins_need();
-                currentUser.setDaily_fats_need();
+                currentIndividualUser.setAge(a);
+                currentIndividualUser.setHeight(h);
+                currentIndividualUser.setWeight(w);
+                currentIndividualUser.setPlan(selectedGoal);
+                currentIndividualUser.setDaily_calories_need();
+                currentIndividualUser.setGender(gender);
+                currentIndividualUser.setDaily_water_need();
+                currentIndividualUser.setDaily_carbs_need();
+                currentIndividualUser.setDaily_proteins_need();
+                currentIndividualUser.setDaily_fats_need();
 
                 fireStoreManager = new FireStoreManager();
-                fireStoreManager.setUserPersonalInfo(currentUser);
+                fireStoreManager.setUserPersonalInfo(currentIndividualUser);
                 Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
                 finish();

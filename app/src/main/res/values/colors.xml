@@ -8,5 +8,6 @@
     <color name="pink_protein">#FF216F</color>
     <color name="orange_carbs">#ff6905</color>
     <color name="purple_fats">#5900FF</color>
+    <color name="red">#FF0000</color>
 
 </resources>

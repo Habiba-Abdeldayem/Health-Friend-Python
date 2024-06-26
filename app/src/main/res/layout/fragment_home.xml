@@ -165,6 +165,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/doctor_cv"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginHorizontal="4dp"
@@ -179,15 +180,18 @@
                 android:padding="8dp">
 
                 <TextView
+                    android:id="@+id/connect_with_doctor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="Excercise"
+                    android:text="Connect with Doctor"
                     android:textColor="@color/black"
-                    android:textSize="32sp" />
+                    android:textSize="30sp"
+                    android:layout_toStartOf="@+id/heart"/>
 
                 <ImageView
+                    android:id="@+id/heart"
                     android:layout_width="62dp"
                     android:layout_height="62dp"
                     android:layout_alignParentEnd="true"
@@ -198,11 +202,11 @@
 
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/btn_deleteme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go to doctor"/>
+<!--        <Button-->
+<!--            android:id="@+id/btn_deleteme"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Go to doctor"/>-->
 
     </LinearLayout>
 

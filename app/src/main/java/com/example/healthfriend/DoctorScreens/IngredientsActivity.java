@@ -1,24 +1,30 @@
 package com.example.healthfriend.DoctorScreens;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthfriend.Models.DailyPlan;
 import com.example.healthfriend.Models.DoctorIngredient;
+import com.example.healthfriend.Models.Meal;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class IngredientsActivity extends AppCompatActivity implements MealAdapterInterface {
@@ -39,15 +45,21 @@ DoctorIngredientAdapter adapter;
         recyclerView.setAdapter(adapter);
 
         TextView calories = findViewById(R.id.ingredients_textview_calories_progress);
-        double caa = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getTotalCalories();
-        String caaa = Double.toString(caa);
-        if(WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan() != null)
-            calories.setText(caaa);
+//        double caa = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getTotalCalories();
+//        String caaa = Double.toString(caa);
+//        if(WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan() != null)
+//            calories.setText(caaa);
 
         Button save_meal = findViewById(R.id.doctor_save_ingredients);
         save_meal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FireStoreManager firestoreHelper = new FireStoreManager();
+                firestoreHelper.saveWeeklyPlan(IndividualUser.getInstance().getEmail(), WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan(),getApplicationContext());
+                Intent intent = new Intent(getApplicationContext(), MealsActivity.class);
+                startActivity(intent);
+//                Toast myToast = Toast.makeText(getApplicationContext(), "Meal Saved!", Toast.LENGTH_LONG);
+//                myToast.show();
 
             }
         });

@@ -1,15 +1,48 @@
 package com.example.healthfriend.UserScreens;
 
-import com.example.healthfriend.UserScreens.Fragments.water.domain.WaterIntakeCalculator;
+import android.util.Log;
+
+import com.example.healthfriend.DoctorScreens.Doctor;
+import com.example.healthfriend.Models.WeeklyPlan;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class User {
+public class IndividualUser {
+    private FireStoreManager fireStoreManager;
     private double height,weight, daily_calories_need, daily_carbs_need,daily_proteins_need,daily_fats_need ,daily_water_need;
     private int age, water_target,water_progress;
-    private String email,gender, plan;
-    private static User instance;
+    private String email,gender, plan,name, doctorEmailConnectedWith;
 
+    private static IndividualUser instance;
+    private Doctor currentDoctor;
+    private WeeklyPlan weeklyPlan;
 
+    public static IndividualUser getInstance() {
+        if (instance == null) {
+            instance = new IndividualUser();
+        }
+        return instance;
+    }
+
+    private IndividualUser(){
+        fireStoreManager = new FireStoreManager();
+        height =0;
+        weight=0;
+        daily_calories_need = 0;
+        age=0;
+        water_target=0;
+        daily_water_need = 0;
+        daily_carbs_need =0;
+        daily_fats_need =0 ;
+        daily_proteins_need =0 ;
+        email = "";
+        gender = "";
+        plan = "";
+        water_progress = 0;
+        doctorEmailConnectedWith = null;
+        currentDoctor =null;
+        weeklyPlan = null;
+        setDaily_water_need();
+    }
     public double getDaily_carbs_need() {
         return daily_carbs_need;
     }
@@ -34,28 +67,6 @@ public class User {
         this.daily_fats_need = Math.round((daily_calories_need *0.2)/9*100.0)/100.0;;
     }
 
-    private User(){
-        height =0;
-        weight=0;
-        daily_calories_need = 0;
-        age=0;
-        water_target=0;
-        daily_water_need = 0;
-        daily_carbs_need =0;
-        daily_fats_need =0 ;
-        daily_proteins_need =0 ;
-        email = "";
-        gender = "";
-        plan = "";
-        water_progress = 0;
-        setDaily_water_need();
-    }
-    public static User getInstance() {
-        if (instance == null) {
-            instance = new User();
-        }
-        return instance;
-    }
 
     public double getHeight() {
         return height;
@@ -147,7 +158,8 @@ public class User {
             gender = document.getString("gender");
             water_progress = document.getLong("daily_water_need").intValue();
             plan = document.getString("plan");
-
+            doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");
+//            setCurrentDoctor();
             setDaily_water_need();
         }
     }
@@ -159,6 +171,15 @@ public class User {
     public void setWater_progress(int water_progress) {
         this.water_progress = water_progress;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // Used to update info when user update his info
     public void updateCalculations(){
         setDaily_carbs_need();
@@ -170,4 +191,36 @@ public class User {
         fireStoreManager.setUserPersonalInfo(instance);
     }
 
+    public String getDoctorEmailConnectedWith() {
+        return doctorEmailConnectedWith;
+    }
+
+    public void setDoctorEmailConnectedWith(String doctorEmailConnectedWith) {
+        this.doctorEmailConnectedWith = doctorEmailConnectedWith;
+//        fireStoreManager.retrieveDoctorFromFirestore(doctorEmailConnectedWith);
+    }
+
+    public Doctor getCurrentDoctor() {
+        return currentDoctor;
+    }
+
+    public void setCurrentDoctor(Doctor currentDoctor) {
+        this.currentDoctor = currentDoctor;
+    }
+
+
+    public WeeklyPlan getWeeklyPlan() {
+        return weeklyPlan;
+    }
+
+    public void setWeeklyPlan(WeeklyPlan weeklyPlan) {
+        this.weeklyPlan = weeklyPlan;
+    }
+    public void unFollowDoctor(){
+        Log.d("ehellybnull??", "email?? " + this.getEmail());
+        fireStoreManager.removePatientEmail(doctorEmailConnectedWith,getEmail());
+        this.currentDoctor = null;
+        this.doctorEmailConnectedWith = null;
+        fireStoreManager.setUserPersonalInfo(instance);
+    }
 }

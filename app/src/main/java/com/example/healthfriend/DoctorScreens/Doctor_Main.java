@@ -1,15 +1,19 @@
 package com.example.healthfriend.DoctorScreens;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
-public class Doctor_Main extends AppCompatActivity implements UserList.OnItemClickListener,UserList.OnItemLongClickListener {
+public class Doctor_Main extends AppCompatActivity {
    // private ArrayList<Product> products;
     //MarketoDb database;
     UserList adapter;
@@ -22,6 +26,9 @@ public class Doctor_Main extends AppCompatActivity implements UserList.OnItemCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_main);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,new Userlist_Fragment()).addToBackStack(null).commit();
+
 //        ArrayList<User> users=new ArrayList<User>();
 //        users.add(new User(150,50,R.drawable.ff,"shimaa"));
 //        users.add(new User(160,80,R.drawable.car4,"aya"));
@@ -82,15 +89,15 @@ public class Doctor_Main extends AppCompatActivity implements UserList.OnItemCli
         builder.show();
     }
 
-    @Override
-    public void onItemClick(User user) {
-//        Intent intent = new Intent(getApplicationContext(), Products.class);
-//        intent.putExtra("id",category.getId());
+//    @Override
+//    public void onItemClick(IndividualUser user) {
+//        Intent intent = new Intent(getApplicationContext(), DaysActivity.class);
 //        startActivity(intent);
-    }
+////        intent.putExtra("id",category.getId());
+//    }
 
-    @Override
-    public void onItemLongClick(User category) {
-
-    }
+//    @Override
+//    public void onItemLongClick(User category) {
+//
+//    }
 }

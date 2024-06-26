@@ -26,7 +26,7 @@ import com.example.healthfriend.UserScreens.PythonDinner;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.TodaysDinnerSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,7 +37,7 @@ import java.util.Map;
 
 
 public class DinnerFragment extends Fragment implements MealAdapterInterface {
-    User user = User.getInstance();
+    IndividualUser individualUser = IndividualUser.getInstance();
 
     boolean dinner_fav_isClicked = false;
     private TodaysDinnerSingleton dinnerSingleton;
@@ -168,9 +168,9 @@ public class DinnerFragment extends Fragment implements MealAdapterInterface {
     }
 
     private void updateCaloriesProgress(){
-        double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / user.getDaily_calories_need()) * 100;
+        double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / individualUser.getDaily_calories_need()) * 100;
         caloriesProgressBar.setProgress((int) caloriesProgress);
-        String calories_left_string = getString(R.string.calories_progress, TodaysNutrientsEaten.getEatenCalories(), user.getDaily_calories_need());
+        String calories_left_string = getString(R.string.calories_progress, TodaysNutrientsEaten.getEatenCalories(), individualUser.getDaily_calories_need());
         textview_calories_progress.setText(calories_left_string);
 
 //        double caloriesLeftValue = Math.max(User.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
@@ -178,25 +178,25 @@ public class DinnerFragment extends Fragment implements MealAdapterInterface {
 //        textview_calories_progress.setText(calories_left_string);
     }
     private void updateCarbsProgress(){
-        double carbsProgress = (TodaysNutrientsEaten.getEatenCarbs() / user.getDaily_carbs_need()) * 100;
+        double carbsProgress = (TodaysNutrientsEaten.getEatenCarbs() / individualUser.getDaily_carbs_need()) * 100;
         carbsProgressBar.setProgress((int) carbsProgress);
-        String carbs_left_string = getString(R.string.carbs_progress, TodaysNutrientsEaten.getEatenCarbs(), user.getDaily_carbs_need());
+        String carbs_left_string = getString(R.string.carbs_progress, TodaysNutrientsEaten.getEatenCarbs(), individualUser.getDaily_carbs_need());
         textview_carbs_progress.setText(carbs_left_string);
 //        String carbsProgressText = Double.toString(Math.round(TodaysNutrientsEaten.getEatenCarbs()*100.0)/100.0);
 //        textview_carbs_progress.setText(carbsProgressText + "/" + "100");
     }
     private void updateProteinsProgress(){
-        double proteinsProgress = (TodaysNutrientsEaten.getEatenProteins() /user.getDaily_proteins_need()) * 100;
+        double proteinsProgress = (TodaysNutrientsEaten.getEatenProteins() / individualUser.getDaily_proteins_need()) * 100;
         proteinsProgressBar.setProgress((int) proteinsProgress);
-        String proteins_left_string = getString(R.string.proteins_progress, TodaysNutrientsEaten.getEatenProteins(), user.getDaily_proteins_need());
+        String proteins_left_string = getString(R.string.proteins_progress, TodaysNutrientsEaten.getEatenProteins(), individualUser.getDaily_proteins_need());
         textview_proteins_progress.setText(proteins_left_string);
 //        String proteinsProgressText = Double.toString(Math.round(TodaysNutrientsEaten.getEatenProteins()*100.0)/100.0);
 //        textview_proteins_progress.setText(proteinsProgressText + "/" + "100");
     }
     private void updateFatsProgress(){
-        double fatsProgress = (TodaysNutrientsEaten.getEatenFats() / user.getDaily_fats_need()) * 100;
+        double fatsProgress = (TodaysNutrientsEaten.getEatenFats() / individualUser.getDaily_fats_need()) * 100;
         fatsProgressBar.setProgress((int) fatsProgress);
-        String fats_left_string = getString(R.string.fats_progress, TodaysNutrientsEaten.getEatenFats(), user.getDaily_fats_need());
+        String fats_left_string = getString(R.string.fats_progress, TodaysNutrientsEaten.getEatenFats(), individualUser.getDaily_fats_need());
         textview_fats_progress.setText(fats_left_string);
 
 //        String fatsProgressText = Double.toString(Math.round(TodaysNutrientsEaten.getEatenFats()*100.0)/100.0);

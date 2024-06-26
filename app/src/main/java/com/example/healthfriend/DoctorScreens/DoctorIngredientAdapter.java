@@ -12,12 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthfriend.Models.DailyPlan;
 import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.Models.Meal;
+import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder> {
@@ -36,8 +39,13 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
         this.mealAdapterInterface = mealAdapterInterface;
         this.dayIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
         this.isItBreakfastLunchDinnerIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx();
-        this.currentMeal = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
-        if (this.currentMeal != null) {
+        initializeMealAndIngredients();
+
+//        this.currentMeal = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
+
+        if (WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan() != null && WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans() != null && WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx) != null) {
+            this.currentMeal = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
+
             this.selectedIngredients = this.currentMeal.getIngredients();
 
             // Initialize the selected state for each ingredient
@@ -52,6 +60,9 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
                 availableIngredient.setIngredientSelectedByDoctor(isSelected);
             }
         }
+//        else if(WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan() == null ){
+//            WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().setDailyPlans();
+//        }
     }
 
     @NonNull
@@ -121,7 +132,56 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
             imageButton.setImageResource(R.drawable.ic_ingredient_unchecked);
         }
     }
+
+    private void initializeMealAndIngredients() {
+        WeeklyPlan weeklyPlan = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan();
+
+        if (weeklyPlan == null) {
+            weeklyPlan = new WeeklyPlan();
+            WeeklyPlanManagerSingleton.getInstance().setWeeklyPlan(weeklyPlan);
+        }
+
+        List<DailyPlan> dailyPlans = weeklyPlan.getDailyPlans();
+        if (dailyPlans == null || dailyPlans.isEmpty()) {
+            dailyPlans = new ArrayList<>();
+            for (int i = 0; i < 7; i++) {
+                dailyPlans.add(new DailyPlan());
+            }
+            weeklyPlan.setDailyPlans(dailyPlans);
+        }
+
+        DailyPlan dailyPlan = dailyPlans.get(dayIdx);
+        if (dailyPlan == null) {
+            dailyPlan = new DailyPlan();
+            dailyPlans.set(dayIdx, dailyPlan);
+        }
+
+        currentMeal = dailyPlan.isItBreakfastLunchDinner(isItBreakfastLunchDinnerIdx);
+        if (currentMeal == null) {
+            currentMeal = new Meal();
+            dailyPlan.updateMeal(isItBreakfastLunchDinnerIdx, currentMeal);
+        }
+
+        selectedIngredients = currentMeal.getIngredients();
+        if (selectedIngredients == null) {
+            selectedIngredients = new ArrayList<>();
+            currentMeal.setIngredients(selectedIngredients);
+        }
+
+        // Initialize the selected state for each ingredient
+        for (DoctorIngredient availableIngredient : availableIngredients) {
+            boolean isSelected = false;
+            for (DoctorIngredient selectedIngredient : selectedIngredients) {
+                if (availableIngredient.getName().equals(selectedIngredient.getName())) {
+                    isSelected = true;
+                    break;
+                }
+            }
+            availableIngredient.setIngredientSelectedByDoctor(isSelected);
+        }
+    }
 }
+
 
 class IngredientViewHolder extends RecyclerView.ViewHolder {
     TextView textViewIngredientName;

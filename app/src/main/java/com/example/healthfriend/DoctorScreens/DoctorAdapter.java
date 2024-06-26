@@ -1,4 +1,5 @@
 package com.example.healthfriend.DoctorScreens;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,16 +76,21 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         }
     };
 
+    public void updateFullDoctorList(List<Doctor> newDoctorList) {
+        doctorListFull.clear();
+        doctorListFull.addAll(newDoctorList);
+    }
+
     public class DoctorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView doctorNameTextView;
-        public TextView doctorSpecialtyTextView;
+        public TextView doctorEmailTextView;
         public Button followButton;
         OnDoctorListener onDoctorListener;
 
         public DoctorViewHolder(View itemView, OnDoctorListener onDoctorListener) {
             super(itemView);
             doctorNameTextView = itemView.findViewById(R.id.textViewName);
-            doctorSpecialtyTextView = itemView.findViewById(R.id.textViewSpecialty);
+            doctorEmailTextView = itemView.findViewById(R.id.textViewEmail);
             followButton = itemView.findViewById(R.id.buttonFollow);
             this.onDoctorListener = onDoctorListener;
 
@@ -93,13 +99,14 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         public void bind(Doctor doctor) {
             doctorNameTextView.setText(doctor.getName());
-            doctorSpecialtyTextView.setText(doctor.getSpecialty());
+            doctorEmailTextView.setText(doctor.getEmail());
             followButton.setText(onDoctorListener.isFollowing(doctor) ? "Unfollow" : "Follow");
         }
 
         @Override
         public void onClick(View v) {
             onDoctorListener.onDoctorClick(getAdapterPosition());
+            notifyItemChanged(getAdapterPosition());
         }
     }
 

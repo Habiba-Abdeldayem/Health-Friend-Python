@@ -6,12 +6,16 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.content.Intent;
 import android.health.connect.datatypes.MealType;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.healthfriend.Models.DailyPlan;
 import com.example.healthfriend.Models.DoctorIngredient;
+import com.example.healthfriend.Models.Meal;
+import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
 
@@ -26,6 +30,8 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
     private List<Map<String, String>> adapterData = new ArrayList<>();
     private WeeklyPlanManagerSingleton weeklyPlanManagerSingleton = WeeklyPlanManagerSingleton.getInstance();
     AppCompatButton edit_meal;
+    int dayIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
+    int mealIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +42,14 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.lv_meal_selected_ingredients);
         TextView no_meals_selected = findViewById(R.id.tv_no_meals_selected);
         edit_meal = findViewById(R.id.edit_meal);
+        initializeMealAndIngredients();
 
-
+        List<DoctorIngredient> ingredientList = null;
         // Assuming you have a list of DoctorIngredient objects
-        List<DoctorIngredient> ingredientList = weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans().get(weeklyPlanManagerSingleton.getCurrentDayIdx()).getBreakfast().getIngredients();
+        if(weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans() != null)
+            ingredientList = weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(mealIdx).getIngredients();
         if (ingredientList != null) {
             no_meals_selected.setVisibility(View.INVISIBLE);
-        } else {
-            no_meals_selected.setVisibility(View.VISIBLE);
-        }
         // Create a list of maps where each map represents a list item
         adapterData = prepareSimpleAdapterArray(ingredientList);
 
@@ -56,6 +61,9 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
 
         SimpleAdapter adapter = new SimpleAdapter(this, adapterData, R.layout.item_meal_selected_ingredient, from, to);
         listView.setAdapter(adapter);
+        } else {
+            no_meals_selected.setVisibility(View.VISIBLE);
+        }
 
         edit_meal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,4 +108,41 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
         return categoriesSet;
 
     }
+    private void initializeMealAndIngredients() {
+        WeeklyPlan weeklyPlan = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan();
+
+        if (weeklyPlan == null) {
+            weeklyPlan = new WeeklyPlan();
+            WeeklyPlanManagerSingleton.getInstance().setWeeklyPlan(weeklyPlan);
+        }
+
+        List<DailyPlan> dailyPlans = weeklyPlan.getDailyPlans();
+        if (dailyPlans == null || dailyPlans.isEmpty()) {
+            dailyPlans = new ArrayList<>();
+            for (int i = 0; i < 7; i++) {
+                dailyPlans.add(new DailyPlan());
+            }
+            weeklyPlan.setDailyPlans(dailyPlans);
+        }
+
+        DailyPlan dailyPlan = dailyPlans.get(dayIdx);
+        if (dailyPlan == null) {
+            dailyPlan = new DailyPlan();
+            dailyPlans.set(dayIdx, dailyPlan);
+        }
+
+        Meal currentMeal = dailyPlan.isItBreakfastLunchDinner(WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx());
+        if (currentMeal == null) {
+            currentMeal = new Meal();
+            dailyPlan.updateMeal(WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx(), currentMeal);
+        }
+
+        List<DoctorIngredient> selectedIngredients = currentMeal.getIngredients();
+        if (selectedIngredients == null) {
+            selectedIngredients = new ArrayList<>();
+            currentMeal.setIngredients(selectedIngredients);
+        }
+
+    }
+
 }

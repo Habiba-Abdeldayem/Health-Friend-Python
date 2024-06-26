@@ -1,14 +1,27 @@
 package com.example.healthfriend.DoctorScreens;
 
 
-public class Doctor {
-    private String name;
-    private String specialty;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
-    public Doctor(String name, String specialty) {
-        this.name = name;
-        this.specialty = specialty;
+import java.util.List;
+
+public class Doctor {
+    private static Doctor instance;
+
+    private String name, email;
+//    private boolean isDoctor = true;
+    private int age;
+    private List<String> patientList;
+
+    public Doctor() {
     }
+    public static Doctor getInstance() {
+        if (instance == null) {
+            instance = new Doctor();
+        }
+        return instance;
+    }
+
 
     public String getName() {
         return name;
@@ -18,11 +31,39 @@ public class Doctor {
         this.name = name;
     }
 
-    public String getSpecialty() {
-        return specialty;
+    public static void setInstance(Doctor instance) {
+        Doctor.instance = instance;
     }
 
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
+    public String getEmail() {
+        return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public List<String> getPatientList() {
+        return patientList;
+    }
+
+    public void setPatientList(List<String> patientList) {
+        this.patientList = patientList;
+    }
+
+//    public boolean isDoctor() {
+//        return isDoctor;
+//    }
+//
+//    public void setDoctor(boolean doctor) {
+//        isDoctor = doctor;
+//    }
 }

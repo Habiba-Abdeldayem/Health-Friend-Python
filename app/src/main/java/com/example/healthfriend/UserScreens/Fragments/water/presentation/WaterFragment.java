@@ -2,19 +2,17 @@ package com.example.healthfriend.UserScreens.Fragments.water.presentation;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.healthfriend.R;
-import com.example.healthfriend.UserScreens.User;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WaterFragment extends Fragment {
@@ -24,7 +22,7 @@ public class WaterFragment extends Fragment {
     private TextView waterGoal;
     private WaterViewModel viewModel;
     private FirebaseFirestore db;
-    private Double waterNeeded = User.getInstance().getDaily_water_need();
+    private Double waterNeeded = IndividualUser.getInstance().getDaily_water_need();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +79,7 @@ public class WaterFragment extends Fragment {
         viewModel.progress.observe(getViewLifecycleOwner(), p -> {
             progress = p;
             updateProgressBar();
-            waterNeeded = User.getInstance().getDaily_water_need();
+            waterNeeded = IndividualUser.getInstance().getDaily_water_need();
             waterGoal.setText("/ " + waterNeeded);
         });
 
