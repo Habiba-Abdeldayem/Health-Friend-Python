@@ -1,5 +1,6 @@
 package com.example.healthfriend.UserScreens;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -8,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.Models.WeeklyPlan;
-import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.UserScreens.Adapters.MealModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 public class FireStoreManager {
     private FirebaseFirestore db;
@@ -36,10 +37,20 @@ public class FireStoreManager {
     DocumentReference userDocumentRef;
     DocumentReference personalInfoDocumentRef;
     private FirestoreCallback callback;
+    private userTypeCallBack userTypeCallBack;
+    private coolBack coolback;
 
     // Add a method to set the callback
     public void setFirestoreCallback(FirestoreCallback callback) {
         this.callback = callback;
+    }
+
+    public void setUserTypeCallBack(FireStoreManager.userTypeCallBack userTypeCallBack) {
+        this.userTypeCallBack = userTypeCallBack;
+    }
+
+    public void setCoolback(FireStoreManager.coolBack coolback) {
+        this.coolback = coolback;
     }
 
     public FireStoreManager() {
@@ -50,13 +61,6 @@ public class FireStoreManager {
         dinnerCollectionRef = db.collection("/BreakfastMeals");
     }
 
-    public interface FirestoreCallback {
-        void onSuccess(List<MealModel> meals);
-
-        void onSuccessIngredients(List<IngredientModel> ingredients);
-
-        void onFailure(Exception e);
-    }
 
     public void getIngredients(List<Integer> ingredientsId) {
         List<IngredientModel> mealIngredient = new ArrayList<>();
@@ -160,7 +164,7 @@ public class FireStoreManager {
     }
 
     public void setUserPersonalInfo(IndividualUser u) {
-        // Create a Map to represent your data
+        // Create a Map to represent data
         Map<String, Object> user_personal_data = new HashMap<>();
         user_personal_data.put("age", u.getAge());
         user_personal_data.put("daily_calories_need", u.getDaily_calories_need());
@@ -173,6 +177,7 @@ public class FireStoreManager {
         user_personal_data.put("weight", u.getWeight());
         user_personal_data.put("plan", u.getPlan());
         user_personal_data.put("water_progress", u.getWater_progress());
+        user_personal_data.put("doctorEmailConnectedWith", u.getDoctorEmailConnectedWith());
 
         personalInfoDocumentRef = db.collection("/Users/").document(u.getEmail()).collection("/personal_info").document("/data");
 
@@ -230,46 +235,161 @@ public class FireStoreManager {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         IndividualUser.getInstance().fromDocumentSnapshot(document);
-
-                        // Access the document data here
+                        // Check user type here
+                        if (userTypeCallBack != null) {
+                            userTypeCallBack.onCallback();
+                        }
                     } else {
                         retrieveDoctorFromFirestore(userEmail);
-                        // Document doesn't exist
                     }
                 } else {
                     // Handle task failure
                     Exception e = task.getException();
                     if (e != null) {
-                        Log.e("aaao", "Error fetching document: " + e.getMessage());
+                        Log.e("Firestore", "Error fetching document: " + e.getMessage());
                     }
                 }
             }
         });
+    }
 
+    public void retrieveDoctorFromFirestore(String email) {
+        Log.d("Firestore", "retrieveDoctorFromFirestore called with email: " + email);
+
+        db.collection("Doctors")
+                .document(email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                Doctor doctor = document.toObject(Doctor.class);
+                                if (doctor != null) {
+                                    Log.d("Firestore", "Doctor object created: " + doctor.getName());
+                                    Doctor.getInstance().setName(doctor.getName());
+                                    Doctor.setInstance(doctor);
+                                    if (coolback != null) {
+                                        coolback.onCallback();
+                                    }
+                                } else {
+                                    Log.e("Firestore", "Doctor object is null");
+                                }
+                            } else {
+                                Log.d("Firestore", "No such document for email: " + email);
+                            }
+                        } else {
+                            Log.e("Firestore", "Task failed: ", task.getException());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firestore", "Error retrieving doctor data: ", e);
+                    }
+                });
+    }
+
+    // Function to retrieve all doctors
+    public void retrieveAllDoctors(final OnCompleteListener<List<Doctor>> onCompleteListener) {
+        db.collection("Doctors")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<Doctor> doctorList = new ArrayList<>();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Doctor doctor = document.toObject(Doctor.class);
+                                if (doctor != null) {
+                                    doctorList.add(doctor);
+                                }
+                            }
+                            onCompleteListener.onComplete(new Task<List<Doctor>>() {
+                                @Override
+                                public boolean isComplete() {
+                                    return true;
+                                }
+
+                                @Override
+                                public boolean isSuccessful() {
+                                    return true;
+                                }
+
+                                @Override
+                                public boolean isCanceled() {
+                                    return false;
+                                }
+
+                                @Override
+                                public List<Doctor> getResult() {
+                                    return doctorList;
+                                }
+
+                                @Override
+                                public <X extends Throwable> List<Doctor> getResult(@NonNull Class<X> aClass) throws X {
+                                    return doctorList;
+                                }
+
+                                @Override
+                                public Exception getException() {
+                                    return null;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnCompleteListener(@NonNull OnCompleteListener<List<Doctor>> onCompleteListener) {
+                                    return this;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnCompleteListener(@NonNull Executor executor, @NonNull OnCompleteListener<List<Doctor>> onCompleteListener) {
+                                    return this;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnSuccessListener(@NonNull OnSuccessListener<? super List<Doctor>> onSuccessListener) {
+                                    return this;
+                                }
+
+                                @NonNull
+                                @Override
+                                public Task<List<Doctor>> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super List<Doctor>> onSuccessListener) {
+                                    return null;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super List<Doctor>> onSuccessListener) {
+                                    return this;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+                                    return this;
+                                }
+
+                                @NonNull
+                                @Override
+                                public Task<List<Doctor>> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+                                    return null;
+                                }
+
+                                @Override
+                                public Task<List<Doctor>> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+                                    return this;
+                                }
+                            });
+                        } else {
+                            Log.e("TAG", "Error retrieving doctors", task.getException());
+                            onCompleteListener.onComplete(null);
+                        }
+                    }
+                });
     }
 
 
     // Doctor methods
-//    public void getPatientEmails(String doctorEmail, final PatientFirestoreCallback callback) {
-//        DocumentReference doctorRef = db.collection("DoctorsPlan").document(doctorEmail);
-//        doctorRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    ArrayList<String> patientEmails = (ArrayList<String>) document.get("patients_email");
-//                    if (patientEmails != null) {
-//                        callback.onCallback(patientEmails);
-//                    } else {
-//                        Log.w("FirestoreHelper", "No patient emails found.");
-//                    }
-//                } else {
-//                    Log.w("FirestoreHelper", "Error getting doctor document.", task.getException());
-//                }
-//            }
-//        });
-//    }
-
     public void saveDoctorToFirestore(Doctor doctor) {
         db.collection("Doctors")
                 .document(doctor.getEmail())
@@ -285,59 +405,82 @@ public class FireStoreManager {
                     }
                 });
     }
-    private void retrieveDoctorFromFirestore(String email) {
-        db.collection("Doctors")
-                .document(email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Doctor doctor = document.toObject(Doctor.class);
-                                if (doctor != null) {
-                                    Doctor.getInstance().setName(doctor.getName());
-                                    Log.d("TAG", "Doctor data retrieved successfully: " + doctor.getName());
-                                    // Do something with the retrieved doctor data
-                                }
-                            } else {
-                                Log.d("TAG", "No such document");
-                            }
-                        } else {
-                            Log.e("TAG", "Error retrieving doctor data", task.getException());
-                        }
-                    }
-                });
-    }
-
 
     // Method to retrieve patient emails for a specific doctor
     public void getPatientEmails(String doctorEmail, final PatientFirestoreCallback callback) {
-        db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            ArrayList<String> patientEmails = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                patientEmails.add(document.getId());
+        if (doctorEmail != null) {
+            db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                ArrayList<String> patientEmails = new ArrayList<>();
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    patientEmails.add(document.getId());
+                                }
+                                callback.onCallback(patientEmails);
+                            } else {
+                                Log.w("FirestoreHelper", "Error getting patient emails.", task.getException());
                             }
-                            callback.onCallback(patientEmails);
-                        } else {
-                            Log.w("FirestoreHelper", "Error getting patient emails.", task.getException());
                         }
-                    }
+                    });
+        }
+    }
+
+    // Method to store patient email
+    public void addPatientEmail(String doctorEmail, String patientEmail, String patientName) {
+        // Create a map to store the patient name
+        Map<String, Object> patientData = new HashMap<>();
+        patientData.put("name", patientName);
+
+        // Add the patient email to the doctor's subcollection
+        db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email").document(patientEmail)
+                .set(patientData)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("FirestoreHelper", "Patient email added successfully to doctor's subcollection.");
+
+                    // Create a subcollection for the patient with their email as the document name
+                    db.collection("DoctorsPlan").document(doctorEmail).collection(patientEmail).document("weekly_plan")
+                            .set(new WeeklyPlan())
+                            .addOnSuccessListener(aVoid1 -> {
+                                Log.d("FirestoreHelper", "Subcollection created for the patient.");
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.w("FirestoreHelper", "Error creating subcollection for the patient.", e);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("FirestoreHelper", "Error adding patient email to doctor's subcollection.", e);
                 });
-    }    // Save the weekly plan for a patient
+    }
+
+    public void removePatientEmail(String doctorEmail, String patientEmail) {
+        // Delete the patient email from the doctor's subcollection
+        Log.d("ehellybnull??", "email?? " + doctorEmail + " " + patientEmail);
+
+
+        db.collection("DoctorsPlan").document(doctorEmail).collection("patients_email").document(patientEmail)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("FirestoreHelper", "Patient email removed successfully from doctor's subcollection.");
+
+                    // Delete the patient's subcollection
+                    db.collection("DoctorsPlan").document(doctorEmail).collection(patientEmail).document("weekly_plan")
+                            .delete()
+                            .addOnSuccessListener(aVoid1 -> {
+                                Log.d("FirestoreHelper", "Patient's subcollection deleted successfully.");
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.w("FirestoreHelper", "Error deleting patient's subcollection.", e);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("FirestoreHelper", "Error removing patient email from doctor's subcollection.", e);
+                });
+    }
 
     public void saveWeeklyPlan(String patient_email, WeeklyPlan weeklyPlan, Context context) {
-//        db.collection("DoctorsPlan")
-//                .document("doctor1@gmail.com")
-//                .collection("patient1@gmail.com")
-//                .document("weekly_plan")
-//                .set(weeklyPlan)
         db.collection("DoctorsPlan")
                 .document("doctor1@gmail.com")
                 .collection(patient_email)
@@ -358,7 +501,7 @@ public class FireStoreManager {
     }
 
     // Retrieve the weekly plan for a patient
-    public void getWeeklyPlan(String patient_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+    public void getWeeklyPlan(String patient_email,String doctor_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
         db.collection("DoctorsPlan")
                 .document("doctor1@gmail.com")
                 .collection(patient_email)
@@ -371,7 +514,21 @@ public class FireStoreManager {
     public interface PatientFirestoreCallback {
         void onCallback(ArrayList<String> patientEmails);
     }
-//    public interface FirestoreCallback {
+
+    public interface userTypeCallBack {
+        void onCallback();
+    }
+    public interface coolBack{
+        void onCallback();
+    }
+
+    public interface FirestoreCallback {
+        void onSuccess(List<MealModel> meals);
+
+        void onSuccessIngredients(List<IngredientModel> ingredients);
+
+        void onFailure(Exception e);
+    }//    public interface FirestoreCallback {
 //        void onCallback(List<String> patientEmails);
 //    }
 //

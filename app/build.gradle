@@ -27,7 +27,8 @@ android {
         python {
             //  buildPython "C:/Users/Shimaa Hussein/Desktop/gp/Python311/Python311/python.exe"
             //  buildPython "C:/Users/HP/AppData/Local/Programs/Python/Python311/python.exe"
-            buildPython "C:/Users/moham/AppData/Local/Programs/Python/Python38/python.exe"
+            //  buildPython "C:/Users/moham/AppData/Local/Programs/Python/Python38/python.exe"
+            buildPython "C:/Users/HP/AppData/Local/Programs/Python/Python38/python.exe"
 
         }
         python {

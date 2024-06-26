@@ -29,7 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements FireStoreManager.userTypeCallBack{
+    FireStoreManager fireStoreManager = new FireStoreManager();
     TextView joinText;
     boolean is_doctor = false;
 
@@ -47,20 +48,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        fireStoreManager.setUserTypeCallBack(this);  // Set the callback here
+
         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
         isDoctor = sharedPref.getBoolean("is_doctor", false);
         if (isLoggedIn && !isDoctor) {
             IndividualUser individualUser = IndividualUser.getInstance();
             individualUser.setEmail(sharedPref.getString("user_email", ""));
-            FireStoreManager fireStoreManager = new FireStoreManager();
             fireStoreManager.getUserPersonalInfo(individualUser);
             sendUserToAnotherActivity();
         }
         else if(isLoggedIn && isDoctor){
             Doctor doctor = Doctor.getInstance();
             doctor.setEmail(sharedPref.getString("user_email", ""));
-            FireStoreManager fireStoreManager = new FireStoreManager();
             fireStoreManager.getUserPersonalInfo(doctor.getEmail());
             sendDoctorToAnotherActivity();
 
@@ -100,9 +101,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void performLogin() {
-        FireStoreManager fireStoreManager = new FireStoreManager();
         IndividualUser.getInstance().setEmail(email.getText().toString());
+        Log.d("usdoctor", "firestore is doctor before? " + Boolean.toString(Doctor.getInstance().getName() != null));
+
         fireStoreManager.getUserPersonalInfo(email.getText().toString());
+        Log.d("usdoctor", "firestore is doctor after? " + Boolean.toString(Doctor.getInstance().getName() != null));
+
 
         if(Doctor.getInstance().getName() != null){
             is_doctor = true;
@@ -133,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean("is_logged_in", true);
-                        editor.putBoolean("is_doctor", Doctor.getInstance().getName() != null);
+//                        editor.putBoolean("is_doctor", Doctor.getInstance().getName() != null);
                         editor.putString("user_email", EMAIL); // Save user email or ID if needed
                         editor.apply();
                         Log.d("usdoctor", " " + is_doctor);
@@ -161,5 +165,21 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, UserListActivity.class);
         intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void onCallback() {
+        Log.d("dooTAG","iaaam callfrback impl");
+        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        boolean isDoctor = Doctor.getInstance().getName() != null;
+        editor.putBoolean("is_doctor", isDoctor);
+        editor.apply();
+
+        if (isDoctor) {
+            sendDoctorToAnotherActivity();
+        } else {
+            sendUserToAnotherActivity();
+        }
     }
 }
