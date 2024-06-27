@@ -137,11 +137,9 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
                         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean("is_logged_in", true);
-//                        editor.putBoolean("is_doctor", Doctor.getInstance().getName() != null);
+                        editor.putBoolean("is_doctor", Doctor.getInstance().getName() != null);
                         editor.putString("user_email", EMAIL); // Save user email or ID if needed
                         editor.apply();
-                        Log.d("usdoctor", " " + is_doctor);
-                        Log.d("usdoctor", " ddd " + Doctor.getInstance().getName());
                         if( Doctor.getInstance().getName() == null){
                             sendUserToAnotherActivity();
                         }else{

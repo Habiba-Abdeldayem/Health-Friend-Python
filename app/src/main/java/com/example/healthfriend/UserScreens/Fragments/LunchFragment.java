@@ -18,6 +18,7 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
+import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
@@ -125,7 +126,9 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
             pythonLaunch.setLunchPythonIngredients(pythonIngredients);
             changeMealSingelton.setMeals(meals);
         }
-        List<PythonIngredient> breakfastIngredients = pythonLaunch.getLunchPythonIngredients();
+//        List<PythonIngredient> breakfastIngredients = pythonLaunch.getLunchPythonIngredients();
+        List<DoctorIngredient> dd =  IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getLunch().getIngredients();
+        List<PythonIngredient> breakfastIngredients = DoctorIngredient.convertToPythonIngredientList(dd);
 
 
 

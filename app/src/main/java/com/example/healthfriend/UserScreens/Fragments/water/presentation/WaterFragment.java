@@ -80,7 +80,7 @@ public class WaterFragment extends Fragment {
             progress = p;
             updateProgressBar();
             waterNeeded = IndividualUser.getInstance().getDaily_water_need();
-            waterGoal.setText("/ " + waterNeeded);
+            waterGoal.setText(getString(R.string.water_goall, waterNeeded));
         });
 
         // Inflate the layout for this fragment

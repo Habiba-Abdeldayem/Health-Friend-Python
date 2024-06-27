@@ -104,27 +104,27 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!PASS.equals(CONPASS)) {
             confirmPass.setError("Passwords don't match");
         } else {
-        if (!EMAIL.matches(emailPattern)) {
-            email.setError("Please enter a valid email");
-        } else if (PASS.isEmpty() || PASS.length() < 6) {
-            pass.setError("Please enter a proper password");
-        } else if (!PASS.equals(CONPASS)) {
-            confirmPass.setError("Passwords don't match");
-        } else {
-            progressDialog.setMessage("Please wait for registration");
-            progressDialog.setTitle("Registration");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
+            if (!EMAIL.matches(emailPattern)) {
+                email.setError("Please enter a valid email");
+            } else if (PASS.isEmpty() || PASS.length() < 6) {
+                pass.setError("Please enter a proper password");
+            } else if (!PASS.equals(CONPASS)) {
+                confirmPass.setError("Passwords don't match");
+            } else {
+                progressDialog.setMessage("Please wait for registration");
+                progressDialog.setTitle("Registration");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
 
-            mAuth.createUserWithEmailAndPassword(EMAIL, PASS).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    progressDialog.dismiss();
-                    if (task.isSuccessful()) {
+                mAuth.createUserWithEmailAndPassword(EMAIL, PASS).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
 
-                        Toast.makeText(RegisterActivity.this, "Registration Done", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, "Registration Done", Toast.LENGTH_LONG).show();
 
-                        // Check which user type is selected and redirect accordingly
+                            // Check which user type is selected and redirect accordingly
 //                         int selectedId = userType.getCheckedRadioButtonId();
 //                         if (selectedId == R.id.user_RadioButton) {
 //                             startActivity(new Intent(RegisterActivity.this, QuestionnaireAct.class)
@@ -133,33 +133,34 @@ public class RegisterActivity extends AppCompatActivity {
 //                             startActivity(new Intent(RegisterActivity.this, QuestionnaireDoctorActivity.class)
 //                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
 
-                        // Check which radio button is selected
-                        int selectedId = userType.getCheckedRadioButtonId();
-                        if (selectedId == R.id.user_RadioButton) {
-                            IndividualUser newUser = IndividualUser.getInstance();
-                            newUser.setEmail(email.getText().toString());
-                            Toast.makeText(RegisterActivity.this, "Registration Done for User", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegisterActivity.this, QuestionnaireAct.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        } else if (selectedId == R.id.doctor_RadioButton) {
-                            Doctor newDoctor = Doctor.getInstance();
-                            newDoctor.setEmail(email.getText().toString());
-                            Toast.makeText(RegisterActivity.this, "Registration Done for Doctor", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegisterActivity.this, QuestionnaireDoctorActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    } else {
-                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                            Toast.makeText(RegisterActivity.this, "Email is already registered", Toast.LENGTH_LONG).show();
+                            // Check which radio button is selected
+                            int selectedId = userType.getCheckedRadioButtonId();
+                            if (selectedId == R.id.user_RadioButton) {
+                                IndividualUser newUser = IndividualUser.getInstance();
+                                newUser.setEmail(email.getText().toString());
+                                Toast.makeText(RegisterActivity.this, "Registration Done for User", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(RegisterActivity.this, QuestionnaireAct.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else if (selectedId == R.id.doctor_RadioButton) {
+                                Doctor newDoctor = Doctor.getInstance();
+                                newDoctor.setEmail(email.getText().toString());
+                                Toast.makeText(RegisterActivity.this, "Registration Done for Doctor", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(RegisterActivity.this, QuestionnaireDoctorActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
                         } else {
-                            Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_LONG).show();
-                            Log.e(TAG, "Registration failed", task.getException());
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                Toast.makeText(RegisterActivity.this, "Email is already registered", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_LONG).show();
+                                Log.e(TAG, "Registration failed", task.getException());
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 }

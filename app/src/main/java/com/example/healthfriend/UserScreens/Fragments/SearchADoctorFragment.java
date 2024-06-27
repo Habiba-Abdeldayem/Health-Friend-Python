@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.DoctorScreens.DoctorAdapter;
-import com.example.healthfriend.DoctorScreens.FollowingActivity;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
 import com.example.healthfriend.UserScreens.IndividualUser;

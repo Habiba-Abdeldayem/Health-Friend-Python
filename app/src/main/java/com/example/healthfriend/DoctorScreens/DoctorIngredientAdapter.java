@@ -98,7 +98,7 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
                         currentMeal.addIngredient(currentIngredient);
                         currentIngredient.setIngredientSelectedByDoctor(true);
                         Log.d("opaa", "after after" + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
-                        Log.d("opaa", "total ing: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+//                        Log.d("opaa", "total ing: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
                     } else {
 //                        currentMeal.removeIngredient(currentIngredient);
                         currentMeal.removeIngredientByName(currentIngredient.getName());

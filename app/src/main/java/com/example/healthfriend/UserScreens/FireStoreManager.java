@@ -482,7 +482,7 @@ public class FireStoreManager {
 
     public void saveWeeklyPlan(String patient_email, WeeklyPlan weeklyPlan, Context context) {
         db.collection("DoctorsPlan")
-                .document("doctor1@gmail.com")
+                .document(Doctor.getInstance().getEmail())
                 .collection(patient_email)
                 .document("weekly_plan")
                 .set(weeklyPlan)
@@ -503,7 +503,7 @@ public class FireStoreManager {
     // Retrieve the weekly plan for a patient
     public void getWeeklyPlan(String patient_email,String doctor_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
         db.collection("DoctorsPlan")
-                .document("doctor1@gmail.com")
+                .document(doctor_email)
                 .collection(patient_email)
                 .document("weekly_plan")
                 .get()

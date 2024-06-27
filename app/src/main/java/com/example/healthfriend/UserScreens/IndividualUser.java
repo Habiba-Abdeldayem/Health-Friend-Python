@@ -4,13 +4,14 @@ import android.util.Log;
 
 import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.Models.WeeklyPlan;
+import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class IndividualUser {
     private FireStoreManager fireStoreManager;
-    private double height,weight, daily_calories_need, daily_carbs_need,daily_proteins_need,daily_fats_need ,daily_water_need;
-    private int age, water_target,water_progress;
-    private String email,gender, plan,name, doctorEmailConnectedWith;
+    private double height, weight, daily_calories_need, daily_carbs_need, daily_proteins_need, daily_fats_need, daily_water_need;
+    private int age, water_target, water_progress;
+    private String email, gender, plan, name, doctorEmailConnectedWith;
 
     private static IndividualUser instance;
     private Doctor currentDoctor;
@@ -23,32 +24,34 @@ public class IndividualUser {
         return instance;
     }
 
-    private IndividualUser(){
+    private IndividualUser() {
         fireStoreManager = new FireStoreManager();
-        height =0;
-        weight=0;
+        height = 0;
+        weight = 0;
         daily_calories_need = 0;
-        age=0;
-        water_target=0;
+        age = 0;
+        water_target = 0;
         daily_water_need = 0;
-        daily_carbs_need =0;
-        daily_fats_need =0 ;
-        daily_proteins_need =0 ;
+        daily_carbs_need = 0;
+        daily_fats_need = 0;
+        daily_proteins_need = 0;
         email = "";
         gender = "";
         plan = "";
         water_progress = 0;
         doctorEmailConnectedWith = null;
-        currentDoctor =null;
+        currentDoctor = null;
         weeklyPlan = null;
         setDaily_water_need();
     }
+
     public double getDaily_carbs_need() {
         return daily_carbs_need;
     }
 
     public void setDaily_carbs_need() {
-        this.daily_carbs_need =  Math.round((daily_calories_need *0.5)/4*100.0)/100.0;;
+        this.daily_carbs_need = Math.round((daily_calories_need * 0.5) / 4 * 100.0) / 100.0;
+        ;
     }
 
     public double getDaily_proteins_need() {
@@ -56,7 +59,8 @@ public class IndividualUser {
     }
 
     public void setDaily_proteins_need() {
-        this.daily_proteins_need =Math.round((daily_calories_need *0.3)/4 *100.0)/100.0;;
+        this.daily_proteins_need = Math.round((daily_calories_need * 0.3) / 4 * 100.0) / 100.0;
+        ;
     }
 
     public double getDaily_fats_need() {
@@ -64,7 +68,8 @@ public class IndividualUser {
     }
 
     public void setDaily_fats_need() {
-        this.daily_fats_need = Math.round((daily_calories_need *0.2)/9*100.0)/100.0;;
+        this.daily_fats_need = Math.round((daily_calories_need * 0.2) / 9 * 100.0) / 100.0;
+        ;
     }
 
 
@@ -90,9 +95,13 @@ public class IndividualUser {
     }
 
     public void setDaily_calories_need() {
-        if(plan.equals("Health & Wellness") || plan.equals("Easy Monitoring")){daily_calories_need = weight * 30;}
-        else if(plan.equals("Weight Control")){ daily_calories_need = weight * 35;}
-        else if(plan.equals("Weight Gain")){  daily_calories_need = weight * 20;}
+        if (plan.equals("Health & Wellness") || plan.equals("Easy Monitoring")) {
+            daily_calories_need = weight * 30;
+        } else if (plan.equals("Weight Control")) {
+            daily_calories_need = weight * 35;
+        } else if (plan.equals("Weight Gain")) {
+            daily_calories_need = weight * 20;
+        }
 //        else {  daily_calories_need = weight * 20;}
 
     }
@@ -159,7 +168,8 @@ public class IndividualUser {
             water_progress = document.getLong("daily_water_need").intValue();
             plan = document.getString("plan");
             doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");
-//            setCurrentDoctor();
+            if (doctorEmailConnectedWith != null)
+                setWeeklyPlan();
             setDaily_water_need();
         }
     }
@@ -181,7 +191,7 @@ public class IndividualUser {
     }
 
     // Used to update info when user update his info
-    public void updateCalculations(){
+    public void updateCalculations() {
         setDaily_carbs_need();
         setDaily_proteins_need();
         setDaily_fats_need();
@@ -216,9 +226,29 @@ public class IndividualUser {
     public void setWeeklyPlan(WeeklyPlan weeklyPlan) {
         this.weeklyPlan = weeklyPlan;
     }
-    public void unFollowDoctor(){
+
+    public void setWeeklyPlan() {
+        fireStoreManager.getWeeklyPlan(instance.getEmail(), doctorEmailConnectedWith, task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    this.weeklyPlan = document.toObject(WeeklyPlan.class);
+                    WeeklyPlanManagerSingleton.getInstance().setWeeklyPlan(weeklyPlan);
+                } else {
+                    System.out.println("No such document!");
+                }
+            } else {
+                System.err.println("Task failed: " + task.getException());
+            }
+        });
+//        Log.d("plalala", ""+this.weeklyPlan.getDailyPlans().size());
+
+
+    }
+
+    public void unFollowDoctor() {
         Log.d("ehellybnull??", "email?? " + this.getEmail());
-        fireStoreManager.removePatientEmail(doctorEmailConnectedWith,getEmail());
+        fireStoreManager.removePatientEmail(doctorEmailConnectedWith, getEmail());
         this.currentDoctor = null;
         this.doctorEmailConnectedWith = null;
         fireStoreManager.setUserPersonalInfo(instance);
