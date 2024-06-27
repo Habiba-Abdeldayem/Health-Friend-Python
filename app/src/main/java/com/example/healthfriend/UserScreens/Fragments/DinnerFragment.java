@@ -18,7 +18,6 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
-import com.example.healthfriend.Models.Meal;
 import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
@@ -35,7 +34,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class DinnerFragment extends Fragment implements MealAdapterInterface {
@@ -137,7 +135,7 @@ public class DinnerFragment extends Fragment implements MealAdapterInterface {
 //            }
           //  pythonIngredients.add(new PythonIngredient(meals.get(0).getIngredients().get(0).getName(), meals.get(0).getIngredients().get(0).getCarbs(), meals.get(0).getIngredients().get(0).getCalories(), meals.get(0).getIngredients().get(0).getFats(), meals.get(0).getIngredients().get(0).getProtein(),meals.get(0).getIngredients().get(0).getCount(),meals.get(0).getIngredients().get(0).getCategory()));
 
-            pythonDinner.setBreakfastPythonIngredients(pythonIngredients);
+            pythonDinner.setDinnerPythonIngredients(pythonIngredients);
         }
         List<PythonIngredient> breakfastIngredients = pythonDinner.getDinnerPythonIngredients();
 

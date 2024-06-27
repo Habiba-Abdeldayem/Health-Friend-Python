@@ -59,6 +59,10 @@ public class CurrentDoctorFragment extends Fragment {
             public void onClick(View view) {
                 individualUser.unFollowDoctor();
                 Toast.makeText(getContext(), "Doctor Unfollowed", Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean("is_doctor_plan_applied", false);
+                editor.apply();
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, new SearchADoctorFragment()).addToBackStack(null).commit();
             }
         });

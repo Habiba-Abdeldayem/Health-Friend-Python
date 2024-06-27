@@ -37,7 +37,7 @@ public class DoctorIngredient extends Ingredient{
                 doctorIngredient.getCount(),
                 doctorIngredient.getCategory()
         );
-        pythonIngredient.setIngredientSelectedByUser(doctorIngredient.isIngredientSelectedByDoctor());
+        pythonIngredient.setIngredientSelectedByUser(false);
 
         return pythonIngredient;
     }

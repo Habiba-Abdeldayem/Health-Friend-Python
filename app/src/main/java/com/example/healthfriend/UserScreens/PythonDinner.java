@@ -24,7 +24,7 @@ public class PythonDinner {
         return dinnerPythonIngredients;
     }
 
-    public void setBreakfastPythonIngredients(List<PythonIngredient> DinnerPythonIngredients) {
+    public void setDinnerPythonIngredients(List<PythonIngredient> DinnerPythonIngredients) {
         this.dinnerPythonIngredients = DinnerPythonIngredients;
     }
 }
