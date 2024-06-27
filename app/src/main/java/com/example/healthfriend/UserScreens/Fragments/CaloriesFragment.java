@@ -100,6 +100,11 @@ public class CaloriesFragment extends Fragment {
                 FragmentManager fm = requireActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 BreakfastFragment breakfastFragment = new BreakfastFragment();
+             ///to send meal type to fav ingredient fragment
+                Bundle bundle = new Bundle();
+                bundle.putString("mealType", "breakfast"); // Replace "breakfast" with the actual meal type
+                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                fragment.setArguments(bundle);
                 ft.replace(R.id.home_frame_layout, breakfastFragment);
                 ft.addToBackStack(null); // Add this line to enable back navigation
                 ft.commit();
@@ -110,6 +115,10 @@ public class CaloriesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 LunchFragment lunchFragment = new LunchFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("mealType", "lunch"); // Replace "breakfast" with the actual meal type
+                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                fragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, lunchFragment).addToBackStack(null).commit();
             }
         });
@@ -117,6 +126,10 @@ public class CaloriesFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DinnerFragment dinnerFragment = new DinnerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("mealType", "dinner"); // Replace "breakfast" with the actual meal type
+                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                fragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, dinnerFragment).addToBackStack(null).commit();
             }
         });

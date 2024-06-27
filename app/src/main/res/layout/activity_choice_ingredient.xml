@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:entries="@array/spinner1_items" />
+        />
 
     <!-- Ingredient 2 TextView and Spinner -->
     <TextView
@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:entries="@array/spinner1_items" />
+       />
 
     <!-- Ingredient 3 TextView and Spinner -->
     <TextView
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:entries="@array/spinner1_items" />
+     />
 
     <!-- Next Button -->
     <Button
