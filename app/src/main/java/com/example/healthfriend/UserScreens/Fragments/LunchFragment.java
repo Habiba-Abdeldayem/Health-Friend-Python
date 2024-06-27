@@ -51,7 +51,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
     private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
-    private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
+    private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress,fav_ingredient;
     //private PythonBreakfast pythonBreakfast;
     private PythonLaunch pythonLaunch;
     private ChangeMealSingelton changeMealSingelton;
@@ -85,6 +85,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
         textview_carbs_progress = view.findViewById(R.id.lunch_carbs_progress);
         textview_proteins_progress = view.findViewById(R.id.lunch_textview_proteins_progress);
         textview_fats_progress = view.findViewById(R.id.lunch_textview_fats_progress);
+        fav_ingredient=view.findViewById(R.id.fav_ingredient);
         updateCaloriesProgress(); updateCarbsProgress(); updateProteinsProgress(); updateFatsProgress();
         lunchSingleton = TodaysLunchSingleton.getInstance();
         List<IngredientModel> todaysIngredient = lunchSingleton.getLunchIngredients();
@@ -128,6 +129,13 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
                 changeMealSingelton=ChangeMealSingelton.getInstance();
                 pythonLaunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
                 changeMealSingelton.UpdateIndices();
+            }
+        });
+        fav_ingredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fav_ingredient_Fragment fav_fragment = new fav_ingredient_Fragment();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, fav_fragment).addToBackStack(null).commit();
             }
         });
     }

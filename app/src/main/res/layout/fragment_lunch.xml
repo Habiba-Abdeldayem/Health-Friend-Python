@@ -40,8 +40,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Lunch"
+                        android:layout_weight="3"
                         android:textSize="24sp"
                         android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/fav_ingredient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:text="select fav ingredient" />
 
                 </LinearLayout>
             </Toolbar>
