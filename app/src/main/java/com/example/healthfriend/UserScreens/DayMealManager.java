@@ -36,7 +36,7 @@ public class DayMealManager {
         pythonDinner= PythonDinner.getInstance();
         todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
 //        isDoctorPlanApplied()
-        if (false) {
+        if (isDoctorPlanApplied()) {
             setDoctorLunch();
         }
         else{

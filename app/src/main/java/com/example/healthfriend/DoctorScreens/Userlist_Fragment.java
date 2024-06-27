@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +21,7 @@ import com.example.healthfriend.Models.Meal;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
+import com.example.healthfriend.UserScreens.Fragments.CaloriesFragment;
 import com.example.healthfriend.UserScreens.IndividualUser;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class Userlist_Fragment extends Fragment implements UserList.OnItemClickL
     private RecyclerView recyclerView;
     private UserList adapter;
     IndividualUser individualUser = IndividualUser.getInstance();
+
 
     public Userlist_Fragment() {
         // Required empty public constructor
@@ -49,23 +53,20 @@ public class Userlist_Fragment extends Fragment implements UserList.OnItemClickL
 
         FireStoreManager firestoreHelper = new FireStoreManager();
 
-
         recyclerView = view.findViewById(R.id.rv_userList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        firestoreHelper.getPatientEmails("doctor1@gmail.com", new FireStoreManager.PatientFirestoreCallback() {
+        firestoreHelper.getPatientEmails(Doctor.getInstance().getEmail(), new FireStoreManager.PatientFirestoreCallback() {
             @Override
             public void onCallback(ArrayList<String> patientEmails) {
                 if (patientEmails != null) {
                     usersEmail.addAll(patientEmails);
-                    Log.d("alaaa", "size after callback: " + usersEmail.size());
-                    adapter = new UserList(usersEmail,Userlist_Fragment.this::onItemClick);
+                    adapter = new UserList(usersEmail, Userlist_Fragment.this::onItemClick);
                     recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
-
-        Log.e("lkl", "onViewCreated end");
     }
 
     @Override
@@ -75,8 +76,15 @@ public class Userlist_Fragment extends Fragment implements UserList.OnItemClickL
 
     @Override
     public void onItemClick(IndividualUser user) {
-        Intent intent = new Intent(getContext(), DaysActivity.class);
-        startActivity(intent);
+        FragmentManager fm = requireActivity().getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        DaysFragment daysFragment = new DaysFragment();
+        ft.replace(R.id.doctor_home_frame_layout, daysFragment);
+        ft.addToBackStack(null); // Add this line to enable back navigation
+        ft.commit();
+
+//        Intent intent = new Intent(getContext(), DaysActivity.class);
+//        startActivity(intent);
 
     }
 }

@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
         isDoctor = sharedPref.getBoolean("is_doctor", false);
+        Log.d("kkgkg", ""+isDoctor);
         if (isLoggedIn && !isDoctor) {
             IndividualUser individualUser = IndividualUser.getInstance();
             individualUser.setEmail(sharedPref.getString("user_email", ""));
@@ -160,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
         startActivity(intent);
     }
     private void sendDoctorToAnotherActivity() {
-        Intent intent = new Intent(LoginActivity.this, UserListActivity.class);
+        Intent intent = new Intent(LoginActivity.this, Doctor_Main.class);
         intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
