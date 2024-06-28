@@ -22,7 +22,7 @@ import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
-import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.UserScreens.DoctorMealAdapterInterface;
 import com.example.healthfriend.UserScreens.PythonDinner;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.TodaysDinnerSingleton;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DinnerFragment extends Fragment implements MealAdapterInterface {
+public class DinnerFragment extends Fragment implements DoctorMealAdapterInterface {
     IndividualUser individualUser = IndividualUser.getInstance();
 
     boolean dinner_fav_isClicked = false;

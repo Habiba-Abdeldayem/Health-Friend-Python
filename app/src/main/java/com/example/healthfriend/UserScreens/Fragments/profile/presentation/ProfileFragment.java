@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Activities.LoginActivity;
 import com.example.healthfriend.UserScreens.Fragments.profile.domain.DialogueCallback;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ProfileFragment extends Fragment {
     TextView weightTV, heightTV, ageTV, greeting_tv, targetTV, caloriesTV,logout;
     ImageView weightEditBtn, heightEditBtn, ageEditBtn, genderEditBtn, targetEditBtn, caloriesEditBtn;
+    IndividualUser individualUser = IndividualUser.getInstance();
 
     private ProfileViewModel viewModel;
     private FirebaseFirestore db;
@@ -60,6 +62,10 @@ logout.setOnClickListener(new View.OnClickListener() {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.apply();
+        individualUser.logout();
+        Doctor.getInstance().logout();
+        Log.d("logoutotot", "from user , is doctor? " + String.valueOf(Doctor.getInstance().getEmail() != null));
+        Log.d("logoutotot", "from user, is user?" + String.valueOf(!IndividualUser.getInstance().getEmail().equals("")));
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }

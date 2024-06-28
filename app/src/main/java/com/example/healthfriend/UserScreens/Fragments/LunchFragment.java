@@ -18,10 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
-import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.UserScreens.ChangeMealSingelton;
 import com.example.healthfriend.UserScreens.DayMealManager;
-import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.UserScreens.DoctorMealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.PythonBreakfast;
 import com.example.healthfriend.UserScreens.PythonDinner;
@@ -33,7 +32,7 @@ import com.example.healthfriend.UserScreens.IndividualUser;
 import java.util.List;
 
 
-public class LunchFragment extends Fragment implements MealAdapterInterface {
+public class LunchFragment extends Fragment implements DoctorMealAdapterInterface {
     IndividualUser individualUser = IndividualUser.getInstance();
     boolean lunch_fav_isClicked = false;
     boolean eman=false;

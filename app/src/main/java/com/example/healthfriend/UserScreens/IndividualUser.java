@@ -102,9 +102,9 @@ public class IndividualUser {
         if (plan.equals("Health & Wellness") || plan.equals("Easy Monitoring")) {
             daily_calories_need = weight * 30;
         } else if (plan.equals("Weight Control")) {
-            daily_calories_need = weight * 35;
-        } else if (plan.equals("Weight Gain")) {
             daily_calories_need = weight * 20;
+        } else if (plan.equals("Weight Gain")) {
+            daily_calories_need = weight * 35;
         }
 //        else {  daily_calories_need = weight * 20;}
 
@@ -266,8 +266,28 @@ public class IndividualUser {
         this.currentDoctorPlanIdx = currentDoctorPlanIdx;
     }
 
-    public void logout() {
-        instance = null;
-    }
+        public void logout() {
+            height = 0;
+            weight = 0;
+            daily_calories_need = 0;
+            age = 0;
+            water_target = 0;
+            daily_water_need = 0;
+            daily_carbs_need = 0;
+            daily_fats_need = 0;
+            daily_proteins_need = 0;
+            email = "";
+            gender = "";
+            plan = "";
+            name = "";
+            water_progress = 0;
+            currentDoctorPlanIdx = -1;
+            doctorEmailConnectedWith = null;
+            currentDoctor = null;
+            weeklyPlan = null;
+            instance = null;
+
+        }
+
 
 }

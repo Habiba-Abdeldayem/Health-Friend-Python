@@ -490,13 +490,13 @@ public class FireStoreManager {
                 .set(weeklyPlan)
                 .addOnSuccessListener(aVoid -> {
                     // Successfully saved
-                    Toast myToast = Toast.makeText(context, "saveeed", Toast.LENGTH_LONG);
+                    Toast myToast = Toast.makeText(context, "Meal Saved Successfully", Toast.LENGTH_SHORT);
                     myToast.show();
                     System.out.println("Weekly plan successfully saved!" + patient_email);
                 })
                 .addOnFailureListener(e -> {
                     // Handle the error
-                    Toast myToast = Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
+                    Toast myToast = Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT);
                     myToast.show();
                     System.err.println("Error saving weekly plan: " + e.getMessage());
                 });
