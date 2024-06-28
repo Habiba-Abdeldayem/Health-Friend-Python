@@ -71,9 +71,6 @@ public class HomeActivity extends AppCompatActivity {
                 } else if (itemId == R.id.profile_nav_item) {
                     transaction.replace(R.id.home_frame_layout, profileFragment).addToBackStack(null).commit();
                     return true;
-                } else if (itemId == R.id.settings_nav_item) {
-                    transaction.replace(R.id.home_frame_layout, settingsFragment).addToBackStack(null).commit();
-                    return true;
                 } else {
                     transaction.replace(R.id.home_frame_layout, homeFragment).addToBackStack(null).commit();
                 }
@@ -95,10 +92,7 @@ public class HomeActivity extends AppCompatActivity {
             selectedItem = bottomNavigationView.getMenu().findItem(R.id.home_nav_item);
         } else if (currentFragment instanceof ProfileFragment) {
             selectedItem = bottomNavigationView.getMenu().findItem(R.id.profile_nav_item);
-        } else if (currentFragment instanceof SettingsFragment) {
-            selectedItem = bottomNavigationView.getMenu().findItem(R.id.settings_nav_item);
         }
-
         // Set the selected item on the BottomNavigationView
         if (selectedItem != null) {
             selectedItem.setChecked(true);

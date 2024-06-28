@@ -4,12 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.Models.DailyData;
 import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.Models.PythonIngredient;
+import com.example.healthfriend.Models.UserMeal;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +25,7 @@ import java.util.Map;
 
 public class DayMealManager {
     private static DayMealManager instance;
+    IndividualUser individualUser=IndividualUser.getInstance();
     private Context context;
     private PythonBreakfast pythonBreakfast;
     private PythonLunch pythonLunch;
@@ -27,13 +36,13 @@ public class DayMealManager {
         pythonBreakfast = PythonBreakfast.getInstance();
         pythonLunch = PythonLunch.getInstance();
         pythonDinner = PythonDinner.getInstance();
-        checkAndResetMealsIfNeeded();
-        retrieveMealsFromFirestore(getCurrentDate());
-//        isDoctorPlanApplied()
+//        checkAndResetMealsIfNeeded();
+//        retrieveMealsFromFirestore(getCurrentDate());
         if (isDoctorPlanApplied()) {
             setDoctorLunch();
         }
         else{
+        setPythonLaunch();
 
         }
     }
@@ -114,7 +123,40 @@ public class DayMealManager {
         this.pythonLunch = pythonLunch;
         updateMealsInFirestore();
     }
+    public void setPythonLaunch() {
+        if(pythonLunch.getLunchPythonIngredients()==null) {
 
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(context));
+            }
+            Python python=Python.getInstance();
+            PyObject myModule=python.getModule("chocoo");
+            PyObject myfncall=myModule.get("calll");
+            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"lunch.csv");
+            String f=result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+
+            // Deserialize JSON to List<Meal>
+            List<UserMeal> meals = new Gson().fromJson(f, type);
+            List<PythonIngredient> pythonIngredients = new ArrayList<>();
+
+            for(UserMeal meal : meals){
+                for (PythonIngredient ingredient :meal.getIngredients()){
+                    pythonIngredients.add(new PythonIngredient(ingredient.getName(),
+                            ingredient.getCarbs(),
+                            ingredient.getCalories(),
+                            ingredient.getFats(),
+                            ingredient.getProtein(),
+                            ingredient.getCount(),
+                            ingredient.getCategory()));
+                }
+                break;
+            }
+
+            pythonLunch.setLunchPythonIngredients(pythonIngredients);
+        }
+
+    }
     public void setPythonBreakfast(PythonBreakfast pythonBreakfast) {
         this.pythonBreakfast = pythonBreakfast;
         updateMealsInFirestore();

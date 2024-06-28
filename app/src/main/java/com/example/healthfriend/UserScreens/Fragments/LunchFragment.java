@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
@@ -68,7 +69,7 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
         super.onViewCreated(view, savedInstanceState);
 //
 //        ImageButton favourite_btn = view.findViewById(R.id.lunch_btn_add_to_favourite);
-//        ImageButton change_meal_btn = view.findViewById(R.id.lunch_btn_change_meal);
+        ImageButton change_meal_btn = view.findViewById(R.id.lunch_btn_change_meal);
         caloriesProgressBar = view.findViewById(R.id.lunch_calories_progressbar);
         carbsProgressBar = view.findViewById(R.id.lunch_carbs_progressbar);
         proteinsProgressBar = view.findViewById(R.id.lunch_proteins_progressbar);
@@ -112,17 +113,17 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
 //            }
 //        });
 //
-//        change_meal_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
-////                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
-//
+        change_meal_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+
 //                changeMealSingelton=ChangeMealSingelton.getInstance();
 //                pythonLunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
 //                changeMealSingelton.UpdateIndices();
-//            }
-//        });
+            }
+        });
         fav_ingredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
