@@ -9,6 +9,7 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.example.healthfriend.Models.DailyData;
 import com.example.healthfriend.Models.DoctorIngredient;
+import com.example.healthfriend.Models.IngredientAppearedRefused;
 import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.Models.UserMeal;
 import com.google.common.reflect.TypeToken;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 public class DayMealManager {
     private static DayMealManager instance;
+    private FireStoreManager fireStoreManager;
     IndividualUser individualUser=IndividualUser.getInstance();
     private Context context;
     private PythonBreakfast pythonBreakfast;
@@ -35,6 +37,7 @@ public class DayMealManager {
 
     private DayMealManager(Context context) {
         this.context = context;
+        fireStoreManager = new FireStoreManager();
         pythonBreakfast = PythonBreakfast.getInstance();
         pythonLunch = PythonLunch.getInstance();
         pythonDinner = PythonDinner.getInstance();
@@ -282,7 +285,6 @@ public class DayMealManager {
     }
     public boolean isDoctorPlanApplied() {
         SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
-        Log.d("jjgjgj",""+sharedPref.getBoolean("is_doctor_plan_applied", false));
         return sharedPref.getBoolean("is_doctor_plan_applied", false); // Default is false if not found
     }
     private void retrieveMealsFromFirestore(String date) {
@@ -382,6 +384,58 @@ public class DayMealManager {
         }
     }
 
+    public void dayRejectedIngredients() {
+        String userEmail = IndividualUser.getInstance().getEmail();
+        List<PythonIngredient> rejectedIngredients = new ArrayList<>();
+        for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+            if (!ingredient.isIngredientSelectedByUser()) {
+                rejectedIngredients.add(ingredient);
+                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
+                fireStoreManager.storeIngredientData(userEmail, ingredientData);
+            }
+        }
+//        for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
+//            if (!ingredient.isIngredientSelectedByUser()) {
+//                rejectedIngredients.add(ingredient);
+//                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
+//                fireStoreManager.storeIngredientData(userEmail, ingredientData);
+//            }
+//        }
+//        for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
+//            if (!ingredient.isIngredientSelectedByUser()) {
+//                rejectedIngredients.add(ingredient);
+//                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
+//                fireStoreManager.storeIngredientData(userEmail, ingredientData);
+//            }
+//        }
+//        return rejectedIngredients;
+    }
+
+    public void dayAppearedIngredients() {
+        String userEmail = IndividualUser.getInstance().getEmail();
+        List<PythonIngredient> appearedIngredients = new ArrayList<>();
+        if(pythonBreakfast.getBreakfastPythonIngredients()!=null){
+
+        for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+            appearedIngredients.add(ingredient);
+            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+            fireStoreManager.storeIngredientData(userEmail, ingredientData);
+        }}
+//        if(pythonLunch.getLunchPythonIngredients()!=null){
+//
+//        for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
+//            appearedIngredients.add(ingredient);
+//            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+//            fireStoreManager.storeIngredientData(userEmail, ingredientData);
+//        }}
+//        if(pythonDinner.getDinnerPythonIngredients()!=null){
+//        for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
+//            appearedIngredients.add(ingredient);
+//            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+//            fireStoreManager.storeIngredientData(userEmail, ingredientData);
+//        }}
+//        return appearedIngredients;
+    }
 
     public interface OnDataRetrievedListener {
         void onDataRetrieved(List<DailyData> dailyDataList);

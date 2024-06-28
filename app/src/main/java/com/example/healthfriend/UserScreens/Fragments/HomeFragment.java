@@ -166,4 +166,14 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
             Log.e("HomeFragment", "Doctor instance is null or doctor email is null");
         }
     }
+
+    @Override
+    public void updateCalories() {
+        ProgressBar progressBar = requireView().findViewById(R.id.home_progress_bar);
+        double progress = (TodaysNutrientsEaten.getEatenCalories() / IndividualUser.getInstance().getDaily_calories_need()) * 100;
+        progressBar.setProgress((int) progress);
+        Double calories_left_value = IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
+        String calories_left_string = getString(R.string.home_calories_left, calories_left_value);
+        caloriesLeft.setText(calories_left_string);
+    }
 }

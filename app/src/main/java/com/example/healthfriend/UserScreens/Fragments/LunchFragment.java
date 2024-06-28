@@ -110,6 +110,8 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
             adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
             recyclerView.setAdapter(adapter);
         }
+        dayMealManager.dayAppearedIngredients();
+        dayMealManager.dayRejectedIngredients();
 //        favourite_btn.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
