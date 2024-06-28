@@ -107,7 +107,7 @@ public class DayMealManager {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         DailyData dailyData = new DailyData();
-        dailyData.setDate(getPreviousDate());
+        dailyData.setDate(getCurrentDate());
         dailyData.setBreakfast(pythonBreakfast.getBreakfastPythonIngredients());
         dailyData.setLunch(pythonLunch.getLunchPythonIngredients());
         dailyData.setDinner(pythonDinner.getDinnerPythonIngredients());
@@ -118,7 +118,7 @@ public class DayMealManager {
         dailyData.setWater_progress(IndividualUser.getInstance().getWater_progress());
         dailyData.setWeight(IndividualUser.getInstance().getWeight());
 
-        db.collection("Users").document(userId).collection("history").document(getPreviousDate())
+        db.collection("Users").document(userId).collection("history").document(getCurrentDate())
                 .set(dailyData)
                 .addOnSuccessListener(aVoid -> Log.d("DayMealManager", "Meals successfully written!"))
                 .addOnFailureListener(e -> Log.w("DayMealManager", "Error writing document", e));

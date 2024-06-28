@@ -34,16 +34,11 @@ import java.util.List;
 
 public class LunchFragment extends Fragment implements DoctorMealAdapterInterface {
     IndividualUser individualUser = IndividualUser.getInstance();
-    boolean lunch_fav_isClicked = false;
-    boolean eman=false;
-    boolean habiba=false;
-
-    private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;
     private String mealType;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
     private ImageButton fav_ingredient,change_meal_btn;
-    private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
+    private TextView meal_name,textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
     //private PythonBreakfast pythonBreakfast;
     private PythonLunch pythonLunch;
     private PythonBreakfast pythonBreakfast;
@@ -82,14 +77,17 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         dayMealManager = DayMealManager.getInstance(getContext());
           switch (mealType){
               case "breakfast":
+                  meal_name.setText("Breakfast");
                   getBreakfast();
                   mealIngredients  = pythonBreakfast.getBreakfastPythonIngredients();
                   break;
               case "lunch":
+                  meal_name.setText("Lunch");
                   getLunch();
                   mealIngredients  = pythonLunch.getLunchPythonIngredients();
                   break;
               case "dinner":
+                  meal_name.setText("Dinner");
                   getDinner();
                   mealIngredients  = pythonDinner.getDinnerPythonIngredients();
                   break;
@@ -109,7 +107,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         if (mealIngredients!= null) {
             RecyclerView recyclerView = view.findViewById(R.id.rv_lunch_suggested_meals);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            IngredientAdapter adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
+            adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
             recyclerView.setAdapter(adapter);
         }
 //        favourite_btn.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +150,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
 
     private void  initUI(View view){
 //        ImageButton favourite_btn = view.findViewById(R.id.lunch_btn_add_to_favourite);
-
+        meal_name = view.findViewById(R.id.meal_name);
         change_meal_btn = view.findViewById(R.id.lunch_btn_change_meal);
         caloriesProgressBar = view.findViewById(R.id.lunch_calories_progressbar);
         carbsProgressBar = view.findViewById(R.id.lunch_carbs_progressbar);
@@ -163,6 +161,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         textview_proteins_progress = view.findViewById(R.id.lunch_textview_proteins_progress);
         textview_fats_progress = view.findViewById(R.id.lunch_textview_fats_progress);
         fav_ingredient=view.findViewById(R.id.fav_ingredient);
+
         updateCaloriesProgress(); updateCarbsProgress(); updateProteinsProgress(); updateFatsProgress();
     }
 

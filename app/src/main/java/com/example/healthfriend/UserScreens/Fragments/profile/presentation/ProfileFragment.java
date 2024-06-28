@@ -64,8 +64,6 @@ logout.setOnClickListener(new View.OnClickListener() {
         editor.apply();
         individualUser.logout();
         Doctor.getInstance().logout();
-        Log.d("logoutotot", "from user , is doctor? " + String.valueOf(Doctor.getInstance().getEmail() != null));
-        Log.d("logoutotot", "from user, is user?" + String.valueOf(!IndividualUser.getInstance().getEmail().equals("")));
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }

@@ -46,9 +46,6 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
         fireStoreManager = new FireStoreManager();
         fireStoreManager.setCoolback(this);  // Set the callback here
 
-        TodaysBreakfastSingleton breakfast = TodaysBreakfastSingleton.getInstance();
-        TodaysLunchSingleton lunchFragment = TodaysLunchSingleton.getInstance();
-        TodaysDinnerSingleton dinnerFragment = TodaysDinnerSingleton.getInstance();
         todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
         progress = (TodaysNutrientsEaten.getEatenCalories() / IndividualUser.getInstance().getDaily_calories_need()) * 100;
     }
@@ -63,6 +60,9 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ProgressBar progressBar = view.findViewById(R.id.home_progress_bar);
+        fireStoreManager.getUserPersonalInfo(IndividualUser.getInstance().getEmail());
+        Log.d("HomeFragment", "nulll " + Boolean.toString(individualUser.getName().equals("")));
+
         caloriesLeft = view.findViewById(R.id.tv_homeFragment_calories_left);
         progressBar.setProgress((int) progress);
         Double calories_left_value = IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories();
@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
             FragmentManager fm = requireActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.home_frame_layout, new CurrentDoctorFragment());
-            ft.addToBackStack(null); // Add this line to enable back navigation
+            ft.addToBackStack(null);
             ft.commit();
         } else {
             Log.e("HomeFragment", "Doctor instance is null or doctor email is null");
