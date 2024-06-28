@@ -31,6 +31,7 @@ public class CaloriesFragment extends Fragment {
     TodaysBreakfastSingleton breakfast;
     TodaysNutrientsEaten todaysNutrientsEaten;
     private double progress;
+
     public CaloriesFragment() {
         // Required empty public constructor
     }
@@ -41,15 +42,14 @@ public class CaloriesFragment extends Fragment {
         breakfast = TodaysBreakfastSingleton.getInstance();
         todaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
         progress = (TodaysNutrientsEaten.getEatenCalories()/1500.0)*100;
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_calories, container, false);
         calendarTextView = view.findViewById(R.id.calendarTextView);
+        updateLabel();
         calendarTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +59,7 @@ public class CaloriesFragment extends Fragment {
 
         return view;
     }
+
     private void showDatePicker() {
         new DatePickerDialog(getContext(), dateSetListener,
                 calendar.get(Calendar.YEAR),
@@ -82,7 +83,6 @@ public class CaloriesFragment extends Fragment {
         calendarTextView.setText(sdf.format(calendar.getTime()));
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -94,69 +94,59 @@ public class CaloriesFragment extends Fragment {
         carbsLeft =view.findViewById(R.id.mealsOverview_carbs_tv);
         proteinsLeft =view.findViewById(R.id.mealsOverview_proteins_tv);
         fatsLeft =view.findViewById(R.id.mealsOverview_fats_tv);
+
         breakfastCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fm = requireActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                BreakfastFragment breakfastFragment = new BreakfastFragment();
-             ///to send meal type to fav ingredient fragment
-                Bundle bundle = new Bundle();
-                bundle.putString("mealType", "breakfast"); // Replace "breakfast" with the actual meal type
-                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
-                fragment.setArguments(bundle);
-                ft.replace(R.id.home_frame_layout, breakfastFragment);
-                ft.addToBackStack(null); // Add this line to enable back navigation
-                ft.commit();
+                navigateToMealFragment("breakfast");
             }
         });
 
         lunchCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LunchFragment lunchFragment = new LunchFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("mealType", "lunch"); // Replace "breakfast" with the actual meal type
-                //fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
-                lunchFragment.setArguments(bundle);
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, lunchFragment).addToBackStack(null).commit();
+                navigateToMealFragment("lunch");
             }
         });
+
         dinnerCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DinnerFragment dinnerFragment = new DinnerFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("mealType", "dinner"); // Replace "breakfast" with the actual meal type
-               // fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
-                dinnerFragment.setArguments(bundle);
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, dinnerFragment).addToBackStack(null).commit();
+                navigateToMealFragment("dinner");
             }
         });
 
         ProgressBar progressBar = view.findViewById(R.id.fragment_mealsOverview_progress_bar);
-        progressBar.setProgress((int)progress);
-
+        progressBar.setProgress((int) progress);
     }
 
+    private void navigateToMealFragment(String mealType) {
+        LunchFragment fragment = new LunchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("mealType", mealType);
+        fragment.setArguments(bundle);
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.home_frame_layout, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
+    @Override
     public void onResume() {
         super.onResume();
         updateCaloriesProgress();
-
     }
 
-    private void updateCaloriesProgress(){
+    private void updateCaloriesProgress() {
         IndividualUser individualUser = IndividualUser.getInstance();
         ProgressBar caloriesProgressBar = requireView().findViewById(R.id.fragment_mealsOverview_progress_bar);
         double caloriesProgress = (TodaysNutrientsEaten.getEatenCalories() / individualUser.getDaily_calories_need()) * 100;
         caloriesProgressBar.setProgress((int) caloriesProgress);
 
-        double caloriesLeftValue = Math.max(IndividualUser.getInstance().getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
+        double caloriesLeftValue = Math.max(individualUser.getDaily_calories_need() - TodaysNutrientsEaten.getEatenCalories(), 0);
         double carbsLeftValue = Math.max(individualUser.getDaily_carbs_need() - TodaysNutrientsEaten.getEatenCarbs(), 0);
         double proteinsLeftValue = Math.max(individualUser.getDaily_proteins_need() - TodaysNutrientsEaten.getEatenProteins(), 0);
         double fatsLeftValue = Math.max(individualUser.getDaily_fats_need() - TodaysNutrientsEaten.getEatenFats(), 0);
-
 
         String calories_left_string = getString(R.string.home_calories_left, caloriesLeftValue);
         String carbs_left_string = getString(R.string.carbs_left, carbsLeftValue);
@@ -167,6 +157,5 @@ public class CaloriesFragment extends Fragment {
         carbsLeft.setText(carbs_left_string);
         proteinsLeft.setText(proteins_left_string);
         fatsLeft.setText(fats_left_string);
-
     }
 }

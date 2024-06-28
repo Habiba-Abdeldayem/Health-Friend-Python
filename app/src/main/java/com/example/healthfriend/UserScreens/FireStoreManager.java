@@ -166,6 +166,7 @@ public class FireStoreManager {
     public void setUserPersonalInfo(IndividualUser u) {
         // Create a Map to represent data
         Map<String, Object> user_personal_data = new HashMap<>();
+//        user_personal_data.put("name", u.getName());
         user_personal_data.put("age", u.getAge());
         user_personal_data.put("daily_calories_need", u.getDaily_calories_need());
         user_personal_data.put("daily_water_need", u.getDaily_water_need());

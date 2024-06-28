@@ -16,6 +16,7 @@ public class IndividualUser {
 
     private static IndividualUser instance;
     private Doctor currentDoctor;
+    private int currentDoctorPlanIdx;
     private WeeklyPlan weeklyPlan;
 
     public static IndividualUser getInstance() {
@@ -41,6 +42,7 @@ public class IndividualUser {
         plan = "";
         name="";
         water_progress = 0;
+        currentDoctorPlanIdx=-1;
         doctorEmailConnectedWith = null;
         currentDoctor = null;
         weeklyPlan = null;
@@ -167,7 +169,7 @@ public class IndividualUser {
             daily_fats_need = document.getDouble("daily_fats_need");
             daily_proteins_need = document.getDouble("daily_proteins_need");
             name = document.getString("name");
-            water_progress = document.getLong("daily_water_need").intValue();
+            water_progress = document.getLong("water_progress").doubleValue();
             plan = document.getString("plan");
             doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");
             if (doctorEmailConnectedWith != null)
@@ -180,7 +182,7 @@ public class IndividualUser {
         return water_progress;
     }
 
-    public void setWater_progress(int water_progress) {
+    public void setWater_progress(double water_progress) {
         this.water_progress = water_progress;
     }
 
@@ -255,6 +257,15 @@ public class IndividualUser {
         this.doctorEmailConnectedWith = null;
         fireStoreManager.setUserPersonalInfo(instance);
     }
+
+    public int getCurrentDoctorPlanIdx() {
+        return currentDoctorPlanIdx;
+    }
+
+    public void setCurrentDoctorPlanIdx(int currentDoctorPlanIdx) {
+        this.currentDoctorPlanIdx = currentDoctorPlanIdx;
+    }
+
     public void logout() {
         instance = null;
     }

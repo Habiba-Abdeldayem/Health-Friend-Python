@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.DayMealManager;
 import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 

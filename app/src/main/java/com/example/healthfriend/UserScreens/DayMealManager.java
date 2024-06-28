@@ -36,13 +36,16 @@ public class DayMealManager {
         pythonBreakfast = PythonBreakfast.getInstance();
         pythonLunch = PythonLunch.getInstance();
         pythonDinner = PythonDinner.getInstance();
-//        checkAndResetMealsIfNeeded();
-//        retrieveMealsFromFirestore(getCurrentDate());
+        checkAndResetMealsIfNeeded();
+        retrieveMealsFromFirestore(getCurrentDate());
         if (isDoctorPlanApplied()) {
             setDoctorLunch();
+            setDoctorBreakfast();
+            setDoctorDinner();
         }
         else{
-        setPythonLaunch();
+
+//        setPythonLaunch();
 
         }
     }
@@ -95,8 +98,8 @@ public class DayMealManager {
         dailyData.setEatenCarbs(TodaysNutrientsEaten.getEatenCarbs());
         dailyData.setEatenFats(TodaysNutrientsEaten.getEatenFats());
         dailyData.setEatenProteins(TodaysNutrientsEaten.getEatenProteins());
-        dailyData.setWaterProgress(IndividualUser.getInstance().getWater_progress());  // Assuming waterProgress is a Double
-        dailyData.setWeight(IndividualUser.getInstance().getWeight());  // Assuming weight is a Double
+        dailyData.setWater_progress(IndividualUser.getInstance().getWater_progress());
+        dailyData.setWeight(IndividualUser.getInstance().getWeight());
 
         db.collection("Users").document(userId).collection("history").document(date)
                 .set(dailyData)
@@ -157,17 +160,81 @@ public class DayMealManager {
         }
 
     }
-    public void setPythonBreakfast(PythonBreakfast pythonBreakfast) {
-        this.pythonBreakfast = pythonBreakfast;
-        updateMealsInFirestore();
+    public void setPythonBreakfast() {
+        if(pythonBreakfast.getBreakfastPythonIngredients()==null) {
+
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(context));
+            }
+            Python python=Python.getInstance();
+            PyObject myModule=python.getModule("chocoo");
+            PyObject myfncall=myModule.get("calll");
+            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"breakfast.csv");
+            String f=result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+
+            // Deserialize JSON to List<Meal>
+            List<UserMeal> meals = new Gson().fromJson(f, type);
+            List<PythonIngredient> pythonIngredients = new ArrayList<>();
+
+            for(UserMeal meal : meals){
+                for (PythonIngredient ingredient :meal.getIngredients()){
+                    pythonIngredients.add(new PythonIngredient(ingredient.getName(),
+                            ingredient.getCarbs(),
+                            ingredient.getCalories(),
+                            ingredient.getFats(),
+                            ingredient.getProtein(),
+                            ingredient.getCount(),
+                            ingredient.getCategory()));
+                }
+                break;
+            }
+
+            pythonBreakfast.setBreakfastPythonIngredients(pythonIngredients);
+        }
+//        this.pythonBreakfast = pythonBreakfast;
+//        updateMealsInFirestore();
     }
 
-    public void setPythonDinner(PythonDinner pythonDinner) {
-        this.pythonDinner = pythonDinner;
-        updateMealsInFirestore();
+    public void setPythonDinner() {
+//        Log.d("ddssis","dd "+ pythonDinner.getDinnerPythonIngredients().size());
+        if(pythonDinner.getDinnerPythonIngredients()==null) {
+            Log.d("ddssis","started  "+ pythonDinner.getDinnerPythonIngredients().size());
+
+            if (!Python.isStarted()) {
+                Python.start(new AndroidPlatform(context));
+            }
+            Python python=Python.getInstance();
+            PyObject myModule=python.getModule("chocoo");
+            PyObject myfncall=myModule.get("calll");
+            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"breakfast.csv");
+            String f=result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+
+            // Deserialize JSON to List<Meal>
+            List<UserMeal> meals = new Gson().fromJson(f, type);
+            List<PythonIngredient> pythonIngredients = new ArrayList<>();
+
+            for(UserMeal meal : meals){
+                for (PythonIngredient ingredient :meal.getIngredients()){
+                    pythonIngredients.add(new PythonIngredient(ingredient.getName(),
+                            ingredient.getCarbs(),
+                            ingredient.getCalories(),
+                            ingredient.getFats(),
+                            ingredient.getProtein(),
+                            ingredient.getCount(),
+                            ingredient.getCategory()));
+                }
+                break;
+            }
+
+            pythonDinner.setDinnerPythonIngredients(pythonIngredients);
+        }
+//        this.pythonDinner = pythonDinner;
+//        updateMealsInFirestore();
     }
 
-    private void updateMealsInFirestore() {
+    public void updateMealsInFirestore() {
         String currentDate = getCurrentDate();
         storeMealsInFirestore(currentDate);
     }
@@ -180,7 +247,8 @@ public class DayMealManager {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpBreakfastIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getIngredients();
             List<PythonIngredient> breakfastIngredients = DoctorIngredient.convertToPythonIngredientList(tmpBreakfastIngredients);
-            PythonBreakfast.getInstance().setBreakfastPythonIngredients(breakfastIngredients);
+            pythonBreakfast.setBreakfastPythonIngredients(breakfastIngredients);
+            updateMealsInFirestore();
         }
     }
     private void setDoctorLunch() {
@@ -188,6 +256,7 @@ public class DayMealManager {
             List<DoctorIngredient> tmpLunchIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getLunch().getIngredients();
             List<PythonIngredient> lunchIngredients = DoctorIngredient.convertToPythonIngredientList(tmpLunchIngredients);
             PythonLunch.getInstance().setLunchPythonIngredients(lunchIngredients);
+            updateMealsInFirestore();
         }
     }
     private void setDoctorDinner() {
@@ -195,6 +264,7 @@ public class DayMealManager {
             List<DoctorIngredient> tmpDinnerIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getDinner().getIngredients();
             List<PythonIngredient> dinnerIngredients = DoctorIngredient.convertToPythonIngredientList(tmpDinnerIngredients);
             PythonDinner.getInstance().setDinnerPythonIngredients(dinnerIngredients);
+            updateMealsInFirestore();
         }
     }
     private void retrieveMealsFromFirestore(String date) {

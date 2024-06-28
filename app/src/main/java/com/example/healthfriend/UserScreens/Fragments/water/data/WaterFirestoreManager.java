@@ -41,6 +41,17 @@ public class WaterFirestoreManager {
                 .update("water_progress", progress)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        IndividualUser.getInstance().setWater_progress(progress);
+                        callback.onSuccess();
+                    } else {
+                        callback.onError(Objects.requireNonNull(task.getException()).getMessage());  // Handle task failure
+                    }
+                }); db.collection("/Users/")
+                .document(IndividualUser.getInstance().getEmail())
+                .collection("/personal_info").document("/data")
+                .update("water_progress", progress)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
                         callback.onSuccess();
                     } else {
                         callback.onError(Objects.requireNonNull(task.getException()).getMessage());  // Handle task failure

@@ -1,6 +1,7 @@
 package com.example.healthfriend.UserScreens.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.example.healthfriend.UserScreens.ChangeMealSingelton;
 import com.example.healthfriend.UserScreens.DayMealManager;
 import com.example.healthfriend.UserScreens.MealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
+import com.example.healthfriend.UserScreens.PythonBreakfast;
+import com.example.healthfriend.UserScreens.PythonDinner;
 import com.example.healthfriend.UserScreens.PythonLunch;
 import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
@@ -40,10 +43,13 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
     IngredientAdapter adapter;
     private String mealType;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
-    private ImageButton fav_ingredient;
+    private ImageButton fav_ingredient,change_meal_btn;
     private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
     //private PythonBreakfast pythonBreakfast;
     private PythonLunch pythonLunch;
+    private PythonBreakfast pythonBreakfast;
+    private PythonDinner pythonDinner;
+    DayMealManager dayMealManager;
     private ChangeMealSingelton changeMealSingelton;
 
     public LunchFragment() {
@@ -53,8 +59,13 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("lunchfrag",""+ getArguments());
         if (getArguments() != null) {
             mealType = getArguments().getString("mealType");
+        }
+        if (mealType == null) {
+            // Set a default value or handle the error as appropriate
+            mealType = "dinner";
         }
     }
 
@@ -67,36 +78,39 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//
-//        ImageButton favourite_btn = view.findViewById(R.id.lunch_btn_add_to_favourite);
-        ImageButton change_meal_btn = view.findViewById(R.id.lunch_btn_change_meal);
-        caloriesProgressBar = view.findViewById(R.id.lunch_calories_progressbar);
-        carbsProgressBar = view.findViewById(R.id.lunch_carbs_progressbar);
-        proteinsProgressBar = view.findViewById(R.id.lunch_proteins_progressbar);
-        fatsProgressBar = view.findViewById(R.id.lunch_fats_progressbar);
-        textview_calories_progress = view.findViewById(R.id.lunch_textview_calories_progress);
-        textview_carbs_progress = view.findViewById(R.id.lunch_carbs_progress);
-        textview_proteins_progress = view.findViewById(R.id.lunch_textview_proteins_progress);
-        textview_fats_progress = view.findViewById(R.id.lunch_textview_fats_progress);
-        fav_ingredient=view.findViewById(R.id.fav_ingredient);
-        updateCaloriesProgress(); updateCarbsProgress(); updateProteinsProgress(); updateFatsProgress();
-        lunchSingleton = TodaysLunchSingleton.getInstance();
-        List<IngredientModel> todaysIngredient = lunchSingleton.getLunchIngredients();
-        pythonLunch = PythonLunch.getInstance();
-        changeMealSingelton=ChangeMealSingelton.getInstance();
+          initUI(view);
+        List<PythonIngredient> mealIngredients = null;
+        dayMealManager = DayMealManager.getInstance(getContext());
+          switch (mealType){
+              case "breakfast":
+                  getBreakfast();
+                  mealIngredients  = pythonBreakfast.getBreakfastPythonIngredients();
+                  break;
+              case "lunch":
+                  getLunch();
+                  mealIngredients  = pythonLunch.getLunchPythonIngredients();
+                  break;
+              case "dinner":
+                  getDinner();
+                  mealIngredients  = pythonDinner.getDinnerPythonIngredients();
+                  break;
+              default:
+                  getBreakfast();
+                  break;
+          }
 
-        DayMealManager dayMealManager = DayMealManager.getInstance(getContext());
+
+
 //        dayMealManager.setPythonLunch();
-        List<PythonIngredient> breakfastIngredients = pythonLunch.getLunchPythonIngredients();
 //        List<DoctorIngredient> dd =  IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getLunch().getIngredients();
 //        List<PythonIngredient> breakfastIngredients = DayMealManager.getInstance(getContext()).getPythonLaunch().getLunchPythonIngredients();
 
 
 
-        if (breakfastIngredients!= null) {
+        if (mealIngredients!= null) {
             RecyclerView recyclerView = view.findViewById(R.id.rv_lunch_suggested_meals);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            IngredientAdapter adapter = new IngredientAdapter(breakfastIngredients, recyclerView, this);
+            IngredientAdapter adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
             recyclerView.setAdapter(adapter);
         }
 //        favourite_btn.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +149,35 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, fav_fragment).addToBackStack(null).commit();
             }
         });
+    }
+
+    private void  initUI(View view){
+//        ImageButton favourite_btn = view.findViewById(R.id.lunch_btn_add_to_favourite);
+
+        change_meal_btn = view.findViewById(R.id.lunch_btn_change_meal);
+        caloriesProgressBar = view.findViewById(R.id.lunch_calories_progressbar);
+        carbsProgressBar = view.findViewById(R.id.lunch_carbs_progressbar);
+        proteinsProgressBar = view.findViewById(R.id.lunch_proteins_progressbar);
+        fatsProgressBar = view.findViewById(R.id.lunch_fats_progressbar);
+        textview_calories_progress = view.findViewById(R.id.lunch_textview_calories_progress);
+        textview_carbs_progress = view.findViewById(R.id.lunch_carbs_progress);
+        textview_proteins_progress = view.findViewById(R.id.lunch_textview_proteins_progress);
+        textview_fats_progress = view.findViewById(R.id.lunch_textview_fats_progress);
+        fav_ingredient=view.findViewById(R.id.fav_ingredient);
+        updateCaloriesProgress(); updateCarbsProgress(); updateProteinsProgress(); updateFatsProgress();
+    }
+
+    private void getBreakfast(){
+        pythonBreakfast = PythonBreakfast.getInstance();
+        dayMealManager.setPythonBreakfast();
+    }
+    private void getLunch(){
+        pythonLunch = PythonLunch.getInstance();
+        dayMealManager.setPythonLaunch();
+    }
+    private void getDinner(){
+        pythonDinner = PythonDinner.getInstance();
+        dayMealManager.setPythonDinner();
     }
 
     @Override

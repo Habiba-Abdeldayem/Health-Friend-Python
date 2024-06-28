@@ -10,7 +10,7 @@ public class DailyData {
     private Double eatenCarbs;
     private Double eatenFats;
     private Double eatenProteins;
-    private Double waterProgress;
+    private Double water_progress;
     private Double weight;
 
     // Default constructor for Firestore
@@ -38,8 +38,8 @@ public class DailyData {
     public Double getEatenProteins() { return eatenProteins; }
     public void setEatenProteins(Double eatenProteins) { this.eatenProteins = eatenProteins; }
 
-    public Double getWaterProgress() { return waterProgress; }
-    public void setWaterProgress(Double waterProgress) { this.waterProgress = waterProgress; }
+    public Double getWater_progress() { return water_progress; }
+    public void setWater_progress(Double water_progress) { this.water_progress = water_progress; }
 
     public Double getWeight() { return weight; }
     public void setWeight(Double weight) { this.weight = weight; }
