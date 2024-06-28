@@ -64,6 +64,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                         TodaysNutrientsEaten.setEatenProteins(TodaysNutrientsEaten.getEatenProteins() + currentIngredient.getProtein());
                         TodaysNutrientsEaten.setEatenFats(TodaysNutrientsEaten.getEatenFats() + currentIngredient.getFats());
                         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                            currentIngredient.setIngredientSelectedByUser(!currentIngredient.isIngredientSelectedByUser());
                             mealAdapterInterface.addItem(holder.getAdapterPosition());
                         }
                     }
@@ -73,6 +74,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                         TodaysNutrientsEaten.setEatenProteins(Math.max(TodaysNutrientsEaten.getEatenProteins() - currentIngredient.getProtein(),0));
                         TodaysNutrientsEaten.setEatenFats(Math.max(TodaysNutrientsEaten.getEatenFats() - currentIngredient.getFats(),0));
                         if (holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                            currentIngredient.setIngredientSelectedByUser(!currentIngredient.isIngredientSelectedByUser());
                             mealAdapterInterface.removeItem(holder.getAdapterPosition());
                         }
                     }
@@ -80,7 +82,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
                 // Notify the adapter that the data has changed to reflect the new image state
                 notifyDataSetChanged();
-                currentIngredient.setIngredientSelectedByUser(!currentIngredient.isIngredientSelectedByUser());
 
             }
         });

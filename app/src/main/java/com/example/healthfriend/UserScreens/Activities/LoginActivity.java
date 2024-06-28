@@ -20,6 +20,8 @@ import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.DoctorScreens.Doctor_Main;
 import com.example.healthfriend.DoctorScreens.UserListActivity;
 import com.example.healthfriend.DoctorScreens.Userlist_Fragment;
+import com.example.healthfriend.Models.DailyData;
+import com.example.healthfriend.UserScreens.DayMealManager;
 import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
             IndividualUser individualUser = IndividualUser.getInstance();
             individualUser.setEmail(sharedPref.getString("user_email", ""));
             fireStoreManager.getUserPersonalInfo(individualUser);
+            DayMealManager dayMealManager = DayMealManager.getInstance(getApplicationContext());
             sendUserToAnotherActivity();
         }
         else if(isLoggedIn && isDoctor){
@@ -140,6 +143,8 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
                         editor.putBoolean("is_logged_in", true);
                         editor.putBoolean("is_doctor", Doctor.getInstance().getName() != null);
                         editor.putString("user_email", EMAIL); // Save user email or ID if needed
+                        Log.d("kkgkg", "vv "+isDoctor);
+
                         editor.apply();
                         if( Doctor.getInstance().getName() == null){
                             sendUserToAnotherActivity();

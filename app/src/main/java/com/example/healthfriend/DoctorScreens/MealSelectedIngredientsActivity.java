@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
-import android.health.connect.datatypes.MealType;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -38,31 +36,30 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_selected_ingredients);
 
-
         ListView listView = findViewById(R.id.lv_meal_selected_ingredients);
         TextView no_meals_selected = findViewById(R.id.tv_no_meals_selected);
         edit_meal = findViewById(R.id.edit_meal);
         initializeMealAndIngredients();
 
         List<DoctorIngredient> ingredientList = null;
-        // Assuming you have a list of DoctorIngredient objects
-        if(weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans() != null)
-            ingredientList = weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans().get(dayIdx).isItBreakfastLunchDinner(mealIdx).getIngredients();
-        if (ingredientList != null) {
-            no_meals_selected.setVisibility(View.INVISIBLE);
-        // Create a list of maps where each map represents a list item
-        adapterData = prepareSimpleAdapterArray(ingredientList);
+        if (weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans() != null) {
+            ingredientList = weeklyPlanManagerSingleton.getWeeklyPlan().getDailyPlans().get(dayIdx)
+                    .isItBreakfastLunchDinner(mealIdx).getIngredients();
+        }
 
-        // Keys in the maps
-        String[] from = {"textViewIngredientName", "textViewIngredientInfo"};
-
-        // IDs of the views in the layout
-        int[] to = {R.id.details_textViewIngredientName, R.id.details_textViewIngredientInfo};
-
-        SimpleAdapter adapter = new SimpleAdapter(this, adapterData, R.layout.item_meal_selected_ingredient, from, to);
-        listView.setAdapter(adapter);
-        } else {
+        if (ingredientList == null || ingredientList.isEmpty()) {
             no_meals_selected.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+        } else {
+            no_meals_selected.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
+            adapterData = prepareSimpleAdapterArray(ingredientList);
+
+            String[] from = {"textViewIngredientName", "textViewIngredientInfo"};
+            int[] to = {R.id.details_textViewIngredientName, R.id.details_textViewIngredientInfo};
+
+            SimpleAdapter adapter = new SimpleAdapter(this, adapterData, R.layout.item_meal_selected_ingredient, from, to);
+            listView.setAdapter(adapter);
         }
 
         edit_meal.setOnClickListener(new View.OnClickListener() {
@@ -77,26 +74,22 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private List<Map<String, String>> prepareSimpleAdapterArray(List<DoctorIngredient> ingredientList) {
-        // Populate the data list with maps using a loop
         for (DoctorIngredient ingredient : ingredientList) {
             Map<String, String> item = new HashMap<>();
             item.put("textViewIngredientName", ingredient.getName());
             String ingredientInfo = getString(R.string.ingredient_info, ingredient.getCalories(), ingredient.getProtein(), ingredient.getCarbs(), ingredient.getFats());
             item.put("textViewIngredientInfo", ingredientInfo);
             adapterData.add(item);
-
         }
         return adapterData;
-
     }
 
     private Set<String> getMealCategories() {
         Set<String> categoriesSet = null;
-        int mealType = weeklyPlanManagerSingleton.getCurrentMealIdx(); // 1 breakfast, 2 lunch , 3 dinner
+        int mealType = weeklyPlanManagerSingleton.getCurrentMealIdx(); // 1 breakfast, 2 lunch, 3 dinner
         if (mealType == 1) {
             categoriesSet = CSVParser.getCategories(getResources().openRawResource(R.raw.breakfast));
         } else if (mealType == 2) {
@@ -104,10 +97,9 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
         } else {
             categoriesSet = CSVParser.getCategories(getResources().openRawResource(R.raw.breakfast));
         }
-
         return categoriesSet;
-
     }
+
     private void initializeMealAndIngredients() {
         WeeklyPlan weeklyPlan = WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan();
 
@@ -142,7 +134,5 @@ public class MealSelectedIngredientsActivity extends AppCompatActivity {
             selectedIngredients = new ArrayList<>();
             currentMeal.setIngredients(selectedIngredients);
         }
-
     }
-
 }

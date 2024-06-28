@@ -502,11 +502,13 @@ public class FireStoreManager {
 
     // Retrieve the weekly plan for a patient
     public void getWeeklyPlan(String patient_email,String doctor_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
-        db.collection("DoctorsPlan")
-                .document(doctor_email)
-                .collection(patient_email)
-                .document("weekly_plan")
-                .get()
+        Log.d("kkdkdd", patient_email+ " " +doctor_email);
+        DocumentReference doc = db.collection("/DoctorsPlan/").document(doctor_email).collection(patient_email).document("/weekly_plan");
+//        db.collection("DoctorsPlan")
+//                .document(doctor_email)
+//                .collection(patient_email)
+//                .document("weekly_plan")
+                doc.get()
                 .addOnCompleteListener(onCompleteListener);
 
     }
