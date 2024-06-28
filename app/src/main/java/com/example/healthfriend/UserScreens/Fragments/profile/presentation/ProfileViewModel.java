@@ -16,7 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<String> _weight = new MutableLiveData<>();
     public LiveData<String> weight = _weight;
-
+    private final MutableLiveData<String> _name = new MutableLiveData<>();
+    public LiveData<String> name = _name;
     private final MutableLiveData<String> _height = new MutableLiveData<>();
     public LiveData<String> height = _height;
 
@@ -49,6 +50,7 @@ public class ProfileViewModel extends ViewModel {
             public void onSuccess(IndividualUser individualUser) {
                 if (individualUser != null) {
                     _height.postValue(Double.toString(individualUser.getHeight()));
+                    _name.postValue(individualUser.getName());
                     _weight.postValue(Double.toString(individualUser.getWeight()));
                     _age.postValue(Integer.toString(individualUser.getAge()));
                     _gender.postValue(individualUser.getGender());

@@ -117,8 +117,8 @@ public class CaloriesFragment extends Fragment {
                 LunchFragment lunchFragment = new LunchFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("mealType", "lunch"); // Replace "breakfast" with the actual meal type
-                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
-                fragment.setArguments(bundle);
+                //fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                lunchFragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, lunchFragment).addToBackStack(null).commit();
             }
         });
@@ -128,8 +128,8 @@ public class CaloriesFragment extends Fragment {
                 DinnerFragment dinnerFragment = new DinnerFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("mealType", "dinner"); // Replace "breakfast" with the actual meal type
-                fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
-                fragment.setArguments(bundle);
+               // fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                dinnerFragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, dinnerFragment).addToBackStack(null).commit();
             }
         });

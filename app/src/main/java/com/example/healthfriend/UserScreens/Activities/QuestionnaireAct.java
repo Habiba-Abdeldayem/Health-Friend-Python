@@ -22,7 +22,7 @@ public class QuestionnaireAct extends AppCompatActivity {
     private FireStoreManager fireStoreManager;
     String selectedGoal;
     private Spinner healthGoalSpinner;
-    EditText weight,height,age;
+    EditText weight,height,age,name;
     private RadioGroup genderRadioGroup;
     private RadioButton maleRadioButton;
     private RadioButton femaleRadioButton;
@@ -37,6 +37,7 @@ public class QuestionnaireAct extends AppCompatActivity {
         currentIndividualUser = IndividualUser.getInstance();
         weight=findViewById(R.id.weight);
         height=findViewById(R.id.height);
+        name=findViewById(R.id.name_edt);
         age=findViewById(R.id.age);
         genderRadioGroup = findViewById(R.id.gender_radio_group);
         maleRadioButton = findViewById(R.id.male_radio_button);
@@ -87,7 +88,9 @@ public class QuestionnaireAct extends AppCompatActivity {
                 double w= Double.parseDouble(weight.getText().toString());
                 double h=Double.parseDouble(height.getText().toString());
                 int a=Integer.parseInt(age.getText().toString());
+                String n=name.getText().toString();
                 currentIndividualUser.setAge(a);
+                currentIndividualUser.setName(n);
                 currentIndividualUser.setHeight(h);
                 currentIndividualUser.setWeight(w);
                 currentIndividualUser.setPlan(selectedGoal);

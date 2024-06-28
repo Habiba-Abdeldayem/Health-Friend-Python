@@ -30,7 +30,7 @@ public class fav_ingredient_Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mealType = getArguments().getString("mealType");
+            mealType = getArguments().getString("mealTypee");
         }
     }
 
