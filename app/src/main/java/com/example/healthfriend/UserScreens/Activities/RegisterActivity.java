@@ -138,14 +138,14 @@ public class RegisterActivity extends AppCompatActivity {
                             if (selectedId == R.id.user_RadioButton) {
                                 IndividualUser newUser = IndividualUser.getInstance();
                                 newUser.setEmail(email.getText().toString());
-                                Toast.makeText(RegisterActivity.this, "Registration Done for User", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "Registration Done for User", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, QuestionnaireAct.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             } else if (selectedId == R.id.doctor_RadioButton) {
                                 Doctor newDoctor = Doctor.getInstance();
                                 newDoctor.setEmail(email.getText().toString());
-                                Toast.makeText(RegisterActivity.this, "Registration Done for Doctor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "Registration Done for Doctor", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, QuestionnaireDoctorActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
