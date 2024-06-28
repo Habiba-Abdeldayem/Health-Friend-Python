@@ -12,6 +12,7 @@ public class DailyData {
     private Double eatenProteins;
     private Double water_progress;
     private Double weight;
+    private String date;
 
     // Default constructor for Firestore
     public DailyData() {}
@@ -43,4 +44,12 @@ public class DailyData {
 
     public Double getWeight() { return weight; }
     public void setWeight(Double weight) { this.weight = weight; }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

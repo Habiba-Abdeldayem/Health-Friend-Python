@@ -16,8 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +73,20 @@ public class DayMealManager {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date());
     }
+    private String getPreviousDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -2);
+        Date previousDate = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(previousDate);
+    }
+    private String getpPreviousDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -2);
+        Date previousDate = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(previousDate);
+    }
 
     private void saveCurrentDate(String date) {
         SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
@@ -91,6 +107,7 @@ public class DayMealManager {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         DailyData dailyData = new DailyData();
+        dailyData.setDate(getPreviousDate());
         dailyData.setBreakfast(pythonBreakfast.getBreakfastPythonIngredients());
         dailyData.setLunch(pythonLunch.getLunchPythonIngredients());
         dailyData.setDinner(pythonDinner.getDinnerPythonIngredients());
@@ -101,7 +118,7 @@ public class DayMealManager {
         dailyData.setWater_progress(IndividualUser.getInstance().getWater_progress());
         dailyData.setWeight(IndividualUser.getInstance().getWeight());
 
-        db.collection("Users").document(userId).collection("history").document(date)
+        db.collection("Users").document(userId).collection("history").document(getPreviousDate())
                 .set(dailyData)
                 .addOnSuccessListener(aVoid -> Log.d("DayMealManager", "Meals successfully written!"))
                 .addOnFailureListener(e -> Log.w("DayMealManager", "Error writing document", e));
@@ -195,7 +212,6 @@ public class DayMealManager {
 //        this.pythonBreakfast = pythonBreakfast;
 //        updateMealsInFirestore();
     }
-
     public void setPythonDinner() {
 //        Log.d("ddssis","dd "+ pythonDinner.getDinnerPythonIngredients().size());
         if(pythonDinner.getDinnerPythonIngredients()==null) {
@@ -233,16 +249,6 @@ public class DayMealManager {
 //        this.pythonDinner = pythonDinner;
 //        updateMealsInFirestore();
     }
-
-    public void updateMealsInFirestore() {
-        String currentDate = getCurrentDate();
-        storeMealsInFirestore(currentDate);
-    }
-    public boolean isDoctorPlanApplied() {
-        SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
-        Log.d("jjgjgj",""+sharedPref.getBoolean("is_doctor_plan_applied", false));
-        return sharedPref.getBoolean("is_doctor_plan_applied", false); // Default is false if not found
-    }
     private void setDoctorBreakfast() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpBreakfastIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getIngredients();
@@ -266,6 +272,18 @@ public class DayMealManager {
             PythonDinner.getInstance().setDinnerPythonIngredients(dinnerIngredients);
             updateMealsInFirestore();
         }
+    }
+
+
+    public void updateMealsInFirestore() {
+        String currentDate = getCurrentDate();
+        storeMealsInFirestore(currentDate);
+//        storeMealsInFirestore(getPreviousDate());
+    }
+    public boolean isDoctorPlanApplied() {
+        SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
+        Log.d("jjgjgj",""+sharedPref.getBoolean("is_doctor_plan_applied", false));
+        return sharedPref.getBoolean("is_doctor_plan_applied", false); // Default is false if not found
     }
     private void retrieveMealsFromFirestore(String date) {
         if (date.isEmpty()) return;
@@ -299,6 +317,74 @@ public class DayMealManager {
                     }
                 })
                 .addOnFailureListener(e -> Log.w("DayMealManager", "Error retrieving document", e));
+    }
+    public void retrieveHistoryFirestore(String startDate, String endDate, OnDataRetrievedListener listener) {
+        String userId = IndividualUser.getInstance().getEmail();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Prepare to collect data
+        List<DailyData> dailyDataList = new ArrayList<>();
+
+        // Convert startDate and endDate to "yyyyMMdd" format for Firestore query
+        SimpleDateFormat sdfInput = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfOutput = new SimpleDateFormat("yyyyMMdd");
+
+        Calendar startCal = Calendar.getInstance();
+        Calendar endCal = Calendar.getInstance();
+        try {
+            // Parse input dates to Date objects
+            Date startDateObj = sdfInput.parse(startDate);
+            Date endDateObj = sdfInput.parse(endDate);
+
+            // Format parsed dates to "yyyyMMdd"
+            String formattedStartDate = sdfOutput.format(startDateObj);
+            String formattedEndDate = sdfOutput.format(endDateObj);
+
+            // Set Calendar instances to parsed and formatted dates
+            startCal.setTime(sdfOutput.parse(formattedStartDate));
+            endCal.setTime(sdfOutput.parse(formattedEndDate));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("UserStatisticsFragment", "Error parsing dates: " + e.getMessage());
+            return;
+        }
+
+        // Iterate through dates and retrieve data from Firestore
+        while (!startCal.after(endCal)) {
+            String date = sdfOutput.format(startCal.getTime());
+
+            db.collection("Users").document(userId).collection("history").document(date)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            DailyData dailyData = documentSnapshot.toObject(DailyData.class);
+                            if (dailyData != null) {
+                                dailyDataList.add(dailyData);
+                            }
+                        }
+
+                        // Check if it's the last date to notify listener
+                        if (date.equals(sdfOutput.format(endCal.getTime()))) {
+                            Log.d("UserStatisticsFragment", "Data retrieved, dailydata? " + dailyDataList.isEmpty());
+                            listener.onDataRetrieved(dailyDataList);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w("DayMealManager", "Error retrieving document for date " + date, e);
+                        // Notify listener even on failure
+                        if (date.equals(sdfOutput.format(endCal.getTime()))) {
+                            listener.onDataRetrieved(dailyDataList);
+                        }
+                    });
+
+            startCal.add(Calendar.DAY_OF_YEAR, 1); // Move to next day
+        }
+    }
+
+
+    public interface OnDataRetrievedListener {
+        void onDataRetrieved(List<DailyData> dailyDataList);
     }
 
 }
