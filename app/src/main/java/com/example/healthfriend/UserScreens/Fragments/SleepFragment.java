@@ -2,140 +2,113 @@ package com.example.healthfriend.UserScreens.Fragments;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
-import com.example.healthfriend.R;
-import java.util.Calendar;
 
+import androidx.fragment.app.Fragment;
+
+import com.example.healthfriend.R;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 public class SleepFragment extends Fragment {
+
+    private TextView textTime;
+    private TextView textView4;
+    private TextView textView5;
+    private TextView textView6;
+    private Button button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_sleep, container, false);
 
-        // Inflate the layout for this fragment
-        final ImageView timeInput = view.findViewById(R.id.timeBtn);
-        final TextView textView4 = view.findViewById(R.id.textView4);
-        final TextView timeTextView = view.findViewById(R.id.textTime);
-        Button button = view.findViewById(R.id.button);
+        textTime = view.findViewById(R.id.textTime);
+        textView4 = view.findViewById(R.id.textView4);
+        textView5 = view.findViewById(R.id.textView5);
+        textView6 = view.findViewById(R.id.textView6);
+        button = view.findViewById(R.id.button);
+        TextView timeBtn = view.findViewById(R.id.textTime);
 
-        timeInput.setOnClickListener(v -> {
-            // Get current time
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+        timeBtn.setOnClickListener(v -> showTimePicker());
 
-            // Create a new TimePickerDialog
-            TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),
-                    (view1, hourOfDay, minute1) -> {
-                        // Display selected time in EditText
-                        timeTextView.setText(hourOfDay + ":" + minute1);
-                    }, hour, minute, false);
+        button.setOnClickListener(v -> calculateWakingUpTimes());
 
-            // Show the TimePickerDialog
-            timePickerDialog.show();
-        });
-
-        button.setOnClickListener(v -> {
-            // Get the time from EditText
-            String time = timeTextView.getText().toString();
-            if (!time.isEmpty()) {
-                // Split the time into hour and minute
-                String[] parts = time.split(":");
-                int hour = Integer.parseInt(parts[0]);
-                int minute = Integer.parseInt(parts[1]);
-
-                // Add 6 hours to the time
-                hour = (hour + 6) % 24;
-
-                // Display the modified time in textView4
-                textView4.setText(hour + ":" + minute);
-            } else {
-                // Notify the user to enter a time first
-                Toast.makeText(requireContext(), "Please enter a time first", Toast.LENGTH_SHORT).show();
-            }
-        });
         return view;
     }
-}
 
-/*
-import android.app.TimePickerDialog;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import androidx.appcompat.app.AppCompatActivity;
-import java.util.Calendar;
-import android.widget.Toast;
+    private void showTimePicker() {
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
-public class MainActivity extends AppCompatActivity {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(requireContext(),
+                (view, hourOfDay, minute1) -> {
+                    String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute1);
+                    textTime.setText(selectedTime);
+                }, hour, minute, false);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        timePickerDialog.show();
+    }
 
-        final EditText timeInput = findViewById(R.id.timeInput);
-        final TextView textView4 = findViewById(R.id.textView4);
-        Button button = findViewById(R.id.button);
+    private void calculateWakingUpTimes() {
+        String time = textTime.getText().toString().trim();
+        if (time.isEmpty()) {
+            Toast.makeText(requireContext(), "Please enter a sleeping time first", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        timeInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get current time
-                final Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
+        try {
+            String[] parts = time.split(":");
+            int hour = Integer.parseInt(parts[0]);
+            int minute = Integer.parseInt(parts[1]);
 
-                // Create a new TimePickerDialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                // Display selected time in EditText
-                                timeInput.setText(hourOfDay + ":" + minute);
-                            }
-                        }, hour, minute, false);
+            // Calculate waking up times with durations in hours
+            double[] durations = {4.5, 6, 7.5}; // durations in hours
+            int[] wakingUpHours = new int[durations.length];
+            int[] wakingUpMinutes = new int[durations.length];
 
-                // Show the TimePickerDialog
-                timePickerDialog.show();
-            }
-        });
+            for (int i = 0; i < durations.length; i++) {
+                double totalHours = hour + durations[i];
+                int wakeHour = (int) totalHours;
+                double minuteDecimalPart = totalHours - wakeHour; // Get the decimal part for minutes calculation
+                int wakeMinute = (int) (minuteDecimalPart * 60) + minute;
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the time from EditText
-                String time = timeInput.getText().toString();
-                if (!time.isEmpty()) {
-                    // Split the time into hour and minute
-                    String[] parts = time.split(":");
-                    int hour = Integer.parseInt(parts[0]);
-                    int minute = Integer.parseInt(parts[1]);
 
-                    // Add 6 hours to the time
-                    hour = (hour + 6) % 24;
+                if(wakeMinute>60){
+                  wakeHour++;
+                }
+                wakeHour %= 24;
+                wakeMinute %= 60;
 
-                    // Display the modified time in textView4
-                    textView4.setText(hour + ":" + minute);
-                } else {
-                    // Notify the user to enter a time first
-                    Toast.makeText(MainActivity.this, "Please enter a time first", Toast.LENGTH_SHORT).show();
+                wakingUpHours[i] = wakeHour;
+                wakingUpMinutes[i] = wakeMinute;
+
+                // Display the calculated waking up time
+                switch (i) {
+                    case 0:
+                        textView4.setText(String.format(Locale.getDefault(), "%02d:%02d", wakeHour, wakeMinute));
+                        break;
+                    case 1:
+                        textView5.setText(String.format(Locale.getDefault(), "%02d:%02d", wakeHour, wakeMinute));
+                        break;
+                    case 2:
+                        textView6.setText(String.format(Locale.getDefault(), "%02d:%02d", wakeHour, wakeMinute));
+                        break;
                 }
             }
-        });
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Invalid time format", Toast.LENGTH_SHORT).show();
+        }
     }
 }
- */

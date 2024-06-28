@@ -37,8 +37,10 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
 
     private TodaysLunchSingleton lunchSingleton;
     IngredientAdapter adapter;
+    private String mealType;
     private ProgressBar caloriesProgressBar, carbsProgressBar , proteinsProgressBar, fatsProgressBar;
-    private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress,fav_ingredient;
+    private ImageButton fav_ingredient;
+    private TextView textview_calories_progress, textview_carbs_progress, textview_proteins_progress, textview_fats_progress;
     //private PythonBreakfast pythonBreakfast;
     private PythonLunch pythonLunch;
     private ChangeMealSingelton changeMealSingelton;
@@ -50,6 +52,9 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mealType = getArguments().getString("mealType");
+        }
     }
 
     @Override
@@ -122,6 +127,10 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
             @Override
             public void onClick(View v) {
                 fav_ingredient_Fragment fav_fragment = new fav_ingredient_Fragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("mealTypee", mealType); // Replace "breakfast" with the actual meal type
+                // fav_ingredient_Fragment fragment = new fav_ingredient_Fragment();
+                fav_fragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, fav_fragment).addToBackStack(null).commit();
             }
         });

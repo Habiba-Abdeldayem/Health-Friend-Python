@@ -39,6 +39,7 @@ public class IndividualUser {
         email = "";
         gender = "";
         plan = "";
+        name="";
         water_progress = 0;
         doctorEmailConnectedWith = null;
         currentDoctor = null;
@@ -165,7 +166,7 @@ public class IndividualUser {
             daily_carbs_need = document.getDouble("daily_carbs_need");
             daily_fats_need = document.getDouble("daily_fats_need");
             daily_proteins_need = document.getDouble("daily_proteins_need");
-            gender = document.getString("gender");
+            name = document.getString("name");
             water_progress = document.getLong("daily_water_need").intValue();
             plan = document.getString("plan");
             doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");

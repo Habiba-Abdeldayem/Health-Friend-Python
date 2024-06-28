@@ -173,6 +173,7 @@ public class FireStoreManager {
         user_personal_data.put("daily_proteins_need", u.getDaily_proteins_need());
         user_personal_data.put("daily_fats_need", u.getDaily_fats_need());
         user_personal_data.put("gender", u.getGender());
+        user_personal_data.put("name", u.getName());
         user_personal_data.put("height", u.getHeight());
         user_personal_data.put("weight", u.getWeight());
         user_personal_data.put("plan", u.getPlan());
