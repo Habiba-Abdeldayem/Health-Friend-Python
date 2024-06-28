@@ -34,7 +34,7 @@ public class WaterFirestoreManager {
 
     }
 
-    public void setProgress(int progress, SetCallback callback) {
+    public void setProgress(double progress, SetCallback callback) {
         db.collection("/Users/")
                 .document(IndividualUser.getInstance().getEmail())
                 .collection("/personal_info").document("/data")

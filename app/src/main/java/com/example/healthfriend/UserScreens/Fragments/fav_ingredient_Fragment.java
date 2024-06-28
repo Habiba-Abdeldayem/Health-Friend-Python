@@ -10,13 +10,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.healthfriend.R;
 
 public class fav_ingredient_Fragment extends Fragment {
 
-    private String mealType;
+    private String mealType="lunch";
 
     private Spinner spinner1, spinner2, spinner3;
     Button next;
@@ -64,6 +66,11 @@ public class fav_ingredient_Fragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void setSpinnerData(String mealType) {

@@ -13,8 +13,8 @@ public class WaterViewModel extends ViewModel {
     private final MutableLiveData<String> _weight = new MutableLiveData<>();
     public LiveData<String> weight = _weight;
 
-    private final MutableLiveData<Integer> _progress = new MutableLiveData<>(0);
-    public LiveData<Integer> progress = _progress;
+    private final MutableLiveData<Double> _progress = new MutableLiveData<>(0.0);
+    public LiveData<Double> progress = _progress;
     private WaterFirestoreManager manager;
 
     public void initializeManager(FirebaseFirestore db) {
@@ -42,7 +42,7 @@ public class WaterViewModel extends ViewModel {
 //        });
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(double progress) {
         manager.setProgress(progress, new SetCallback() {
             @Override
             public void onSuccess() {
@@ -60,7 +60,7 @@ public class WaterViewModel extends ViewModel {
         manager.getProgress(new GetCallback() {
             @Override
             public void onSuccess(String p) {
-                _progress.postValue(Integer.valueOf(IndividualUser.getInstance().getWater_progress()));
+                _progress.postValue(Double.valueOf(IndividualUser.getInstance().getWater_progress()));
             }
 
             @Override

@@ -4,18 +4,18 @@ import com.example.healthfriend.Models.PythonIngredient;
 
 import java.util.List;
 
-public class PythonLaunch {
+public class PythonLunch {
     private List<PythonIngredient> lunchPythonIngredients;
     private TodaysNutrientsEaten launchTodaysNutrientsEaten;
-    private static PythonLaunch instance;
+    private static PythonLunch instance;
 
-    private PythonLaunch() {
+    private PythonLunch() {
         launchTodaysNutrientsEaten = TodaysNutrientsEaten.getInstance();
     }
 
-    public static  PythonLaunch getInstance() {
+    public static PythonLunch getInstance() {
         if (instance == null) {
-            instance = new PythonLaunch();
+            instance = new PythonLunch();
         }
         return instance;
     }
@@ -27,4 +27,6 @@ public class PythonLaunch {
     public void setLunchPythonIngredients(List<PythonIngredient> lunchPythonIngredients) {
         this.lunchPythonIngredients = lunchPythonIngredients;
     }
+
+
 }

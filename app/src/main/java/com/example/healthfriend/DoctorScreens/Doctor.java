@@ -9,12 +9,13 @@ public class Doctor {
     private static Doctor instance;
 
     private String name, email;
-//    private boolean isDoctor = true;
+    //    private boolean isDoctor = true;
     private int age;
     private List<String> patientList;
 
     public Doctor() {
     }
+
     public static Doctor getInstance() {
         if (instance == null) {
             instance = new Doctor();
@@ -59,11 +60,7 @@ public class Doctor {
         this.patientList = patientList;
     }
 
-//    public boolean isDoctor() {
-//        return isDoctor;
-//    }
-//
-//    public void setDoctor(boolean doctor) {
-//        isDoctor = doctor;
-//    }
+    public void logout() {
+        instance = null;
+    }
 }

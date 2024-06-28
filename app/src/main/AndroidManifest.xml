@@ -18,6 +18,9 @@
       <activity
             android:name=".DoctorScreens.UserListActivity"
             android:exported="false" />
+        <activity
+            android:name=".DoctorScreens.Doctor_Main"
+            android:exported="false" />
 
         <activity
             android:name=".DoctorScreens.QuestionnaireDoctorActivity"

@@ -25,10 +25,11 @@ android {
             version "3.8"
         }
         python {
-              buildPython "C:/Users/Shimaa Hussein/Desktop/gp/Python38/Python38/python.exe"
+             // buildPython "C:/Users/Shimaa Hussein/Desktop/gp/Python38/Python38/python.exe"
+//              buildPython "C:/Users/Shimaa Hussein/Desktop/gp/Python311/Python311/python.exe"
             //  buildPython "C:/Users/HP/AppData/Local/Programs/Python/Python311/python.exe"
             //  buildPython "C:/Users/moham/AppData/Local/Programs/Python/Python38/python.exe"
-            //buildPython "C:/Users/HP/AppData/Local/Programs/Python/Python38/python.exe"
+            buildPython "C:/Users/HP/AppData/Local/Programs/Python/Python38/python.exe"
 
         }
         python {
@@ -80,6 +81,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.7.7'
     implementation 'androidx.activity:activity:1.8.0'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 
 

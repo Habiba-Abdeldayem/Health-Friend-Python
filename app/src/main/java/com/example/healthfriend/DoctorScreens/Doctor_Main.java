@@ -3,22 +3,32 @@ package com.example.healthfriend.DoctorScreens;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.Fragments.HomeFragment;
+import com.example.healthfriend.UserScreens.Fragments.SettingsFragment;
+import com.example.healthfriend.UserScreens.Fragments.profile.presentation.ProfileFragment;
 import com.example.healthfriend.UserScreens.IndividualUser;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class Doctor_Main extends AppCompatActivity {
-   // private ArrayList<Product> products;
-    //MarketoDb database;
-    UserList adapter;
 
-
+    BottomNavigationView bottomNavigationView;
+    FrameLayout frameLayout;
+    Userlist_Fragment userlistFragment= new Userlist_Fragment();
+     DoctorProfileFragment doctorProfileFragment = new DoctorProfileFragment();
+    SettingsFragment settingsFragment = new SettingsFragment();
 
     Button b1,feed;
     //private Context context;
@@ -27,38 +37,53 @@ public class Doctor_Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_main);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView,new Userlist_Fragment()).addToBackStack(null).commit();
+        frameLayout = findViewById(R.id.doctor_home_frame_layout);
+        getSupportFragmentManager().beginTransaction().replace(R.id.doctor_home_frame_layout, userlistFragment).commit();
+        bottomNavigationView = findViewById(R.id.doctor_home_nav_bar);
 
-//        ArrayList<User> users=new ArrayList<User>();
-//        users.add(new User(150,50,R.drawable.ff,"shimaa"));
-//        users.add(new User(160,80,R.drawable.car4,"aya"));
-//        users.add(new User(170,60,R.drawable.ff,"ahmed"));
-//       // database=MarketoDb.getInstance(getApplicationContext());
-//       // categories = database.getCategories();
-//        // List<Product> products = database.getproductList();
-//        RecyclerView recyclerView = findViewById(R.id.rv_userList);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        adapter = new UserList(users, this,this);
-//        recyclerView.setAdapter(adapter);
-       // b1=findViewById(R.id.search_btn);
-        //feed=findViewById(R.id.feed);
-//        feed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                startActivity(new Intent(AvailableProductActivity.this,ComplainActivity.class));
-//            }
-//        });
-//        b1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i15 = new Intent(getApplicationContext(), search.class);
-//                i15.putExtra("user_id",1);
-//                startActivity(i15);
-//            }
-//        });
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                int itemId = item.getItemId();
+                if (itemId == R.id.home_nav_item) {
+                    transaction.replace(R.id.doctor_home_frame_layout, userlistFragment).addToBackStack(null).commit();
+                    return true;
+                } else if (itemId == R.id.profile_nav_item) {
+                    transaction.replace(R.id.doctor_home_frame_layout, doctorProfileFragment).addToBackStack(null).commit();
+                    return true;
+                } else if (itemId == R.id.settings_nav_item) {
+                    transaction.replace(R.id.doctor_home_frame_layout, settingsFragment).addToBackStack(null).commit();
+                    return true;
+                } else {
+                    transaction.replace(R.id.doctor_home_frame_layout, userlistFragment).addToBackStack(null).commit();
+                }
+                return false;
 
+            }
+        });
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Find the selected item based on the fragment shown
+        MenuItem selectedItem = null;
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.doctor_home_frame_layout);
+        if (currentFragment instanceof HomeFragment) {
+            selectedItem = bottomNavigationView.getMenu().findItem(R.id.home_nav_item);
+        } else if (currentFragment instanceof DoctorProfileFragment) {
+            selectedItem = bottomNavigationView.getMenu().findItem(R.id.profile_nav_item);
+        } else if (currentFragment instanceof SettingsFragment) {
+            selectedItem = bottomNavigationView.getMenu().findItem(R.id.settings_nav_item);
+        }
+
+        // Set the selected item on the BottomNavigationView
+        if (selectedItem != null) {
+            selectedItem.setChecked(true);
+        }
     }
 
 

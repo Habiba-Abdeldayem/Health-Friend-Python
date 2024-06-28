@@ -16,7 +16,7 @@ import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class WaterFragment extends Fragment {
-    private int progress = 0;
+    private double progress = 0;
     private ProgressBar progressBar;
     private TextView textViewProgress;
     private TextView waterGoal;
@@ -91,7 +91,7 @@ public class WaterFragment extends Fragment {
         // Calculate the scaled progress value
         int scaledProgress = (int) ((progress * 100) / waterNeeded); // Scale the progress to a percentage
         progressBar.setProgress(scaledProgress);
-        textViewProgress.setText(progress + "");
+        textViewProgress.setText(getString(R.string.water_progress,progress));
     }
 
     private void increaseProgress(double amount) {

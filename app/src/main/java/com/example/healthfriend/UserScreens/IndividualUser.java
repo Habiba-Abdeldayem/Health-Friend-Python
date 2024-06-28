@@ -10,7 +10,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class IndividualUser {
     private FireStoreManager fireStoreManager;
     private double height, weight, daily_calories_need, daily_carbs_need, daily_proteins_need, daily_fats_need, daily_water_need;
-    private int age, water_target, water_progress;
+    private int age;
+    private double water_target, water_progress;
     private String email, gender, plan, name, doctorEmailConnectedWith;
 
     private static IndividualUser instance;
@@ -115,7 +116,7 @@ public class IndividualUser {
         this.age = age;
     }
 
-    public int getWater_target() {
+    public double getWater_target() {
         return water_target;
     }
 
@@ -175,7 +176,7 @@ public class IndividualUser {
         }
     }
 
-    public int getWater_progress() {
+    public double getWater_progress() {
         return water_progress;
     }
 
@@ -254,4 +255,8 @@ public class IndividualUser {
         this.doctorEmailConnectedWith = null;
         fireStoreManager.setUserPersonalInfo(instance);
     }
+    public void logout() {
+        instance = null;
+    }
+
 }
