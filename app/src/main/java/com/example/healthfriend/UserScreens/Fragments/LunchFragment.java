@@ -128,12 +128,12 @@ public class LunchFragment extends Fragment implements MealAdapterInterface {
         change_meal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
-//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+               Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
+               requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
 
-                changeMealSingelton=ChangeMealSingelton.getInstance();
-                pythonLaunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
-                changeMealSingelton.UpdateIndices();
+//                changeMealSingelton=ChangeMealSingelton.getInstance();
+       //        pythonLaunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
+//                changeMealSingelton.UpdateIndices();
             }
         });
         fav_ingredient.setOnClickListener(new View.OnClickListener() {
