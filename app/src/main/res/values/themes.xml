@@ -17,5 +17,11 @@
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/water_progress_circle</item>
     </style>
+    <style parent="Theme.MaterialComponents.DayNight.NoActionBar" name="splashScreenn">
 
+    <item name="android:windowBackground">@drawable/splashs_creen</item>
+
+    <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
+
+</style>
 </resources>
