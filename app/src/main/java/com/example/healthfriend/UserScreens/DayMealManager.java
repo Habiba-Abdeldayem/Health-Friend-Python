@@ -7,6 +7,7 @@ import android.util.Log;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.example.healthfriend.DoctorScreens.User;
 import com.example.healthfriend.Models.DailyData;
 import com.example.healthfriend.Models.DoctorIngredient;
 import com.example.healthfriend.Models.IngredientAppearedRefused;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class DayMealManager {
     private static DayMealManager instance;
@@ -32,8 +34,9 @@ public class DayMealManager {
     IndividualUser individualUser = IndividualUser.getInstance();
     private Context context;
     private PythonBreakfast pythonBreakfast;
-    private PythonLunch pythonLunch;
-    private PythonDinner pythonDinner;
+    public List<UserMeal> breakfast_alternatives;
+    private PythonLunch pythonLunch, lunch_alternatives;
+    private PythonDinner pythonDinner, dinner_alternatives;
     private String current_meal;
 
     public String getCurrent_meal() {
@@ -51,15 +54,16 @@ public class DayMealManager {
         pythonBreakfast = PythonBreakfast.getInstance();
         pythonLunch = PythonLunch.getInstance();
         pythonDinner = PythonDinner.getInstance();
+        breakfast_alternatives = new ArrayList<>();
         checkAndResetMealsIfNeeded();
-        retrieveMealsFromFirestore(getCurrentDate());
+//        retrieveMealsFromFirestore(getCurrentDate());
         if (isDoctorPlanApplied()) {
             setDoctorLunch();
             setDoctorBreakfast();
             setDoctorDinner();
         } else {
 
-//        setPythonLaunch();
+        setPythonBreakfast();
 
         }
     }
@@ -195,7 +199,7 @@ public class DayMealManager {
     }
 
     public void setPythonBreakfast() {
-        if (pythonBreakfast.getBreakfastPythonIngredients() == null) {
+        if (pythonBreakfast.getBreakfastPythonIngredients() == null ||breakfast_alternatives.size()==0) {
 
             if (!Python.isStarted()) {
                 Python.start(new AndroidPlatform(context));
@@ -211,6 +215,15 @@ public class DayMealManager {
             // Deserialize JSON to List<Meal>
             List<UserMeal> meals = new Gson().fromJson(f, type);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
+            Random random = new Random();
+
+            for (int i = 0; i < 20; i++) {
+                int randomInt = random.nextInt(5000);
+                breakfast_alternatives.add(meals.get(randomInt));
+            }
+
+            // Generate a random integer between 0 (inclusive) and 100 (exclusive)
+//            Log.d("tththt",meals.get(randomInt).getIngredients().get(0).getName());
 
             for (UserMeal meal : meals) {
                 for (PythonIngredient ingredient : meal.getIngredients()) {

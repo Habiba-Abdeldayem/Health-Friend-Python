@@ -1,5 +1,6 @@
 package com.example.healthfriend.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserMeal {
@@ -20,5 +21,12 @@ public class UserMeal {
 
     public void setIngredients(List<PythonIngredient> ingredients) {
         this.ingredients = ingredients;
+    }
+    public String getIngredientsName(){
+        StringBuilder names = new StringBuilder();
+        for(PythonIngredient pythonIngredient:this.ingredients){
+            names.append(pythonIngredient.getName()).append(", ");
+        }
+        return names.toString();
     }
 }
