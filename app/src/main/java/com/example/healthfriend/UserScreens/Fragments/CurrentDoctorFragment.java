@@ -93,6 +93,17 @@ public class CurrentDoctorFragment extends Fragment {
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean("is_doctor_plan_applied", true);
                         editor.apply();
+                        IndividualUser.getInstance().setDoctorPlanApplied(true);
+                        fireStoreManager.setUserPersonalInfo(IndividualUser.getInstance());
+                        Toast.makeText(getContext(), "Doctor Plan Applied", Toast.LENGTH_SHORT).show();
+
+                        FragmentManager fm = requireActivity().getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        HomeFragment homeFragment = new HomeFragment();
+                        ft.replace(R.id.home_frame_layout, homeFragment);
+                        ft.addToBackStack(null); // Add this line to enable back navigation
+                        ft.commit();
+
                     }
                 });
 //            if(this.weeklyPlan != null &&this.weeklyPlan.getDailyPlans()!=null)

@@ -179,7 +179,7 @@ public class DayMealManager {
         Random random = new Random();
 
         for (int i = 0; i < 20; i++) {
-            int randomInt = random.nextInt(5000);
+            int randomInt = random.nextInt(9);
             lunch_alternatives.add(meals.get(randomInt));
         }
         for (UserMeal meal : meals) {
@@ -221,7 +221,7 @@ public class DayMealManager {
             Random random = new Random();
 
             for (int i = 0; i < 20; i++) {
-                int randomInt = random.nextInt(5000);
+                int randomInt = random.nextInt(9);
                 breakfast_alternatives.add(meals.get(randomInt));
             }
 
@@ -271,7 +271,7 @@ public class DayMealManager {
         Random random = new Random();
 
         for (int i = 0; i < 20; i++) {
-            int randomInt = random.nextInt(5000);
+            int randomInt = random.nextInt(9);
             breakfast_alternatives.add(meals.get(randomInt));
         }
         for (UserMeal meal : meals) {

@@ -138,9 +138,9 @@ def calll(weight, height, filepath, new_ingredients=['Beef  brain']):
         fats = (cal * 0.3) / 9
         carbs = (cal * 0.5) / 4
         target_calories = (cal - (cal * 0.15), cal + (cal * 0.15))  # Example: Target calorie range for a meal
-        target_protein = (pro - (pro * 0.75), pro + (pro * 0.15))  # Example: Minimum protein content for a meal
-        target_fat = (fats - (fats * 0.75), fats + (fats * 0.15))  # Example: Maximum fat content for a meal
-        target_carbs = (carbs - (carbs * 0.75), carbs + (carbs * 0.15))
+        target_protein = (pro - (pro * 0.15), pro + (pro * 0.15))  # Example: Minimum protein content for a meal
+        target_fat = (fats - (fats * 0.15), fats + (fats * 0.15))  # Example: Maximum fat content for a meal
+        target_carbs = (carbs - (carbs * 0.15), carbs + (carbs * 0.15))
 
         meals = generate_meals_memoized_optimized(G, target_calories, target_protein, target_fat, target_carbs)
         return meals
@@ -200,6 +200,7 @@ def calll(weight, height, filepath, new_ingredients=['Beef  brain']):
     sorted_meal_similarity_list = sorted(meal_similarity_list, key=lambda item: item['similarity_score'], reverse=True)
 
 
+    sorted_meal_similarity_list=sorted_meal_similarity_list[:10]
     json_data = json.dumps(sorted_meal_similarity_list)
     return json_data
 
