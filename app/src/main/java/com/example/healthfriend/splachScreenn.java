@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.healthfriend.UserScreens.Activities.LoginActivity;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
-import com.example.healthfriend.UserScreens.PythonLaunch;
+import com.example.healthfriend.UserScreens.PythonLunch;
 import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 
 import java.util.List;
