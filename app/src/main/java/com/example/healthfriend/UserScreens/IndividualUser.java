@@ -289,6 +289,13 @@ public class IndividualUser {
             currentDoctor = null;
             weeklyPlan = null;
             isDoctorPlanApplied =false;
+            PythonBreakfast.getInstance().setBreakfastPythonIngredients(null);
+            PythonDinner.getInstance().setDinnerPythonIngredients(null);
+            PythonLunch.getInstance().setLunchPythonIngredients(null);
+            TodaysNutrientsEaten.setEatenFats(0.0);
+            TodaysNutrientsEaten.setEatenProteins(0.0);
+            TodaysNutrientsEaten.setEatenCalories(0.0);
+            TodaysNutrientsEaten.setEatenCarbs(0.0);
             instance = null;
 
         }
