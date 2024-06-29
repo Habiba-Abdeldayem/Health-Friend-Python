@@ -58,6 +58,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day's Total Nutrients"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="28sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -74,7 +81,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ingredients_textview_calories_progress"
+                        android:id="@+id/doctor_textview_calories_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -85,7 +92,7 @@
                 </RelativeLayout>
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/breakfast_calories_progressbar"
+                    android:id="@+id/doctor_calories_progressbar"
                     android:layout_width="match_parent"
                     android:layout_height="34dp"
                     app:indicatorColor="@color/dark_green"
@@ -112,7 +119,7 @@
                             android:textStyle="bold" />
 
                         <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/breakfast_carbs_progressbar"
+                            android:id="@+id/doctor_carbs_progressbar"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
                             android:progress="45"
@@ -120,7 +127,7 @@
                             app:trackThickness="8dp" />
 
                         <TextView
-                            android:id="@+id/breakfast_textview_carbs_progress"
+                            android:id="@+id/doctor_textview_carbs_progress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="49 g / 183 g"
@@ -143,7 +150,7 @@
                             android:textStyle="bold" />
 
                         <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/breakfast_proteins_progressbar"
+                            android:id="@+id/doctor_proteins_progressbar"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
                             android:progress="20"
@@ -151,7 +158,7 @@
                             app:trackThickness="8dp" />
 
                         <TextView
-                            android:id="@+id/breakfast_textview_proteins_progress"
+                            android:id="@+id/doctor_textview_proteins_progress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="49 g / 183 g"
@@ -174,7 +181,7 @@
                             android:textStyle="bold" />
 
                         <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/breakfast_fats_progressbar"
+                            android:id="@+id/doctor_fats_progressbar"
                             android:layout_width="match_parent"
                             android:layout_height="34dp"
                             android:progress="65"
@@ -182,7 +189,7 @@
                             app:trackThickness="8dp" />
 
                         <TextView
-                            android:id="@+id/breakfast_textview_fats_progress"
+                            android:id="@+id/doctor_textview_fats_progress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="49 g / 183 g"
@@ -197,6 +204,7 @@
 
 
         </androidx.cardview.widget.CardView>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredient_recyclerView"

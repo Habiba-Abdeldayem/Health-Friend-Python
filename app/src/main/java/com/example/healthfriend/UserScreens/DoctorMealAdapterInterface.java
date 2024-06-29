@@ -1,6 +1,6 @@
 package com.example.healthfriend.UserScreens;
 
-public interface MealAdapterInterface {
+public interface DoctorMealAdapterInterface {
     void addItem(int position);
     void removeItem(int position);
 }

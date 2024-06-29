@@ -1,33 +1,24 @@
 package com.example.healthfriend.DoctorScreens;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.example.healthfriend.Models.DoctorIngredient;
-import com.example.healthfriend.Models.Ingredient;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
-import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.UserScreens.DoctorMealAdapterInterface;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class MealSelectedIngredientsFragment extends Fragment implements MealAdapterInterface {
+public class doctorMealSelectedIngredientsFragment extends Fragment implements DoctorMealAdapterInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,12 +30,12 @@ public class MealSelectedIngredientsFragment extends Fragment implements MealAda
     private String mParam2;
     private List<DoctorIngredient> mealIngredients;
 
-    public MealSelectedIngredientsFragment() {
+    public doctorMealSelectedIngredientsFragment() {
         // Required empty public constructor
     }
 
-    public static MealSelectedIngredientsFragment newInstance(String param1, String param2) {
-        MealSelectedIngredientsFragment fragment = new MealSelectedIngredientsFragment();
+    public static doctorMealSelectedIngredientsFragment newInstance(String param1, String param2) {
+        doctorMealSelectedIngredientsFragment fragment = new doctorMealSelectedIngredientsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

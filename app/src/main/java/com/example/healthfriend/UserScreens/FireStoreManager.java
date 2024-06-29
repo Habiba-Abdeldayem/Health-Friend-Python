@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.healthfriend.DoctorScreens.Doctor;
+import com.example.healthfriend.Models.IngredientAppearedRefused;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.UserScreens.Adapters.IngredientModel;
 import com.example.healthfriend.UserScreens.Adapters.MealModel;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -166,6 +168,7 @@ public class FireStoreManager {
     public void setUserPersonalInfo(IndividualUser u) {
         // Create a Map to represent data
         Map<String, Object> user_personal_data = new HashMap<>();
+//        user_personal_data.put("name", u.getName());
         user_personal_data.put("age", u.getAge());
         user_personal_data.put("daily_calories_need", u.getDaily_calories_need());
         user_personal_data.put("daily_water_need", u.getDaily_water_need());
@@ -489,13 +492,13 @@ public class FireStoreManager {
                 .set(weeklyPlan)
                 .addOnSuccessListener(aVoid -> {
                     // Successfully saved
-                    Toast myToast = Toast.makeText(context, "saveeed", Toast.LENGTH_LONG);
+                    Toast myToast = Toast.makeText(context, "Meal Saved Successfully", Toast.LENGTH_SHORT);
                     myToast.show();
                     System.out.println("Weekly plan successfully saved!" + patient_email);
                 })
                 .addOnFailureListener(e -> {
                     // Handle the error
-                    Toast myToast = Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG);
+                    Toast myToast = Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT);
                     myToast.show();
                     System.err.println("Error saving weekly plan: " + e.getMessage());
                 });
@@ -513,6 +516,34 @@ public class FireStoreManager {
                 .addOnCompleteListener(onCompleteListener);
 
     }
+    public void storeIngredientData(String userEmail, IngredientAppearedRefused ingredientData) {
+        String documentPath = "/Users/" + userEmail + "/ingredients_appeared_refused/" + ingredientData.getIngredientName();
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+                    DocumentSnapshot snapshot = transaction.get(db.document(documentPath));
+
+                    int appearanceCount = 0;
+                    int refuseCount = 0;
+
+                    if (snapshot.exists()) {
+                        appearanceCount = snapshot.getLong("appearance_count").intValue();
+                        refuseCount = snapshot.getLong("refuse_count").intValue();
+                    }
+
+                    appearanceCount += ingredientData.getAppearance_count();
+                    refuseCount += ingredientData.getRefuse_count();
+
+                    IngredientAppearedRefused updatedData = new IngredientAppearedRefused(
+                            ingredientData.getIngredientName(),
+                            appearanceCount,
+                            refuseCount
+                    );
+
+                    transaction.set(db.document(documentPath), updatedData);
+                    return null;
+                }).addOnSuccessListener(aVoid -> Log.d("Firestore", "Transaction success!"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Transaction failure.", e));
+    }
+
 
     public interface PatientFirestoreCallback {
         void onCallback(ArrayList<String> patientEmails);
@@ -523,6 +554,7 @@ public class FireStoreManager {
     }
     public interface coolBack{
         void onCallback();
+        void updateCalories();
     }
 
     public interface FirestoreCallback {

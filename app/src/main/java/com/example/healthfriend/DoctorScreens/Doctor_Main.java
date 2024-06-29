@@ -53,10 +53,7 @@ public class Doctor_Main extends AppCompatActivity {
                 } else if (itemId == R.id.profile_nav_item) {
                     transaction.replace(R.id.doctor_home_frame_layout, doctorProfileFragment).addToBackStack(null).commit();
                     return true;
-                } else if (itemId == R.id.settings_nav_item) {
-                    transaction.replace(R.id.doctor_home_frame_layout, settingsFragment).addToBackStack(null).commit();
-                    return true;
-                } else {
+                }  else {
                     transaction.replace(R.id.doctor_home_frame_layout, userlistFragment).addToBackStack(null).commit();
                 }
                 return false;
@@ -76,8 +73,6 @@ public class Doctor_Main extends AppCompatActivity {
             selectedItem = bottomNavigationView.getMenu().findItem(R.id.home_nav_item);
         } else if (currentFragment instanceof DoctorProfileFragment) {
             selectedItem = bottomNavigationView.getMenu().findItem(R.id.profile_nav_item);
-        } else if (currentFragment instanceof SettingsFragment) {
-            selectedItem = bottomNavigationView.getMenu().findItem(R.id.settings_nav_item);
         }
 
         // Set the selected item on the BottomNavigationView

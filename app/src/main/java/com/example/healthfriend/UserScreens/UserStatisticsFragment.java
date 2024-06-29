@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.example.healthfriend.Models.DailyData;
 import com.example.healthfriend.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -33,19 +35,8 @@ public class UserStatisticsFragment extends Fragment {
     private EditText startDateEditText, endDateEditText;
     private Button fetchDataButton;
 
-    public UserStatisticsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_user_statistics, container, false);
     }
 
@@ -65,9 +56,7 @@ public class UserStatisticsFragment extends Fragment {
         startDateEditText.setOnClickListener(v -> showDatePickerDialog(startDateEditText));
         endDateEditText.setOnClickListener(v -> showDatePickerDialog(endDateEditText));
 
-        fetchDataButton.setOnClickListener(v -> {
-            loadChartData();
-        });
+        fetchDataButton.setOnClickListener(v -> loadChartData());
     }
 
     private void showDatePickerDialog(EditText dateEditText) {
@@ -75,7 +64,7 @@ public class UserStatisticsFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
                 (view, year, month, dayOfMonth) -> {
-                    String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+                    String date = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year);
                     dateEditText.setText(date);
                 },
                 calendar.get(Calendar.YEAR),
@@ -92,9 +81,6 @@ public class UserStatisticsFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
 
-        String[] dates = {"20/6", "21/6", "22/6", "23/6", "24/6", "25/6", "26/6", "27/6"};
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(dates));
-
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setDrawGridLines(false);
 
@@ -103,108 +89,77 @@ public class UserStatisticsFragment extends Fragment {
     }
 
     private void loadChartData() {
-        List<Entry> caloriesEntries = getCaloriesEntries();
-        List<Entry> carbsEntries = getCarbsEntries();
-        List<Entry> proteinEntries = getProteinEntries();
-        List<Entry> fatsEntries = getFatsEntries();
-        List<Entry> waterEntries = getWaterEntries();
+        String startDate = startDateEditText.getText().toString();
+        String endDate = endDateEditText.getText().toString();
 
-        LineDataSet caloriesDataSet = new LineDataSet(caloriesEntries, "Calories");
-        caloriesDataSet.setColor(getResources().getColor(R.color.dark_green));
-        caloriesDataSet.setValueTextColor(getResources().getColor(R.color.dark_green));
+        DayMealManager dayMealManager = DayMealManager.getInstance(getContext());
+        dayMealManager.retrieveHistoryFirestore(startDate, endDate, dailyDataList -> {
+            Log.d("newstuserdaymeal ","is empty? "+ dailyDataList.isEmpty());
 
-        LineDataSet carbsDataSet = new LineDataSet(carbsEntries, "Carbs");
-        carbsDataSet.setColor(getResources().getColor(R.color.orange_carbs));
-        carbsDataSet.setValueTextColor(getResources().getColor(R.color.orange_carbs));
+            if (dailyDataList != null && !dailyDataList.isEmpty()) {
+                Log.d("newstuserdaymeal ","is empty? after condition "+ dailyDataList.isEmpty());
 
-        LineDataSet proteinDataSet = new LineDataSet(proteinEntries, "Protein");
-        proteinDataSet.setColor(getResources().getColor(R.color.pink_protein));
-        proteinDataSet.setValueTextColor(getResources().getColor(R.color.pink_protein));
+                List<Entry> caloriesEntries = new ArrayList<>();
+                List<Entry> carbsEntries = new ArrayList<>();
+                List<Entry> proteinEntries = new ArrayList<>();
+                List<Entry> fatsEntries = new ArrayList<>();
+                List<Entry> waterEntries = new ArrayList<>();
+                String[] dates = new String[dailyDataList.size()];
 
-        LineDataSet fatsDataSet = new LineDataSet(fatsEntries, "Fats");
-        fatsDataSet.setColor(getResources().getColor(R.color.purple_fats));
-        fatsDataSet.setValueTextColor(getResources().getColor(R.color.purple_fats));
+                for (int i = 0; i < dailyDataList.size(); i++) {
+                    DailyData data = dailyDataList.get(i);
+                    String rawDate = data.getDate(); // Assuming getDate() method exists in DailyData
+                    String formattedDate = rawDate.substring(4, 6) + "/" + rawDate.substring(6, 8);
+                    dates[i] = formattedDate;
 
-        LineData lineData1 = new LineData(caloriesDataSet, carbsDataSet, proteinDataSet, fatsDataSet);
-        lineChart1.setData(lineData1);
-        lineChart1.invalidate(); // Refresh the chart
+                    caloriesEntries.add(new Entry(i, data.getEatenCalories().floatValue()));
+                    carbsEntries.add(new Entry(i, data.getEatenCarbs().floatValue()));
+                    proteinEntries.add(new Entry(i, data.getEatenProteins().floatValue()));
+                    fatsEntries.add(new Entry(i, data.getEatenFats().floatValue()));
+                    waterEntries.add(new Entry(i, data.getWater_progress().floatValue()));
+                }
+
+                updateLineChart(lineChart1, dates, caloriesEntries, carbsEntries, proteinEntries, fatsEntries);
+                updateWaterLineChart(lineChart2, dates, waterEntries); // Modified method for lineChart2
+            } else {
+                // Handle case where no data is retrieved
+                Log.d("UserStatisticsFragment", "No data retrieved for the selected date range.");
+            }
+        });
+    }
+
+    private void updateLineChart(LineChart lineChart, String[] dates, List<Entry>... entriesLists) {
+        LineData lineData = new LineData();
+
+        int[] colors = {R.color.dark_green, R.color.orange_carbs, R.color.pink_protein, R.color.purple_fats};
+        String[] labels = {"Calories", "Carbs", "Protein", "Fats"};
+
+        for (int i = 0; i < entriesLists.length; i++) {
+            LineDataSet dataSet = new LineDataSet(entriesLists[i], labels[i]);
+            dataSet.setColor(getResources().getColor(colors[i]));
+            dataSet.setValueTextColor(getResources().getColor(colors[i]));
+            lineData.addDataSet(dataSet);
+        }
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(dates));
+
+        lineChart.setData(lineData);
+        lineChart.invalidate(); // Refresh the chart
+    }
+
+    private void updateWaterLineChart(LineChart lineChart, String[] dates, List<Entry> waterEntries) {
+        LineData lineData = new LineData();
 
         LineDataSet waterDataSet = new LineDataSet(waterEntries, "Water");
         waterDataSet.setColor(getResources().getColor(R.color.blue));
         waterDataSet.setValueTextColor(getResources().getColor(R.color.blue));
+        lineData.addDataSet(waterDataSet);
 
-        LineData lineData2 = new LineData(waterDataSet);
-        lineChart2.setData(lineData2);
-        lineChart2.invalidate(); // Refresh the chart
-    }
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(dates));
 
-    private List<Entry> getCaloriesEntries() {
-        // Replace with real data retrieval logic
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 2000)); // 20/6: 2000 calories
-        entries.add(new Entry(1, 1800)); // 21/6: 1800 calories
-        entries.add(new Entry(2, 2200)); // 22/6: 2200 calories
-        entries.add(new Entry(3, 2100)); // 23/6: 2100 calories
-        entries.add(new Entry(4, 1900)); // 24/6: 1900 calories
-        entries.add(new Entry(5, 2300)); // 25/6: 2300 calories
-        entries.add(new Entry(6, 2400)); // 26/6: 2400 calories
-        entries.add(new Entry(7, 2000)); // 27/6: 2000 calories
-        return entries;
-    }
-
-    private List<Entry> getCarbsEntries() {
-        // Replace with real data retrieval logic
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 300)); // 20/6: 300 grams of carbs
-        entries.add(new Entry(1, 250)); // 21/6: 250 grams of carbs
-        entries.add(new Entry(2, 350)); // 22/6: 350 grams of carbs
-        entries.add(new Entry(3, 330)); // 23/6: 330 grams of carbs
-        entries.add(new Entry(4, 290)); // 24/6: 290 grams of carbs
-        entries.add(new Entry(5, 370)); // 25/6: 370 grams of carbs
-        entries.add(new Entry(6, 400)); // 26/6: 400 grams of carbs
-        entries.add(new Entry(7, 300)); // 27/6: 300 grams of carbs
-        return entries;
-    }
-
-    private List<Entry> getProteinEntries() {
-        // Replace with real data retrieval logic
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 150)); // 20/6: 150 grams of protein
-        entries.add(new Entry(1, 130)); // 21/6: 130 grams of protein
-        entries.add(new Entry(2, 160)); // 22/6: 160 grams of protein
-        entries.add(new Entry(3, 155)); // 23/6: 155 grams of protein
-        entries.add(new Entry(4, 140)); // 24/6: 140 grams of protein
-        entries.add(new Entry(5, 170)); // 25/6: 170 grams of protein
-        entries.add(new Entry(6, 180)); // 26/6: 180 grams of protein
-        entries.add(new Entry(7, 150)); // 27/6: 150 grams of protein
-        return entries;
-    }
-
-    private List<Entry> getFatsEntries() {
-        // Replace with real data retrieval logic
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 70)); // 20/6: 70 grams of fats
-        entries.add(new Entry(1, 60)); // 21/6: 60 grams of fats
-        entries.add(new Entry(2, 80)); // 22/6: 80 grams of fats
-        entries.add(new Entry(3, 75)); // 23/6: 75 grams of fats
-        entries.add(new Entry(4, 65)); // 24/6  65 grams of fats
-        entries.add(new Entry(5, 85)); // 25/6: 85 grams of fats
-        entries.add(new Entry(6, 90)); // 26/6: 90 grams of fats
-        entries.add(new Entry(7, 70)); // 27/6: 70 grams of fats
-        return entries;
-    }
-
-    private List<Entry> getWaterEntries() {
-        // Replace with real data retrieval logic
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 2)); // 20/6: 2 liters of water
-        entries.add(new Entry(1, 1.8f)); // 21/6: 1.8 liters of water
-        entries.add(new Entry(2, 2.2f)); // 22/6: 2.2 liters of water
-        entries.add(new Entry(3, 2.0f)); // 23/6: 2.0 liters of water
-        entries.add(new Entry(4, 1.9f)); // 24/6: 1.9 liters of water
-        entries.add(new Entry(5, 2.3f)); // 25/6: 2.3 liters of water
-        entries.add(new Entry(6, 2.4f)); // 26/6: 2.4 liters of water
-        entries.add(new Entry(7, 2.0f)); // 27/6: 2.0 liters of water
-        return entries;
+        lineChart.setData(lineData);
+        lineChart.invalidate(); // Refresh the chart
     }
 }

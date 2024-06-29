@@ -1,28 +1,29 @@
 package com.example.healthfriend.DoctorScreens;
 
-
-import com.example.healthfriend.UserScreens.IndividualUser;
-
 import java.util.List;
 
 public class Doctor {
-    private static Doctor instance;
+    private static volatile Doctor instance;
 
-    private String name, email;
-    //    private boolean isDoctor = true;
+    private String name;
+    private String email;
     private int age;
     private List<String> patientList;
 
-    public Doctor() {
+    private Doctor() {
+        // Private constructor to prevent instantiation
     }
 
     public static Doctor getInstance() {
         if (instance == null) {
-            instance = new Doctor();
+            synchronized (Doctor.class) {
+                if (instance == null) {
+                    instance = new Doctor();
+                }
+            }
         }
         return instance;
     }
-
 
     public String getName() {
         return name;
@@ -61,6 +62,9 @@ public class Doctor {
     }
 
     public void logout() {
+        this.email = null;
+        this.name = null;
+        this.age=0;
         instance = null;
     }
 }

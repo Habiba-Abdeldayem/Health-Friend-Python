@@ -71,7 +71,7 @@ public class DaysFragment extends Fragment {
                     WeeklyPlanManagerSingleton.getInstance().setWeeklyPlan(weeklyPlan);
 
                     // Update UI with user information
-                    String personalData = getString(R.string.patient_personal_data, user.getEmail(), user.getEmail(), user.getAge(), user.getGender(), user.getHeight(), user.getWeight(), user.getPlan());
+                    String personalData = getString(R.string.patient_personal_data, "user101", user.getEmail(), user.getAge(), user.getGender(), user.getHeight(), user.getWeight(), user.getPlan());
                     personalInfoTextView.setText(personalData);
                 } else {
                     // Handle case where document does not exist

@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
 
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Login succeeded", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Login succeeded", Toast.LENGTH_SHORT).show();
                         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean("is_logged_in", true);
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
                         }
                     } else {
                         progressDialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

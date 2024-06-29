@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
                 } else if (itemId == R.id.profile_nav_item) {
                     transaction.replace(R.id.home_frame_layout, profileFragment).addToBackStack(null).commit();
                     return true;
-                }  else {
+                } else {
                     transaction.replace(R.id.home_frame_layout, homeFragment).addToBackStack(null).commit();
                 }
                 return false;

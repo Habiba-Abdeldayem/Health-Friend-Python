@@ -18,7 +18,7 @@ import com.example.healthfriend.Models.Meal;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
 import com.example.healthfriend.R;
-import com.example.healthfriend.UserScreens.MealAdapterInterface;
+import com.example.healthfriend.UserScreens.DoctorMealAdapterInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +28,15 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
     private List<DoctorIngredient> availableIngredients;
     private List<DoctorIngredient> selectedIngredients;
 
-    private final MealAdapterInterface mealAdapterInterface;
+    private final DoctorMealAdapterInterface doctorMealAdapterInterface;
     private int dayIdx;
     private Meal currentMeal;
     private int isItBreakfastLunchDinnerIdx; // 1 for breakfast , 2 for lunch , 3 for dinner
 
-    public DoctorIngredientAdapter(Context context, List<DoctorIngredient> ingredientsList, MealAdapterInterface mealAdapterInterface) {
+    public DoctorIngredientAdapter(Context context, List<DoctorIngredient> ingredientsList, DoctorMealAdapterInterface doctorMealAdapterInterface) {
         this.context = context;
         this.availableIngredients = ingredientsList;
-        this.mealAdapterInterface = mealAdapterInterface;
+        this.doctorMealAdapterInterface = doctorMealAdapterInterface;
         this.dayIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentDayIdx();
         this.isItBreakfastLunchDinnerIdx = WeeklyPlanManagerSingleton.getInstance().getCurrentMealIdx();
         initializeMealAndIngredients();
@@ -96,15 +96,15 @@ public class DoctorIngredientAdapter extends RecyclerView.Adapter<IngredientView
                 if (currentMeal != null) {
                     if (!currentIngredient.isIngredientSelectedByDoctor()) {
                         currentMeal.addIngredient(currentIngredient);
+                        doctorMealAdapterInterface.addItem(holder.getAdapterPosition());
                         currentIngredient.setIngredientSelectedByDoctor(true);
-                        Log.d("opaa", "after after" + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
-//                        Log.d("opaa", "total ing: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+
                     } else {
-//                        currentMeal.removeIngredient(currentIngredient);
+
                         currentMeal.removeIngredientByName(currentIngredient.getName());
+                        doctorMealAdapterInterface.removeItem(holder.getAdapterPosition());
                         currentIngredient.setIngredientSelectedByDoctor(false);
-                        Log.d("opaa", "deselect " + Boolean.toString(currentIngredient.isIngredientSelectedByDoctor()));
-                        Log.d("opaa", "total ing after des: " + WeeklyPlanManagerSingleton.getInstance().getWeeklyPlan().getDailyPlans().get(dayIdx).getBreakfast().getIngredients().size());
+
 
                     }
                     // Update the weekly plan using the meal position

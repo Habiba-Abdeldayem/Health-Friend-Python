@@ -1,6 +1,7 @@
 package com.example.healthfriend.DoctorScreens;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -8,53 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.healthfriend.R;
+import com.example.healthfriend.UserScreens.Activities.LoginActivity;
+import com.example.healthfriend.UserScreens.IndividualUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DoctorProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DoctorProfileFragment extends Fragment {
-    private TextView doctor_name, doctor_email, doctor_age;
+    private TextView doctor_name, doctor_email, doctor_age, logout_tv;
     private Doctor doctor;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DoctorProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DoctorProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DoctorProfileFragment newInstance(String param1, String param2) {
-        DoctorProfileFragment fragment = new DoctorProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,12 +41,37 @@ public class DoctorProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initUI(view);
+
+        logout_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPref = getContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.clear();
+                editor.apply();
+
+                // Logout the doctor
+                Doctor.getInstance().logout();
+
+                // Check if the Doctor instance is truly null
+                if (Doctor.getInstance().getEmail() == null) {
+                    Log.d("logoutotot", "Doctor instance is null after logout");
+                } else {
+                    Log.d("logoutotot", "Doctor instance is NOT null after logout");
+                }
+
+                // Navigate to LoginActivity
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initUI(View view) {
         doctor_name = view.findViewById(R.id.doctor_name);
         doctor_email = view.findViewById(R.id.doctor_email);
         doctor_age = view.findViewById(R.id.doctor_age);
+        logout_tv = view.findViewById(R.id.logout_tv);
 
         if (doctor != null) {
             doctor_name.setText(getString(R.string.current_doctor_name, doctor.getName()));

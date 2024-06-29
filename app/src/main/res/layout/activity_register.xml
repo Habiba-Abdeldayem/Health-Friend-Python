@@ -85,7 +85,8 @@
                 android:drawableStart="@drawable/password_icon"
                 android:drawablePadding="12dp"
                 android:inputType="textPassword"
-                android:hint="Password" />
+                android:hint="Password"
+                android:maxLines="1"/>
 
             <EditText
                 android:id="@+id/reg_confirmpass"
