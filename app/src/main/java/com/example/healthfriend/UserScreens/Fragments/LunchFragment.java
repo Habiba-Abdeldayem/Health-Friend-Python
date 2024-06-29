@@ -78,16 +78,19 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
           switch (mealType){
               case "breakfast":
                   meal_name.setText("Breakfast");
+                  dayMealManager.setCurrent_meal("breakfast");
                   getBreakfast();
                   mealIngredients  = pythonBreakfast.getBreakfastPythonIngredients();
                   break;
               case "lunch":
                   meal_name.setText("Lunch");
+                  dayMealManager.setCurrent_meal("lunch");
                   getLunch();
                   mealIngredients  = pythonLunch.getLunchPythonIngredients();
                   break;
               case "dinner":
                   meal_name.setText("Dinner");
+                  dayMealManager.setCurrent_meal("dinner");
                   getDinner();
                   mealIngredients  = pythonDinner.getDinnerPythonIngredients();
                   break;

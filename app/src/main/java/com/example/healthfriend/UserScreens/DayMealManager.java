@@ -29,11 +29,21 @@ import java.util.Map;
 public class DayMealManager {
     private static DayMealManager instance;
     private FireStoreManager fireStoreManager;
-    IndividualUser individualUser=IndividualUser.getInstance();
+    IndividualUser individualUser = IndividualUser.getInstance();
     private Context context;
     private PythonBreakfast pythonBreakfast;
     private PythonLunch pythonLunch;
     private PythonDinner pythonDinner;
+    private String current_meal;
+
+    public String getCurrent_meal() {
+        return current_meal;
+    }
+
+    public void setCurrent_meal(String current_meal) {
+        this.current_meal = current_meal;
+    }
+
 
     private DayMealManager(Context context) {
         this.context = context;
@@ -47,8 +57,7 @@ public class DayMealManager {
             setDoctorLunch();
             setDoctorBreakfast();
             setDoctorDinner();
-        }
-        else{
+        } else {
 
 //        setPythonLaunch();
 
@@ -76,6 +85,7 @@ public class DayMealManager {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date());
     }
+
     private String getPreviousDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -2);
@@ -83,6 +93,7 @@ public class DayMealManager {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(previousDate);
     }
+
     private String getpPreviousDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -2);
@@ -146,25 +157,27 @@ public class DayMealManager {
         this.pythonLunch = pythonLunch;
         updateMealsInFirestore();
     }
+
     public void setPythonLaunch() {
-        if(pythonLunch.getLunchPythonIngredients()==null) {
+        if (pythonLunch.getLunchPythonIngredients() == null) {
 
             if (!Python.isStarted()) {
                 Python.start(new AndroidPlatform(context));
             }
-            Python python=Python.getInstance();
-            PyObject myModule=python.getModule("chocoo");
-            PyObject myfncall=myModule.get("calll");
-            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"lunch.csv");
-            String f=result.toString();
-            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+            Python python = Python.getInstance();
+            PyObject myModule = python.getModule("chocoo");
+            PyObject myfncall = myModule.get("calll");
+            PyObject result = myfncall.call(individualUser.getWeight(), individualUser.getHeight(), "lunch.csv");
+            String f = result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {
+            }.getType();
 
             // Deserialize JSON to List<Meal>
             List<UserMeal> meals = new Gson().fromJson(f, type);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
 
-            for(UserMeal meal : meals){
-                for (PythonIngredient ingredient :meal.getIngredients()){
+            for (UserMeal meal : meals) {
+                for (PythonIngredient ingredient : meal.getIngredients()) {
                     pythonIngredients.add(new PythonIngredient(ingredient.getName(),
                             ingredient.getCarbs(),
                             ingredient.getCalories(),
@@ -180,25 +193,27 @@ public class DayMealManager {
         }
 
     }
+
     public void setPythonBreakfast() {
-        if(pythonBreakfast.getBreakfastPythonIngredients()==null) {
+        if (pythonBreakfast.getBreakfastPythonIngredients() == null) {
 
             if (!Python.isStarted()) {
                 Python.start(new AndroidPlatform(context));
             }
-            Python python=Python.getInstance();
-            PyObject myModule=python.getModule("chocoo");
-            PyObject myfncall=myModule.get("calll");
-            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"breakfast.csv");
-            String f=result.toString();
-            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+            Python python = Python.getInstance();
+            PyObject myModule = python.getModule("chocoo");
+            PyObject myfncall = myModule.get("calll");
+            PyObject result = myfncall.call(individualUser.getWeight(), individualUser.getHeight(), "breakfast.csv");
+            String f = result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {
+            }.getType();
 
             // Deserialize JSON to List<Meal>
             List<UserMeal> meals = new Gson().fromJson(f, type);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
 
-            for(UserMeal meal : meals){
-                for (PythonIngredient ingredient :meal.getIngredients()){
+            for (UserMeal meal : meals) {
+                for (PythonIngredient ingredient : meal.getIngredients()) {
                     pythonIngredients.add(new PythonIngredient(ingredient.getName(),
                             ingredient.getCarbs(),
                             ingredient.getCalories(),
@@ -215,27 +230,29 @@ public class DayMealManager {
 //        this.pythonBreakfast = pythonBreakfast;
 //        updateMealsInFirestore();
     }
+
     public void setPythonDinner() {
 //        Log.d("ddssis","dd "+ pythonDinner.getDinnerPythonIngredients().size());
-        if(pythonDinner.getDinnerPythonIngredients()==null) {
-            Log.d("ddssis","started  "+ pythonDinner.getDinnerPythonIngredients().size());
+        if (pythonDinner.getDinnerPythonIngredients() == null) {
+//            Log.d("ddssis", "started  " + pythonDinner.getDinnerPythonIngredients().size());
 
             if (!Python.isStarted()) {
                 Python.start(new AndroidPlatform(context));
             }
-            Python python=Python.getInstance();
-            PyObject myModule=python.getModule("chocoo");
-            PyObject myfncall=myModule.get("calll");
-            PyObject result= myfncall.call(individualUser.getWeight(), individualUser.getHeight(),"breakfast.csv");
-            String f=result.toString();
-            Type type = new TypeToken<List<UserMeal>>() {}.getType();
+            Python python = Python.getInstance();
+            PyObject myModule = python.getModule("chocoo");
+            PyObject myfncall = myModule.get("calll");
+            PyObject result = myfncall.call(individualUser.getWeight(), individualUser.getHeight(), "breakfast.csv");
+            String f = result.toString();
+            Type type = new TypeToken<List<UserMeal>>() {
+            }.getType();
 
             // Deserialize JSON to List<Meal>
             List<UserMeal> meals = new Gson().fromJson(f, type);
             List<PythonIngredient> pythonIngredients = new ArrayList<>();
 
-            for(UserMeal meal : meals){
-                for (PythonIngredient ingredient :meal.getIngredients()){
+            for (UserMeal meal : meals) {
+                for (PythonIngredient ingredient : meal.getIngredients()) {
                     pythonIngredients.add(new PythonIngredient(ingredient.getName(),
                             ingredient.getCarbs(),
                             ingredient.getCalories(),
@@ -252,6 +269,7 @@ public class DayMealManager {
 //        this.pythonDinner = pythonDinner;
 //        updateMealsInFirestore();
     }
+
     private void setDoctorBreakfast() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpBreakfastIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getIngredients();
@@ -260,6 +278,7 @@ public class DayMealManager {
             updateMealsInFirestore();
         }
     }
+
     private void setDoctorLunch() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpLunchIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getLunch().getIngredients();
@@ -268,6 +287,7 @@ public class DayMealManager {
             updateMealsInFirestore();
         }
     }
+
     private void setDoctorDinner() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpDinnerIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getDinner().getIngredients();
@@ -283,10 +303,12 @@ public class DayMealManager {
         storeMealsInFirestore(currentDate);
 //        storeMealsInFirestore(getPreviousDate());
     }
+
     public boolean isDoctorPlanApplied() {
         SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
         return sharedPref.getBoolean("is_doctor_plan_applied", false); // Default is false if not found
     }
+
     private void retrieveMealsFromFirestore(String date) {
         if (date.isEmpty()) return;
 
@@ -320,6 +342,7 @@ public class DayMealManager {
                 })
                 .addOnFailureListener(e -> Log.w("DayMealManager", "Error retrieving document", e));
     }
+
     public void retrieveHistoryFirestore(String startDate, String endDate, OnDataRetrievedListener listener) {
         String userId = IndividualUser.getInstance().getEmail();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -387,53 +410,78 @@ public class DayMealManager {
     public void dayRejectedIngredients() {
         String userEmail = IndividualUser.getInstance().getEmail();
         List<PythonIngredient> rejectedIngredients = new ArrayList<>();
-        for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+
+        switch (this.current_meal){
+            case "breakfast":
+                for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+                    if (!ingredient.isIngredientSelectedByUser()) {
+                        rejectedIngredients.add(ingredient);
+                        IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
+                        fireStoreManager.storeIngredientData(userEmail, ingredientData);
+                    }
+                }
+                break;
+            case "lunch":
+        for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
             if (!ingredient.isIngredientSelectedByUser()) {
                 rejectedIngredients.add(ingredient);
                 IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
                 fireStoreManager.storeIngredientData(userEmail, ingredientData);
             }
         }
-//        for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
-//            if (!ingredient.isIngredientSelectedByUser()) {
-//                rejectedIngredients.add(ingredient);
-//                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
-//                fireStoreManager.storeIngredientData(userEmail, ingredientData);
-//            }
-//        }
-//        for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
-//            if (!ingredient.isIngredientSelectedByUser()) {
-//                rejectedIngredients.add(ingredient);
-//                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
-//                fireStoreManager.storeIngredientData(userEmail, ingredientData);
-//            }
-//        }
+                break;
+            case "dinner":
+        for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
+            if (!ingredient.isIngredientSelectedByUser()) {
+                rejectedIngredients.add(ingredient);
+                IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
+                fireStoreManager.storeIngredientData(userEmail, ingredientData);
+            }
+        }
+                break;
+
+        }
+
+
+
 //        return rejectedIngredients;
     }
 
     public void dayAppearedIngredients() {
         String userEmail = IndividualUser.getInstance().getEmail();
         List<PythonIngredient> appearedIngredients = new ArrayList<>();
-        if(pythonBreakfast.getBreakfastPythonIngredients()!=null){
+        switch (this.current_meal) {
+            case "breakfast":
+                if (pythonBreakfast.getBreakfastPythonIngredients() != null) {
+                    for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+                        appearedIngredients.add(ingredient);
+                        IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+                        fireStoreManager.storeIngredientData(userEmail, ingredientData);
+                    }
+                }
+                break;
+            case "lunch":
+                if (pythonLunch.getLunchPythonIngredients() != null) {
 
-        for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
-            appearedIngredients.add(ingredient);
-            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
-            fireStoreManager.storeIngredientData(userEmail, ingredientData);
-        }}
-//        if(pythonLunch.getLunchPythonIngredients()!=null){
-//
-//        for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
-//            appearedIngredients.add(ingredient);
-//            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
-//            fireStoreManager.storeIngredientData(userEmail, ingredientData);
-//        }}
-//        if(pythonDinner.getDinnerPythonIngredients()!=null){
-//        for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
-//            appearedIngredients.add(ingredient);
-//            IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
-//            fireStoreManager.storeIngredientData(userEmail, ingredientData);
-//        }}
+                    for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
+                        appearedIngredients.add(ingredient);
+                        IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+                        fireStoreManager.storeIngredientData(userEmail, ingredientData);
+                    }
+                }
+                break;
+            case "dinner":
+                if (pythonDinner.getDinnerPythonIngredients() != null) {
+                    for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
+                        appearedIngredients.add(ingredient);
+                        IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
+                        fireStoreManager.storeIngredientData(userEmail, ingredientData);
+                    }
+                }
+                break;
+        }
+
+
 //        return appearedIngredients;
     }
 
