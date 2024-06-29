@@ -25,7 +25,6 @@ import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.UserScreens.PythonBreakfast;
 import com.example.healthfriend.UserScreens.PythonDinner;
 import com.example.healthfriend.UserScreens.PythonLunch;
-import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
 import com.example.healthfriend.UserScreens.IndividualUser;
 
@@ -44,6 +43,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
     private PythonBreakfast pythonBreakfast;
     private PythonDinner pythonDinner;
     DayMealManager dayMealManager;
+    List<PythonIngredient> mealIngredients;
     private ChangeMealSingelton changeMealSingelton;
 
     public LunchFragment() {
@@ -73,7 +73,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
           initUI(view);
-        List<PythonIngredient> mealIngredients = null;
+        mealIngredients = null;
         dayMealManager = DayMealManager.getInstance(getContext());
           switch (mealType){
               case "breakfast":
@@ -115,25 +115,21 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         }
         dayMealManager.dayAppearedIngredients();
         dayMealManager.dayRejectedIngredients();
-//        favourite_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(!lunch_fav_isClicked){
-//                    lunch_fav_isClicked = true;
-//                    favourite_btn.setImageResource(R.drawable.ic_favourite_red);
-//                }
-//                else{
-//                    lunch_fav_isClicked = false;
-//                    favourite_btn.setImageResource(R.drawable.ic_favourite_grey);
-//                }
-//            }
-//        });
-//
+
         change_meal_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
+                    Change_meal_Fragment fragment = new Change_meal_Fragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("mealType", mealType);
+                    fragment.setArguments(bundle);
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.home_frame_layout, fragment)
+                            .addToBackStack(null)
+                            .commit();
+
+//                Change_meal_Fragment change_meal_fragment = new Change_meal_Fragment();
+//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.home_frame_layout, change_meal_fragment).addToBackStack(null).commit();
 
 //                changeMealSingelton=ChangeMealSingelton.getInstance();
 //                pythonLunch.setLunchPythonIngredients(changeMealSingelton.getMeals().get(changeMealSingelton.getNext()).getIngredients());
@@ -176,7 +172,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
     }
     private void getLunch(){
         pythonLunch = PythonLunch.getInstance();
-        dayMealManager.setPythonLaunch();
+        dayMealManager.setPythonLunch();
     }
     private void getDinner(){
         pythonDinner = PythonDinner.getInstance();
@@ -241,5 +237,18 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
 
 //        String fatsProgressText = Double.toString(Math.round(TodaysNutrientsEaten.getEatenFats()*100.0)/100.0);
 //        textview_fats_progress.setText(fatsProgressText + "/" + "100");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCaloriesProgress(); updateCarbsProgress(); updateProteinsProgress(); updateFatsProgress();
+
+        if (mealIngredients!= null) {
+            RecyclerView recyclerView = getView().findViewById(R.id.rv_lunch_suggested_meals);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
+            recyclerView.setAdapter(adapter);
+        }
     }
 }

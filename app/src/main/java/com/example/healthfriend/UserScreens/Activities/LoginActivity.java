@@ -52,24 +52,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
         setContentView(R.layout.activity_login);
         fireStoreManager.setUserTypeCallBack(this);  // Set the callback here
 
-        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
-        isDoctor = sharedPref.getBoolean("is_doctor", false);
-        Log.d("kkgkg", ""+isDoctor);
-        if (isLoggedIn && !isDoctor) {
-            IndividualUser individualUser = IndividualUser.getInstance();
-            individualUser.setEmail(sharedPref.getString("user_email", ""));
-            fireStoreManager.getUserPersonalInfo(individualUser);
-            DayMealManager dayMealManager = DayMealManager.getInstance(getApplicationContext());
-            sendUserToAnotherActivity();
-        }
-        else if(isLoggedIn && isDoctor){
-            Doctor doctor = Doctor.getInstance();
-            doctor.setEmail(sharedPref.getString("user_email", ""));
-            fireStoreManager.getUserPersonalInfo(doctor.getEmail());
-            sendDoctorToAnotherActivity();
 
-        }
 
         button = findViewById(R.id.login_btn);
         google_btn = findViewById(R.id.login_google);
