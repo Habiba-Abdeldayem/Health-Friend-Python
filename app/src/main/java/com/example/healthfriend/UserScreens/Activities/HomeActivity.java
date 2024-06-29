@@ -21,6 +21,7 @@ import com.example.healthfriend.UserScreens.Fragments.HomeFragment;
 import com.example.healthfriend.R;
 
 import com.example.healthfriend.UserScreens.Fragments.SettingsFragment;
+import com.example.healthfriend.UserScreens.IndividualUser;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -40,6 +41,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        IndividualUser individualUser = IndividualUser.getInstance();
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, DailyResetReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE);

@@ -25,6 +25,7 @@ import com.example.healthfriend.UserScreens.TodaysBreakfastSingleton;
 import com.example.healthfriend.UserScreens.TodaysDinnerSingleton;
 import com.example.healthfriend.UserScreens.TodaysLunchSingleton;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
+import com.example.healthfriend.UserScreens.UserStatisticsFragment;
 
 public class HomeFragment extends Fragment implements FireStoreManager.coolBack {
     private FireStoreManager fireStoreManager;
@@ -72,6 +73,7 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
         CardView waterCV = view.findViewById(R.id.water_cv);
         CardView sleepCV = view.findViewById(R.id.sleep_cv);
         CardView connectWithDoctorCV = view.findViewById(R.id.doctor_cv);
+        CardView stats = view.findViewById(R.id.stats_cv);
 
         caloriesCV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +126,17 @@ public class HomeFragment extends Fragment implements FireStoreManager.coolBack 
                     Log.d("HomeFragment", "Doctor email connected with: " + individualUser.getDoctorEmailConnectedWith());
                     fireStoreManager.retrieveDoctorFromFirestore(individualUser.getDoctorEmailConnectedWith());
                 }
+            }
+        });
+        stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = requireActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                UserStatisticsFragment userStatisticsFragment = new UserStatisticsFragment();
+                ft.replace(R.id.home_frame_layout, userStatisticsFragment);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         });
     }

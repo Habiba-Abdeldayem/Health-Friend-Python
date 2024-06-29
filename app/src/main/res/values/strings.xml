@@ -252,6 +252,7 @@
     <string name="current_doctor_email"><b>Email:</b> %1$s\n</string>
     <string name="current_doctor_age"><b>Age:</b> %1$d</string>
     <string name="water_goall"> / %1$.1f</string>
+    <string name="water_progress">%1$.1f</string>
 
 
     <string name="lorem_ipsum">

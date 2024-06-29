@@ -4,14 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/grey"
     android:orientation="vertical"
     tools:context=".DoctorScreens.Doctor_Main">
-
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:name="com.example.healthfriend.DoctorScreens.Userlist_Fragment"
+    <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Health Friend"
+            android:textColor="@color/dark_green"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </Toolbar>
+
+    <FrameLayout
+        android:id="@+id/doctor_home_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        >
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/doctor_home_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+        app:itemPaddingBottom="8dp"
+        app:menu="@menu/bottom_nav_menu">
+
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
 </LinearLayout>
