@@ -41,7 +41,7 @@ public class DaysActivity extends AppCompatActivity {
         adapter = new DaysAdapter(this, DAY_LIST);
         recyclerView.setAdapter(adapter);
         TextView personal_info = findViewById(R.id.tv_patient_info);
-        String personalData = getString(R.string.patient_personal_data, user.getEmail(), user.getEmail(), user.getAge(), user.getGender(), user.getHeight(), user.getWeight(), user.getPlan());
+        String personalData = getString(R.string.patient_personal_data, user.getName(), user.getEmail(), user.getAge(), user.getGender(), user.getHeight(), user.getWeight(), user.getPlan());
         personal_info.setText(personalData);
 
         FireStoreManager fireStoreManager = new FireStoreManager();
