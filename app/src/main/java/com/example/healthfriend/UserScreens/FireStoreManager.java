@@ -182,6 +182,7 @@ public class FireStoreManager {
         user_personal_data.put("plan", u.getPlan());
         user_personal_data.put("water_progress", u.getWater_progress());
         user_personal_data.put("doctorEmailConnectedWith", u.getDoctorEmailConnectedWith());
+        user_personal_data.put("isDoctorPlanApplied", u.isDoctorPlanApplied());
 
         personalInfoDocumentRef = db.collection("/Users/").document(u.getEmail()).collection("/personal_info").document("/data");
 

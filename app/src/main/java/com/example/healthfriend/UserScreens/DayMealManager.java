@@ -293,7 +293,7 @@ public class DayMealManager {
 //        updateMealsInFirestore();
     }
 
-    private void setDoctorBreakfast() {
+    public void setDoctorBreakfast() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpBreakfastIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getBreakfast().getIngredients();
             List<PythonIngredient> breakfastIngredients = DoctorIngredient.convertToPythonIngredientList(tmpBreakfastIngredients);
@@ -302,7 +302,7 @@ public class DayMealManager {
         }
     }
 
-    private void setDoctorLunch() {
+    public void setDoctorLunch() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpLunchIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getLunch().getIngredients();
             List<PythonIngredient> lunchIngredients = DoctorIngredient.convertToPythonIngredientList(tmpLunchIngredients);
@@ -311,7 +311,7 @@ public class DayMealManager {
         }
     }
 
-    private void setDoctorDinner() {
+    public void setDoctorDinner() {
         if (IndividualUser.getInstance().getWeeklyPlan() != null && IndividualUser.getInstance().getWeeklyPlan().getDailyPlans() != null) {
             List<DoctorIngredient> tmpDinnerIngredients = IndividualUser.getInstance().getWeeklyPlan().getDailyPlans().get(0).getDinner().getIngredients();
             List<PythonIngredient> dinnerIngredients = DoctorIngredient.convertToPythonIngredientList(tmpDinnerIngredients);
@@ -328,8 +328,7 @@ public class DayMealManager {
     }
 
     public boolean isDoctorPlanApplied() {
-        SharedPreferences sharedPref = context.getSharedPreferences("com.example.healthfriend.PREFERENCES", Context.MODE_PRIVATE);
-        return sharedPref.getBoolean("is_doctor_plan_applied", false); // Default is false if not found
+        return IndividualUser.getInstance().isDoctorPlanApplied();
     }
 
     private void retrieveMealsFromFirestore(String date) {

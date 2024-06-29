@@ -18,6 +18,7 @@ public class IndividualUser {
     private Doctor currentDoctor;
     private int currentDoctorPlanIdx;
     private WeeklyPlan weeklyPlan;
+    private boolean isDoctorPlanApplied;
 
     public static IndividualUser getInstance() {
         if (instance == null) {
@@ -46,6 +47,7 @@ public class IndividualUser {
         doctorEmailConnectedWith = null;
         currentDoctor = null;
         weeklyPlan = null;
+        isDoctorPlanApplied = false;
         setDaily_water_need();
     }
 
@@ -172,6 +174,7 @@ public class IndividualUser {
             water_progress = document.getLong("water_progress").doubleValue();
             plan = document.getString("plan");
             doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");
+            isDoctorPlanApplied = document.getBoolean("isDoctorPlanApplied");
             if (doctorEmailConnectedWith != null)
                 setWeeklyPlan();
             setDaily_water_need();
@@ -251,10 +254,10 @@ public class IndividualUser {
     }
 
     public void unFollowDoctor() {
-        Log.d("ehellybnull??", "email?? " + this.getEmail());
         fireStoreManager.removePatientEmail(doctorEmailConnectedWith, getEmail());
         this.currentDoctor = null;
         this.doctorEmailConnectedWith = null;
+        this.isDoctorPlanApplied = false;
         fireStoreManager.setUserPersonalInfo(instance);
     }
 
@@ -285,9 +288,16 @@ public class IndividualUser {
             doctorEmailConnectedWith = null;
             currentDoctor = null;
             weeklyPlan = null;
+            isDoctorPlanApplied =false;
             instance = null;
 
         }
 
+    public boolean isDoctorPlanApplied() {
+        return isDoctorPlanApplied;
+    }
 
+    public void setDoctorPlanApplied(boolean doctorPlanApplied) {
+        isDoctorPlanApplied = doctorPlanApplied;
+    }
 }

@@ -168,15 +168,27 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
 
     private void getBreakfast(){
         pythonBreakfast = PythonBreakfast.getInstance();
-        dayMealManager.setPythonBreakfast();
+        if(dayMealManager.isDoctorPlanApplied())
+            dayMealManager.setDoctorBreakfast();
+        else{
+            dayMealManager.setPythonBreakfast();
+        }
     }
     private void getLunch(){
         pythonLunch = PythonLunch.getInstance();
-        dayMealManager.setPythonLunch();
+        if(dayMealManager.isDoctorPlanApplied())
+            dayMealManager.setDoctorLunch();
+        else{
+            dayMealManager.setPythonLunch();
+        }
     }
     private void getDinner(){
         pythonDinner = PythonDinner.getInstance();
-        dayMealManager.setPythonDinner();
+        if(dayMealManager.isDoctorPlanApplied())
+            dayMealManager.setDoctorDinner();
+        else{
+            dayMealManager.setPythonDinner();
+        }
     }
 
     @Override
