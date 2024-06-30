@@ -179,7 +179,7 @@ public class DayMealManager {
         Random random = new Random();
 
         for (int i = 0; i < 20; i++) {
-            int randomInt = random.nextInt(9);
+            int randomInt = random.nextInt(meals.size()-1);
             lunch_alternatives.add(meals.get(randomInt));
         }
         for (UserMeal meal : meals) {
@@ -221,7 +221,7 @@ public class DayMealManager {
             Random random = new Random();
 
             for (int i = 0; i < 20; i++) {
-                int randomInt = random.nextInt(9);
+                int randomInt = random.nextInt(meals.size()-1);
                 breakfast_alternatives.add(meals.get(randomInt));
             }
 
@@ -252,6 +252,7 @@ public class DayMealManager {
 //        Log.d("ddssis","dd "+ pythonDinner.getDinnerPythonIngredients().size());
 
 //            Log.d("ddssis", "started  " + pythonDinner.getDinnerPythonIngredients().size());
+        if (pythonDinner.getDinnerPythonIngredients() == null || dinner_alternatives.size() == 0) {
 
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(context));
@@ -271,8 +272,8 @@ public class DayMealManager {
         Random random = new Random();
 
         for (int i = 0; i < 20; i++) {
-            int randomInt = random.nextInt(9);
-            breakfast_alternatives.add(meals.get(randomInt));
+            int randomInt = random.nextInt(meals.size()-1);
+            dinner_alternatives.add(meals.get(randomInt));
         }
         for (UserMeal meal : meals) {
             for (PythonIngredient ingredient : meal.getIngredients()) {
@@ -288,7 +289,7 @@ public class DayMealManager {
         }
         if (pythonDinner.getDinnerPythonIngredients() == null) {
             pythonDinner.setDinnerPythonIngredients(pythonIngredients);
-        }
+        }}
 //        this.pythonDinner = pythonDinner;
 //        updateMealsInFirestore();
     }
@@ -453,13 +454,14 @@ public class DayMealManager {
                 }
                 break;
             case "dinner":
+                if(pythonDinner.getDinnerPythonIngredients()!=null){
                 for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
                     if (!ingredient.isIngredientSelectedByUser()) {
                         rejectedIngredients.add(ingredient);
                         IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
                         fireStoreManager.storeIngredientData(userEmail, ingredientData);
                     }
-                }
+                }}
                 break;
 
         }

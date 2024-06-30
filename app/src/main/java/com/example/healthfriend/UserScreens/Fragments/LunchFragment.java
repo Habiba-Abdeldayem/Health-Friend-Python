@@ -171,7 +171,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         if(dayMealManager.isDoctorPlanApplied())
             dayMealManager.setDoctorBreakfast();
         else{
-            dayMealManager.setPythonBreakfast();
+//            dayMealManager.setPythonBreakfast();
         }
     }
     private void getLunch(){
@@ -179,7 +179,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         if(dayMealManager.isDoctorPlanApplied())
             dayMealManager.setDoctorLunch();
         else{
-            dayMealManager.setPythonLunch();
+//            dayMealManager.setPythonLunch();
         }
     }
     private void getDinner(){
@@ -187,7 +187,7 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
         if(dayMealManager.isDoctorPlanApplied())
             dayMealManager.setDoctorDinner();
         else{
-            dayMealManager.setPythonDinner();
+//            dayMealManager.setPythonDinner();
         }
     }
 

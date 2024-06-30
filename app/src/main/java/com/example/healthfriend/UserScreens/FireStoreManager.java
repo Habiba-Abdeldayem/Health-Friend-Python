@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -506,17 +507,18 @@ public class FireStoreManager {
     }
 
     // Retrieve the weekly plan for a patient
-    public void getWeeklyPlan(String patient_email,String doctor_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
-        Log.d("kkdkdd", patient_email+ " " +doctor_email);
+    public void getWeeklyPlan(String patient_email, String doctor_email, OnCompleteListener<DocumentSnapshot> onCompleteListener) {
+        Log.d("kkdkdd", patient_email + " " + doctor_email);
         DocumentReference doc = db.collection("/DoctorsPlan/").document(doctor_email).collection(patient_email).document("/weekly_plan");
 //        db.collection("DoctorsPlan")
 //                .document(doctor_email)
 //                .collection(patient_email)
 //                .document("weekly_plan")
-                doc.get()
+        doc.get()
                 .addOnCompleteListener(onCompleteListener);
 
     }
+
     public void storeIngredientData(String userEmail, IngredientAppearedRefused ingredientData) {
         String documentPath = "/Users/" + userEmail + "/ingredients_appeared_refused/" + ingredientData.getIngredientName();
         db.runTransaction((Transaction.Function<Void>) transaction -> {
@@ -545,6 +547,43 @@ public class FireStoreManager {
                 .addOnFailureListener(e -> Log.w("Firestore", "Transaction failure.", e));
     }
 
+    public void retrieveAllIngredientsData(String userEmail, final OnCompleteListener<Map<String,  ArrayList<Integer>>> onCompleteListener) {
+        String collectionPath = "/Users/" + userEmail + "/ingredients_appeared_refused";
+
+        db.collection(collectionPath).get().addOnCompleteListener(task -> {
+            TaskCompletionSource<Map<String, ArrayList<Integer>>> taskCompletionSource = new TaskCompletionSource<>();
+
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                Map<String,  ArrayList<Integer>> allIngredientsData = new HashMap<>();
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        String ingredientName = document.getId();
+
+                        Long appearanceCountLong = document.getLong("appearance_count");
+                        Long refuseCountLong = document.getLong("refuse_count");
+
+                        // Handle potential null values
+                        int appearanceCount = appearanceCountLong != null ? appearanceCountLong.intValue() : 0;
+                        int refuseCount = refuseCountLong != null ? refuseCountLong.intValue() : 0;
+
+                        ArrayList<Integer> counts = new ArrayList<>();
+                        counts.add(appearanceCount);
+                        counts.add(refuseCount);
+                        allIngredientsData.put(ingredientName, counts);
+                    }
+                }
+
+                taskCompletionSource.setResult(allIngredientsData);
+            } else {
+                Log.w("Firestore", "Error getting documents", task.getException());
+                taskCompletionSource.setException(task.getException());
+            }
+
+            taskCompletionSource.getTask().addOnCompleteListener(onCompleteListener);
+        });
+    }
 
     public interface PatientFirestoreCallback {
         void onCallback(ArrayList<String> patientEmails);
@@ -553,8 +592,10 @@ public class FireStoreManager {
     public interface userTypeCallBack {
         void onCallback();
     }
-    public interface coolBack{
+
+    public interface coolBack {
         void onCallback();
+
         void updateCalories();
     }
 

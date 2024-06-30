@@ -200,7 +200,7 @@ def calll(weight, height, filepath, new_ingredients=['Beef  brain']):
     sorted_meal_similarity_list = sorted(meal_similarity_list, key=lambda item: item['similarity_score'], reverse=True)
 
 
-    sorted_meal_similarity_list=sorted_meal_similarity_list[:10]
+    # sorted_meal_similarity_list=sorted_meal_similarity_list[:10]
     json_data = json.dumps(sorted_meal_similarity_list)
     return json_data
 

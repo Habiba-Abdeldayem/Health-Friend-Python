@@ -2,10 +2,18 @@ package com.example.healthfriend.UserScreens;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.Models.WeeklyPlan;
 import com.example.healthfriend.Models.WeeklyPlanManagerSingleton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class IndividualUser {
     private FireStoreManager fireStoreManager;
@@ -19,6 +27,8 @@ public class IndividualUser {
     private int currentDoctorPlanIdx;
     private WeeklyPlan weeklyPlan;
     private boolean isDoctorPlanApplied;
+    Map<String, ArrayList<Integer>> ingredientsAppearedRefusedMap;
+
 
     public static IndividualUser getInstance() {
         if (instance == null) {
@@ -48,6 +58,7 @@ public class IndividualUser {
         currentDoctor = null;
         weeklyPlan = null;
         isDoctorPlanApplied = false;
+        ingredientsAppearedRefusedMap = new HashMap<>();
         setDaily_water_need();
     }
 
@@ -175,6 +186,7 @@ public class IndividualUser {
             plan = document.getString("plan");
             doctorEmailConnectedWith = document.getString("doctorEmailConnectedWith");
             isDoctorPlanApplied = document.getBoolean("isDoctorPlanApplied");
+            setIngredientsappeared();
             if (doctorEmailConnectedWith != null)
                 setWeeklyPlan();
             setDaily_water_need();
@@ -307,4 +319,62 @@ public class IndividualUser {
     public void setDoctorPlanApplied(boolean doctorPlanApplied) {
         isDoctorPlanApplied = doctorPlanApplied;
     }
+    public void setIngredientsappeared() {
+        fireStoreManager.retrieveAllIngredientsData(this.email, new OnCompleteListener<Map<String, ArrayList<Integer>>>() {
+            @Override
+            public void onComplete(@NonNull Task<Map<String, ArrayList<Integer>>> task) {
+                if (task.isSuccessful()) {
+                    String name = null;
+                    Map<String,  ArrayList<Integer>> allIngredientsData = task.getResult();
+                    if (allIngredientsData != null) {
+                        // Set the ingredientsAppearedRefusedMap directly with the retrieved data
+                        ingredientsAppearedRefusedMap = allIngredientsData;
+
+                        // Log the retrieved data for verification
+                        for (Map.Entry<String, ArrayList<Integer>> entry : ingredientsAppearedRefusedMap.entrySet()) {
+                            name = entry.getKey();
+                            ArrayList<Integer> counts = entry.getValue();
+//                            for ( Integer countEntry : counts) {
+                                int appearanceCount = counts.get(0);
+                                int refuseCount = counts.get(1);
+//                                Log.d("afafafaa", "Name: " + name);
+//                                Log.d("afafafaa", "Appearance Count: " + appearanceCount);
+//                                Log.d("afafafaa", "Refuse Count: " + refuseCount);
+//                            }
+                        }
+
+                        // Example logging for a specific ingredient
+                        if (ingredientsAppearedRefusedMap.containsKey("Beef  brain")) {
+                            ArrayList<Integer> counts = ingredientsAppearedRefusedMap.get("Beef  brain");
+                            if (counts != null) {
+                                // Assuming 0 is appearance count and 1 is refuse count
+                                Integer appearanceCount = counts.get(0);
+                                Integer refuseCount = counts.get(1);
+                                if (appearanceCount != null) {
+                                    Log.d("Firestore", "Beef brain" + appearanceCount);
+                                } else {
+                                    Log.d("Firestore", "Beef brain - Appearance Count: not found");
+                                }
+                                if (refuseCount != null) {
+                                    Log.d("Firestore", "Beef brain - Refuse Count: " + refuseCount);
+                                } else {
+                                    Log.d("Firestore", "Beef brain - Refuse Count: not found");
+                                }
+                            } else {
+                                Log.d("Firestore", "Counts for Beef brain are null");
+                            }
+                        }
+//                        else
+//                            Log.d("Firestore", "noooooooot found");
+                    }
+                } else {
+                    Log.w("Firestore", "Error getting ingredients data", task.getException());
+                }
+            }
+        });
+    }
+
+
+
+
 }

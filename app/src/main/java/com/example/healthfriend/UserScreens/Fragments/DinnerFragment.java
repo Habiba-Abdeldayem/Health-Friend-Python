@@ -135,7 +135,7 @@ public class DinnerFragment extends Fragment implements DoctorMealAdapterInterfa
 //            }
           //  pythonIngredients.add(new PythonIngredient(meals.get(0).getIngredients().get(0).getName(), meals.get(0).getIngredients().get(0).getCarbs(), meals.get(0).getIngredients().get(0).getCalories(), meals.get(0).getIngredients().get(0).getFats(), meals.get(0).getIngredients().get(0).getProtein(),meals.get(0).getIngredients().get(0).getCount(),meals.get(0).getIngredients().get(0).getCategory()));
 
-            pythonDinner.setDinnerPythonIngredients(pythonIngredients);
+//            pythonDinner.setDinnerPythonIngredients(pythonIngredients);
         }
         List<PythonIngredient> breakfastIngredients = pythonDinner.getDinnerPythonIngredients();
 
