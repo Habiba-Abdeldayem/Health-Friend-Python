@@ -15,10 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
-import com.example.healthfriend.UserScreens.ChangeMealSingelton;
 import com.example.healthfriend.UserScreens.DayMealManager;
 import com.example.healthfriend.UserScreens.DoctorMealAdapterInterface;
 import com.example.healthfriend.Models.PythonIngredient;
@@ -44,7 +42,6 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
     private PythonDinner pythonDinner;
     DayMealManager dayMealManager;
     List<PythonIngredient> mealIngredients;
-    private ChangeMealSingelton changeMealSingelton;
 
     public LunchFragment() {
         // Required empty public constructor
@@ -113,8 +110,8 @@ public class LunchFragment extends Fragment implements DoctorMealAdapterInterfac
             adapter = new IngredientAdapter(mealIngredients, recyclerView, this);
             recyclerView.setAdapter(adapter);
         }
-        dayMealManager.dayAppearedIngredients();
-        dayMealManager.dayRejectedIngredients();
+//        dayMealManager.dayAppearedIngredients();
+//        dayMealManager.dayRejectedIngredients();
 
         change_meal_btn.setOnClickListener(new View.OnClickListener() {
             @Override

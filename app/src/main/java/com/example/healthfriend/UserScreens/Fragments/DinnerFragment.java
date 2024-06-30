@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;

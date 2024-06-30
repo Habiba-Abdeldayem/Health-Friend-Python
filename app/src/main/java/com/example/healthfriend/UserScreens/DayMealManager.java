@@ -430,13 +430,13 @@ public class DayMealManager {
         }
     }
 
-    public void dayRejectedIngredients() {
+    public void dayRejectedIngredients( List<PythonIngredient> oldMealIngredients) {
         String userEmail = IndividualUser.getInstance().getEmail();
         List<PythonIngredient> rejectedIngredients = new ArrayList<>();
 
         switch (this.current_meal) {
             case "breakfast":
-                for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+                for (PythonIngredient ingredient : oldMealIngredients) {
                     if (!ingredient.isIngredientSelectedByUser()) {
                         rejectedIngredients.add(ingredient);
                         IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 0, 1);
@@ -470,13 +470,13 @@ public class DayMealManager {
 //        return rejectedIngredients;
     }
 
-    public void dayAppearedIngredients() {
+    public void dayAppearedIngredients( List<PythonIngredient> oldMealIngredients) {
         String userEmail = IndividualUser.getInstance().getEmail();
         List<PythonIngredient> appearedIngredients = new ArrayList<>();
         switch (this.current_meal) {
             case "breakfast":
-                if (pythonBreakfast.getBreakfastPythonIngredients() != null) {
-                    for (PythonIngredient ingredient : pythonBreakfast.getBreakfastPythonIngredients()) {
+                if (oldMealIngredients != null) {
+                    for (PythonIngredient ingredient : oldMealIngredients) {
                         appearedIngredients.add(ingredient);
                         IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
                         fireStoreManager.storeIngredientData(userEmail, ingredientData);
@@ -484,9 +484,9 @@ public class DayMealManager {
                 }
                 break;
             case "lunch":
-                if (pythonLunch.getLunchPythonIngredients() != null) {
+                if (oldMealIngredients != null) {
 
-                    for (PythonIngredient ingredient : pythonLunch.getLunchPythonIngredients()) {
+                    for (PythonIngredient ingredient : oldMealIngredients) {
                         appearedIngredients.add(ingredient);
                         IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
                         fireStoreManager.storeIngredientData(userEmail, ingredientData);
@@ -494,8 +494,8 @@ public class DayMealManager {
                 }
                 break;
             case "dinner":
-                if (pythonDinner.getDinnerPythonIngredients() != null) {
-                    for (PythonIngredient ingredient : pythonDinner.getDinnerPythonIngredients()) {
+                if (oldMealIngredients != null) {
+                    for (PythonIngredient ingredient : oldMealIngredients) {
                         appearedIngredients.add(ingredient);
                         IngredientAppearedRefused ingredientData = new IngredientAppearedRefused(ingredient.getName(), 1, 0);
                         fireStoreManager.storeIngredientData(userEmail, ingredientData);

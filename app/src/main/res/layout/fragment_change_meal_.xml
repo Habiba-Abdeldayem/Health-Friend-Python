@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#296A2C"
-    tools:context=".DoctorScreens.Change_meal_Fragment">
+    tools:context=".UserScreens.Fragments.Change_meal_Fragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

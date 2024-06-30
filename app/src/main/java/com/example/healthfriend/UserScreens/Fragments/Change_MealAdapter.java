@@ -1,4 +1,4 @@
-package com.example.healthfriend.DoctorScreens;
+package com.example.healthfriend.UserScreens.Fragments;
 
 import android.content.Context;
 import android.view.LayoutInflater;

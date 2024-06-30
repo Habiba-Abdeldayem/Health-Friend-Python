@@ -27,4 +27,11 @@ public class PythonBreakfast {
     public void setBreakfastPythonIngredients(List<PythonIngredient> breakfastPythonIngredients) {
         this.breakfastPythonIngredients = breakfastPythonIngredients;
     }
+    public double getMealCalories(){
+        int mealCalories = 0;
+        for(PythonIngredient ingredient : breakfastPythonIngredients){
+            mealCalories+= ingredient.getCalories();
+        }
+        return mealCalories;
+    }
 }

@@ -18,10 +18,7 @@ import android.widget.Toast;
 
 import com.example.healthfriend.DoctorScreens.Doctor;
 import com.example.healthfriend.DoctorScreens.Doctor_Main;
-import com.example.healthfriend.DoctorScreens.UserListActivity;
-import com.example.healthfriend.DoctorScreens.Userlist_Fragment;
-import com.example.healthfriend.Models.DailyData;
-import com.example.healthfriend.UserScreens.DayMealManager;
+import com.example.healthfriend.SplashScreen;
 import com.example.healthfriend.UserScreens.IndividualUser;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.FireStoreManager;
@@ -144,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements FireStoreManager
     }
 
     private void sendUserToAnotherActivity() {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SplashScreen.class);
         intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

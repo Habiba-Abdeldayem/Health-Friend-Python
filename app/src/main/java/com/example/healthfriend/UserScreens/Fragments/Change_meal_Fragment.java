@@ -1,11 +1,9 @@
-package com.example.healthfriend.DoctorScreens;
+package com.example.healthfriend.UserScreens.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,23 +17,22 @@ import com.example.healthfriend.Models.PythonIngredient;
 import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.DayMealManager;
-import com.example.healthfriend.UserScreens.Fragments.CaloriesFragment;
-import com.example.healthfriend.UserScreens.Fragments.LunchFragment;
 import com.example.healthfriend.UserScreens.PythonBreakfast;
 import com.example.healthfriend.UserScreens.PythonDinner;
 import com.example.healthfriend.UserScreens.PythonLunch;
 import com.example.healthfriend.UserScreens.TodaysNutrientsEaten;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
-public class Change_meal_Fragment extends Fragment implements Change_MealAdapter.MealPosition{
+public class Change_meal_Fragment extends Fragment implements Change_MealAdapter.MealPosition {
 
     private String mealType;
-
-
+    double oldMealCalories = 0, oldMealCarbs = 0, oldMealProteins = 0, oldMealFats = 0;
+    double dayCalories, dayProteins, dayCarbs, dayFats;
+    DayMealManager dayMealManager;
+    List<PythonIngredient> oldMealIngredients;
     public Change_meal_Fragment() {
         // Required empty public constructor
     }
@@ -44,18 +41,23 @@ public class Change_meal_Fragment extends Fragment implements Change_MealAdapter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        oldMealCalories = 0; oldMealCarbs = 0; oldMealProteins = 0; oldMealFats = 0;
+        dayCalories = TodaysNutrientsEaten.getEatenCalories();
+        dayProteins = TodaysNutrientsEaten.getEatenProteins();
+        dayCarbs = TodaysNutrientsEaten.getEatenCarbs();
+        dayFats = TodaysNutrientsEaten.getEatenFats();
+
         if (getArguments() != null) {
             mealType = getArguments().getString("mealType");
         }
-        if (mealType == null) {
-            // Set a default value or handle the error as appropriate
-            mealType = "dinner";
-        }
+//        if (mealType == null) {
+//            // Set a default value or handle the error as appropriate
+//            mealType = "dinner";
+//        }
 
     }
 
     Change_MealAdapter adapter;
-    DayMealManager dayMealManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,11 +67,10 @@ public class Change_meal_Fragment extends Fragment implements Change_MealAdapter
         View view = inflater.inflate(R.layout.fragment_change_meal_, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.change_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-         dayMealManager = DayMealManager.getInstance(getContext());
+        dayMealManager = DayMealManager.getInstance(getContext());
         List<String> meal_ingredients_names = new ArrayList<>();
 
-
-        switch (mealType){
+        switch (mealType) {
             case "breakfast":
                 if (dayMealManager.breakfast_alternatives != null) {
                     for (UserMeal meal : dayMealManager.breakfast_alternatives) {
@@ -106,13 +107,16 @@ public class Change_meal_Fragment extends Fragment implements Change_MealAdapter
         switchMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TodaysNutrientsEaten.setEatenCalories(0.0);
-                TodaysNutrientsEaten.setEatenProteins(0.0);
-                TodaysNutrientsEaten.setEatenCarbs(0.0);
-                TodaysNutrientsEaten.setEatenFats(0.0);
+
+                TodaysNutrientsEaten.setEatenCalories(dayCalories - oldMealCalories);
+                TodaysNutrientsEaten.setEatenProteins(dayProteins - oldMealProteins);
+                TodaysNutrientsEaten.setEatenCarbs(dayCarbs - oldMealCarbs);
+                TodaysNutrientsEaten.setEatenFats(dayFats - oldMealFats);
                 dayMealManager.updateMealsInFirestore();
-                Toast.makeText(getContext(),"Meal changed successfully",Toast.LENGTH_SHORT);
-                CaloriesFragment fragment= new CaloriesFragment();
+                dayMealManager.dayAppearedIngredients(oldMealIngredients);
+                dayMealManager.dayRejectedIngredients(oldMealIngredients);
+                Toast.makeText(getContext(), "Meal changed successfully", Toast.LENGTH_SHORT);
+                CaloriesFragment fragment = new CaloriesFragment();
                 requireActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.home_frame_layout, fragment)
                         .addToBackStack(null)
@@ -123,14 +127,41 @@ public class Change_meal_Fragment extends Fragment implements Change_MealAdapter
 
     @Override
     public void onClick(int arrayIdx) {
-        switch (mealType){
+        switch (mealType) {
             case "breakfast":
+                for (PythonIngredient ingredient : PythonBreakfast.getInstance().getBreakfastPythonIngredients()) {
+                    if(ingredient.isIngredientSelectedByUser()){
+                        oldMealCalories += ingredient.getCalories();
+                        oldMealCarbs += ingredient.getCarbs();
+                        oldMealProteins += ingredient.getProtein();
+                        oldMealFats += ingredient.getFats();
+                    }
+                }
+                oldMealIngredients = PythonBreakfast.getInstance().getBreakfastPythonIngredients();
                 PythonBreakfast.getInstance().setBreakfastPythonIngredients(dayMealManager.breakfast_alternatives.get(arrayIdx).getIngredients());
                 break;
             case "lunch":
+                for (PythonIngredient ingredient : PythonLunch.getInstance().getLunchPythonIngredients()) {
+                    if(ingredient.isIngredientSelectedByUser()){
+                    oldMealCalories += ingredient.getCalories();
+                    oldMealCarbs += ingredient.getCarbs();
+                    oldMealProteins += ingredient.getProtein();
+                    oldMealFats += ingredient.getFats();
+                    }
+                }
+                oldMealIngredients = PythonLunch.getInstance().getLunchPythonIngredients();
                 PythonLunch.getInstance().setLunchPythonIngredients(dayMealManager.lunch_alternatives.get(arrayIdx).getIngredients());
                 break;
             case "dinner":
+                for (PythonIngredient ingredient : PythonDinner.getInstance().getDinnerPythonIngredients()) {
+                    if(ingredient.isIngredientSelectedByUser()){
+                        oldMealCalories += ingredient.getCalories();
+                        oldMealCarbs += ingredient.getCarbs();
+                        oldMealProteins += ingredient.getProtein();
+                        oldMealFats += ingredient.getFats();
+                    }
+                }
+                oldMealIngredients = PythonDinner.getInstance().getDinnerPythonIngredients();
                 PythonDinner.getInstance().setDinnerPythonIngredients(dayMealManager.dinner_alternatives.get(arrayIdx).getIngredients());
                 break;
         }

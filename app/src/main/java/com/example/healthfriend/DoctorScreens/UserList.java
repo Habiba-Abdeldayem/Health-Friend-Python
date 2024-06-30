@@ -19,12 +19,12 @@ import java.util.List;
 public class UserList extends RecyclerView.Adapter<AvailableViewHolder> {
     public List<String> user;
     private OnItemClickListener itemClickListener;
-    private OnItemLongClickListener longClickListener;
+//    private OnItemLongClickListener longClickListener;
     FireStoreManager fireStoreManager = new FireStoreManager();
 
-    public interface OnItemLongClickListener {
-        void onItemLongClick(User user);
-    }
+//    public interface OnItemLongClickListener {
+//        void onItemLongClick(User user);
+//    }
 
 
     public UserList(List<String> user, OnItemClickListener itemClickListener) {

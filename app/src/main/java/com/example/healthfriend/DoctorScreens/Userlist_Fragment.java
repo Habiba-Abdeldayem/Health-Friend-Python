@@ -27,7 +27,7 @@ import com.example.healthfriend.UserScreens.IndividualUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Userlist_Fragment extends Fragment implements UserList.OnItemClickListener,UserList.OnItemLongClickListener{
+public class Userlist_Fragment extends Fragment implements UserList.OnItemClickListener{
 
     private ArrayList<String> usersEmail;
     private RecyclerView recyclerView;
@@ -69,10 +69,10 @@ public class Userlist_Fragment extends Fragment implements UserList.OnItemClickL
         });
     }
 
-    @Override
-    public void onItemLongClick(User user) {
-
-    }
+//    @Override
+//    public void onItemLongClick(User user) {
+//
+//    }
 
     @Override
     public void onItemClick(IndividualUser user) {

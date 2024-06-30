@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.healthfriend.DoctorScreens.Change_meal_Fragment;
 import com.example.healthfriend.Models.UserMeal;
 import com.example.healthfriend.R;
 import com.example.healthfriend.UserScreens.Adapters.IngredientAdapter;
