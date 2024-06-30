@@ -375,6 +375,7 @@ public class IndividualUser {
     }
 
 
-
-
+    public Map<String, ArrayList<Integer>> getIngredientsAppearedRefusedMap() {
+        return ingredientsAppearedRefusedMap;
+    }
 }
